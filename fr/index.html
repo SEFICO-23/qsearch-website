@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://qsearch.ch/fr/">
+  <title>QuantumSearch Security Research | S&eacute;curit&eacute; Offensive Suisse</title>
+  <meta name="description" content="Recherche en s&eacute;curit&eacute; offensive suisse. Nous trouvons ce que les attaquants trouveraient &mdash; avant eux. &Eacute;valuation gratuite pour les organisations qualifi&eacute;es.">
+  <meta property="og:title" content="QuantumSearch Security Research">
+  <meta property="og:description" content="S&eacute;curit&eacute; offensive suisse. Nous trouvons ce que les attaquants trouvent &mdash; avant eux.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qsearch.ch/fr/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="alternate" hreflang="en" href="https://qsearch.ch/index.html">
+  <link rel="alternate" hreflang="it" href="https://qsearch.ch/it/index.html">
+  <link rel="alternate" hreflang="de" href="https://qsearch.ch/de/index.html">
+  <link rel="alternate" hreflang="fr" href="https://qsearch.ch/fr/index.html">
+  <link rel="alternate" hreflang="x-default" href="https://qsearch.ch/index.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%235B23FF'/><stop offset='100%25' stop-color='%23008BFF'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23g)'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='18' fill='%23E4FF30'>Q</text></svg>">
+<style>
+/* Trust icon SVGs */
+.trust-icon svg { width: 20px; height: 20px; vertical-align: middle; flex-shrink: 0; }
+/* Social proof badges */
+.social-proof { text-align: center; padding: 2rem 0; }
+.social-proof-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem; letter-spacing: 0.05em; }
+.social-proof-badges { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+.platform-badge { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--signal); display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+.platform-badge span { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.7rem; font-weight: 400; color: var(--text-secondary); }
+
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link" style="position:absolute;top:-100%;left:0;padding:0.5rem 1rem;background:var(--accent);color:var(--bg-primary);z-index:9999;font-weight:700;font-size:0.85rem;border-radius:0 0 8px 0;transition:top 0.2s">Skip to main content</a>
+<style>.skip-link:focus{top:0}</style>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="../logo-mark.svg" alt="Q" class="logo-mark-img" width="30" height="30">
+        QuantumSearch
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Accueil</a></li>
+        <li><a href="about.html">&Agrave; Propos</a></li>
+        <li class="nav-dropdown"><a href="#">Services &#9662;</a><ul class="nav-dropdown-menu"><li><a href="services.html">Services de S&eacute;curit&eacute;</a></li><li><a href="ai-security.html">S&eacute;curit&eacute; IA</a></li><li><a href="vibe-coding.html">S&eacute;curit&eacute; Vibe-Coding</a></li></ul></li>
+        <li><a href="track-record.html">R&eacute;f&eacute;rences</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-dropdown">
+          <a href="#">Ressources &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="demo.html">D&eacute;mo Interactive</a></li>
+            <li><a href="insights.html">Analyses &amp; Recherche</a></li>
+            <li><a href="disclosure.html">Divulgation Responsable</a></li>
+          </ul>
+        </li>
+        <li class="nav-dropdown lang-switcher">
+          <a href="#">FR &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#" data-lang="en">English</a></li>
+            <li><a href="#" data-lang="it">Italiano</a></li>
+            <li><a href="#" data-lang="de">Deutsch</a></li>
+            <li><a href="#" data-lang="fr">Fran&ccedil;ais</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a href="contact.html" class="nav-cta">&Eacute;valuation Gratuite</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Ouvrir le menu">&#9776;</button>
+    </div>
+  </nav>
+
+  <main class="page-content" id="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <video class="hero-video-bg" autoplay muted loop playsinline>
+        <source src="../media/hero-bg.mp4" type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="gradient-orb gradient-orb--purple"></div>
+      <div class="gradient-orb gradient-orb--blue"></div>
+      <div class="gradient-orb gradient-orb--lime"></div>
+      <canvas id="particleCanvas" class="hero-canvas"></canvas>
+      <div class="container">
+        <div class="hero-content">
+          <div class="risk-banner fade-in">
+            <span class="risk-icon">!</span>
+            <p>Une violation de donn&eacute;es co&ucirc;te en moyenne <strong>CHF 4,9 millions</strong>. La plupart des entreprises l'apprennent &agrave; leurs d&eacute;pens.</p>
+          </div>
+          <div class="label">S&eacute;curit&eacute; Offensive Suisse</div>
+          <h1>Nous trouvons ce que<br>les <span class="accent" data-typing="attaquants,hackers,menaces,failles">attaquants</span> trouvent.<br>Avant eux.</h1>
+          <p>La reconnaissance pilot&eacute;e par l'IA rencontre les tests manuels d'experts. Nous d&eacute;couvrons les vuln&eacute;rabilit&eacute;s de vos syst&egrave;mes, prouvons leur exploitabilit&eacute; avec du code fonctionnel et quantifions l'impact m&eacute;tier dans votre devise. Pas un scan. Pas une checklist. De la vraie s&eacute;curit&eacute; offensive.</p>
+          <div class="hero-buttons">
+            <a href="contact.html" class="btn-primary">Obtenez votre &eacute;valuation gratuite &rarr;</a>
+            <a href="../demo.html" class="btn-secondary">Voir la d&eacute;mo en direct</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="container fade-in">
+      <div class="trust-bar">
+        <div class="trust-item">
+          <span class="trust-icon"><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" rx="3" fill="#D52B1E"/><rect x="8" y="4" width="4" height="12" rx="0.5" fill="#fff"/><rect x="4" y="8" width="12" height="4" rx="0.5" fill="#fff"/></svg></span>
+          Bas&eacute;s en Suisse
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon"><svg viewBox="0 0 20 20" fill="none" stroke="var(--signal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M6 9V6a4 4 0 0 1 8 0v3"/></svg></span>
+          Conformes nDSG &amp; GDPR
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon"><svg viewBox="0 0 20 20" fill="none" stroke="var(--signal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="2" x2="10" y2="18"/><line x1="4" y1="6" x2="16" y2="6"/><line x1="4" y1="6" x2="6" y2="12"/><line x1="16" y1="6" x2="14" y2="12"/><path d="M3 12a3 3 0 0 0 6 0"/><path d="M11 12a3 3 0 0 0 6 0"/></svg></span>
+          Droit suisse applicable
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon"><svg viewBox="0 0 20 20" fill="none" stroke="var(--signal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M3 4h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7l-4 3V5a1 1 0 0 1 1-1z"/></svg></span>
+          EN &middot; IT &middot; DE &middot; FR
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="container">
+      <div class="stats-bar fade-in">
+        <div class="stat">
+          <div class="stat-number">400+</div>
+          <div class="stat-label">Vuln&eacute;rabilit&eacute;s d&eacute;couvertes</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Surveillance continue</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Plateformes &eacute;valu&eacute;es</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">R&eacute;sultats v&eacute;rifi&eacute;s avec PoC</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Proof — Platform Badges -->
+    <div class="container fade-in">
+      <div class="social-proof">
+        <p class="social-proof-label">Actifs sur les principales plateformes de s&eacute;curit&eacute; mondiales</p>
+        <div class="social-proof-badges">
+          <div class="platform-badge">H1<span>HackerOne</span></div>
+          <div class="platform-badge">BC<span>Bugcrowd</span></div>
+          <div class="platform-badge">IM<span>Immunefi</span></div>
+          <div class="platform-badge">IN<span>Intigriti</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Free Assessment CTA -->
+    <section>
+      <div class="container">
+        <div class="free-cta-card fade-in">
+          <div>
+            <div class="free-badge">&#10003; Gratuit &mdash; Sans engagement</div>
+            <h3>Commencez par une &eacute;valuation gratuite</h3>
+            <p>Nous analysons votre surface d'attaque externe et vous livrons vos <strong>3 vuln&eacute;rabilit&eacute;s les plus critiques</strong> avec des recommandations compl&egrave;tes de rem&eacute;diation, des r&egrave;gles de d&eacute;tection et des requ&ecirc;tes de surveillance. Sans frais. Sans conditions.</p>
+          </div>
+          <div>
+            <a href="contact.html" class="btn-primary">Demander une &eacute;valuation gratuite &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What We Do -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Ce que nous faisons</div>
+          <h2>Une s&eacute;curit&eacute; qui prouve l'impact,<br>pas qui liste des vuln&eacute;rabilit&eacute;s</h2>
+          <p>Chaque mission fournit des exploits fonctionnels, un impact m&eacute;tier quantifi&eacute; et une rem&eacute;diation prioris&eacute;e.</p>
+        </div>
+
+        <div class="cards-grid">
+          <div class="card fade-in fade-in-delay-1">
+            <a href="../services.html" style="color: inherit; text-decoration: none; display: block;">
+              <div class="card-icon">&gt;_</div>
+              <h3>&Eacute;valuation de s&eacute;curit&eacute;</h3>
+              <p>Cartographie compl&egrave;te de la surface d'attaque de vos applications web, API et infrastructures. Chaque faiblesse identifi&eacute;e, chaque risque quantifi&eacute;.</p>
+            </a>
+          </div>
+          <div class="card fade-in fade-in-delay-2">
+            <a href="../services.html#plans" style="color: inherit; text-decoration: none; display: block;">
+              <div class="card-icon">&lt;/&gt;</div>
+              <h3>Test d'intrusion</h3>
+              <p>Des attaques simul&eacute;es qui prouvent l'exploitabilit&eacute;. Nous cha&icirc;nons les vuln&eacute;rabilit&eacute;s en chemins d'attaque r&eacute;els et d&eacute;montrons l'impact m&eacute;tier concret.</p>
+            </a>
+          </div>
+          <div class="card fade-in fade-in-delay-3">
+            <a href="../ai-security.html" style="color: inherit; text-decoration: none; display: block;">
+              <div class="card-icon">AI</div>
+              <h3>Recherche en s&eacute;curit&eacute; IA</h3>
+              <p>Tests sp&eacute;cialis&eacute;s pour les int&eacute;grations LLM, chatbots et fonctionnalit&eacute;s pilot&eacute;es par l'IA. Injection de prompts, exfiltration de donn&eacute;es et exploitation d'agents.</p>
+            </a>
+          </div>
+          <div class="card fade-in fade-in-delay-4">
+            <a href="../services.html#plans" style="color: inherit; text-decoration: none; display: block;">
+              <div class="card-icon">&#9878;</div>
+              <h3>Protection continue</h3>
+              <p>Des abonnements qui maintiennent votre posture de s&eacute;curit&eacute; surveill&eacute;e et en am&eacute;lioration constante. Pas un rapport ponctuel qui prend la poussi&egrave;re.</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky Note -->
+    <div class="container">
+      <div class="sticky-note fade-in">
+        <span class="sticky-icon">!</span>
+        <p><strong>80% des violations impliquent des identifiants compromis ou des failles de logique m&eacute;tier</strong> &mdash; pr&eacute;cis&eacute;ment ce que les scanners automatis&eacute;s manquent syst&eacute;matiquement.</p>
+      </div>
+    </div>
+
+    <!-- How We're Different -->
+    <section class="section-alpine">
+      <div class="container">
+        <div class="feature-row fade-in">
+          <div class="feature-text slide-left">
+            <div class="label">Notre approche</div>
+            <h3>La profondeur de l'IA,<br>la pr&eacute;cision humaine</h3>
+            <p>Les cabinets traditionnels lancent un scanner et vous remettent un PDF. Nous d&eacute;ployons une analyse pilot&eacute;e par l'IA pour cartographier toute votre surface d'attaque, puis des experts humains v&eacute;rifient chaque d&eacute;couverte avec des exploits fonctionnels.</p>
+            <ul class="feature-list">
+              <li>Chaque d&eacute;couverte inclut une preuve de concept fonctionnelle</li>
+              <li>Impact m&eacute;tier quantifi&eacute; en CHF/EUR, pas en scores CVSS</li>
+              <li>Sc&eacute;narios de cha&icirc;nes d'attaque montrant les chemins d'exploitation r&eacute;els</li>
+              <li>Recommandations de rem&eacute;diation avec priorisation claire</li>
+            </ul>
+          </div>
+          <div class="feature-visual slide-right">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <code>
+$ qsearch assess --target client.ch
+
+[*] Phase 1: Reconnaissance
+    Sous-domaines d&eacute;couverts: 47
+    Services actifs: 23
+    Technologies identifi&eacute;es: 12
+
+[*] Phase 2: Analyse des vuln&eacute;rabilit&eacute;s
+    D&eacute;couvertes: 18 (3 Critiques, 5 &Eacute;lev&eacute;es)
+    Exploits PoC v&eacute;rifi&eacute;s: 8
+
+[*] Phase 3: &Eacute;valuation d'impact
+    Donn&eacute;es expos&eacute;es: 12 400 enregistrements
+    Exposition r&eacute;glementaire: CHF 250 000
+    Interruption d'activit&eacute;: CHF 180 000
+
+[+] Rapport pr&ecirc;t. Plan de rem&eacute;diation joint.
+            </code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process Timeline -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <h2>Du premier appel &agrave;<br>des syst&egrave;mes s&eacute;curis&eacute;s</h2>
+          <p>Un processus structur&eacute; qui respecte votre temps et produit des r&eacute;sultats mesurables.</p>
+        </div>
+
+        <div class="process-timeline fade-in">
+          <div class="process-step">
+            <div class="process-dot">01</div>
+            <h4>&Eacute;valuation gratuite</h4>
+            <p>Nous analysons votre surface d'attaque et livrons les principales d&eacute;couvertes. Sans frais.</p>
+            <div class="process-tag">1-2 jours</div>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">02</div>
+            <h4>P&eacute;rim&egrave;tre &amp; proposition</h4>
+            <p>Nous d&eacute;finissons les cibles et proposons une tarification transparente.</p>
+            <div class="process-tag">1-2 jours</div>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">03</div>
+            <h4>&Eacute;valuation</h4>
+            <p>Tests approfondis. Les d&eacute;couvertes critiques sont signal&eacute;es imm&eacute;diatement.</p>
+            <div class="process-tag">1-3 semaines</div>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">04</div>
+            <h4>Rapport &amp; correction</h4>
+            <p>Rapport complet avec PoCs, impact et rem&eacute;diation.</p>
+            <div class="process-tag">3-5 jours</div>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">05</div>
+            <h4>Protection continue</h4>
+            <p>Surveillance permanente via un abonnement.</p>
+            <div class="process-tag">en continu</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky Note -->
+    <div class="container">
+      <div class="sticky-note danger centered fade-in">
+        <span class="sticky-icon">!</span>
+        <p><strong>43% des cyberattaques ciblent les PME.</strong> La plupart n'ont pas d'&eacute;quipe de s&eacute;curit&eacute; d&eacute;di&eacute;e. Pas besoin d'&ecirc;tre une multinationale pour &ecirc;tre une cible.</p>
+      </div>
+    </div>
+
+    <!-- Industries — Use Cases -->
+    <section class="section-alpine">
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Adapt&eacute; &agrave; votre activit&eacute;</div>
+          <h2>Vos menaces sont uniques.<br>Notre approche aussi.</h2>
+          <p>Chaque organisation fait face &agrave; des vecteurs d'attaque diff&eacute;rents. Nous adaptons chaque mission &agrave; votre technologie, votre r&eacute;glementation et votre contexte m&eacute;tier.</p>
+        </div>
+
+        <div class="usecase-grid fade-in">
+          <div class="usecase-card">
+            <div class="usecase-scenario">Votre plateforme</div>
+            <h3>Un attaquant cha&icirc;ne 3 failles mineures en prise de contr&ocirc;le totale de compte</h3>
+            <p>Individuellement, les d&eacute;couvertes semblent inoffensives. Cha&icirc;n&eacute;es ensemble, elles compromettent toute votre base d'utilisateurs. Nous testons les cha&icirc;nes que les scanners n'explorent jamais.</p>
+            <div class="usecase-result">&#8594; Nous cha&icirc;nons avant que les attaquants ne le fassent</div>
+          </div>
+          <div class="usecase-card">
+            <div class="usecase-scenario">Votre API</div>
+            <h3>L'utilisateur A voit les donn&eacute;es de l'utilisateur B via un contr&ocirc;le d'autorisation manquant</h3>
+            <p>Le contr&ocirc;le d'acc&egrave;s d&eacute;faillant est la vuln&eacute;rabilit&eacute; web n&deg;1 mondiale. Un seul contr&ocirc;le manquant signifie un proc&egrave;s, une amende GDPR, un titre dans la presse.</p>
+            <div class="usecase-result">&#8594; Nous scellons chaque fronti&egrave;re</div>
+          </div>
+          <div class="usecase-card">
+            <div class="usecase-scenario">Votre entreprise</div>
+            <h3>Un concurrent extrait votre algorithme de tarification via un endpoint expos&eacute;</h3>
+            <p>Les fuites de logique m&eacute;tier co&ucirc;tent plus cher que les violations de donn&eacute;es. Nous trouvons les endpoints qui exposent votre avantage concurrentiel.</p>
+            <div class="usecase-result">&#8594; Nous prot&eacute;geons ce qui vous rend unique</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+          <a href="services.html" class="btn-ghost fade-in">D&eacute;couvrez comment nous adaptons les missions &agrave; votre activit&eacute; &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container fade-in">
+        <h2>Vos attaquants n'attendent pas.<br>Vous non plus.</h2>
+        <p>Commencez par une &eacute;valuation gratuite. D&eacute;couvrez ce que nous trouvons avant que quelqu'un d'autre ne le fasse.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="contact.html" class="btn-primary">Obtenez votre &eacute;valuation gratuite &rarr;</a>
+          <a href="services.html" class="btn-secondary">Voir les offres &amp; tarifs</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <img src="../logo-mark.svg" alt="Q" width="24" height="24">
+            QuantumSearch
+          </a>
+          <p class="footer-tagline">Recherche en s&eacute;curit&eacute; offensive suisse.</p>
+        </div>
+        <nav class="footer-nav">
+          <div class="footer-nav-col"><h5>Entreprise</h5><ul><li><a href="about.html">&Agrave; propos</a></li><li><a href="track-record.html">Track Record</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+          <div class="footer-nav-col"><h5>Services</h5><ul><li><a href="services.html">Offres</a></li><li><a href="ai-security.html">S&eacute;curit&eacute; IA</a></li><li><a href="vibe-coding.html">S&eacute;curit&eacute; Vibe-Coding</a></li><li><a href="../demo.html">D&eacute;mo</a></li><li><a href="disclosure.html">Disclosure</a></li></ul></div>
+          <div class="footer-nav-col"><h5>L&eacute;gal</h5><ul><li><a href="disclosure.html">Divulgation</a></li><li><a href="privacy.html">Confidentialit&eacute;</a></li></ul></div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">&copy; 2026 QuantumSearch Security Research. Suisse.</div>
+        <ul class="footer-legal"><li><a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a></li><li><a href="privacy.html">Confidentialit&eacute;</a></li></ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script data-goatcounter="https://qsearch.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

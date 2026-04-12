@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="it" class="ai-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://qsearch.ch/it/ai-security.html">
+  <title>Sicurezza AI | QuantumSearch Security Research</title>
+  <meta name="description" content="Valutazioni di sicurezza specializzate per agenti AI, server MCP e deployment LLM. Test di prompt injection, tool poisoning, esfiltrazione dati. Con sede in Svizzera.">
+  <meta property="og:title" content="Sicurezza AI | QuantumSearch Security Research">
+  <meta property="og:description" content="La Sua AI prende decisioni. Noi testiamo cosa succede quando qualcuno infrange le regole.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qsearch.ch/it/ai-security.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://qsearch.ch/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://qsearch.ch/og-image.png">
+  <link rel="alternate" hreflang="en" href="https://qsearch.ch/ai-security.html">
+  <link rel="alternate" hreflang="it" href="https://qsearch.ch/it/ai-security.html">
+  <link rel="alternate" hreflang="de" href="https://qsearch.ch/de/ai-security.html">
+  <link rel="alternate" hreflang="fr" href="https://qsearch.ch/fr/ai-security.html">
+  <link rel="alternate" hreflang="x-default" href="https://qsearch.ch/ai-security.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%235B23FF'/><stop offset='100%25' stop-color='%23008BFF'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23g)'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='18' fill='%23E4FF30'>Q</text></svg>">
+</head>
+<body>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"QuantumSearch Security Research","url":"https://qsearch.ch/it/ai-security.html","description":"Valutazioni di sicurezza AI specializzate: audit server MCP, test di sicurezza agenti AI e valutazioni complete dello stack AI.","areaServed":["CH","EU"],"serviceType":["MCP Security Audit","AI Agent Security Audit","AI Red Team Assessment"]}</script>
+
+  <a href="#main" class="skip-link" style="position:absolute;top:-100%;left:0;padding:0.5rem 1rem;background:var(--accent);color:var(--bg-primary);z-index:9999;font-weight:700;font-size:0.85rem;border-radius:0 0 8px 0;transition:top 0.2s">Vai al contenuto</a>
+  <style>.skip-link:focus{top:0}</style>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="../logo-mark.svg" alt="Q" class="logo-mark-img" width="30" height="30"> QuantumSearch</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">Chi Siamo</a></li>
+        <li class="nav-dropdown"><a href="#" class="active">Servizi &#9662;</a><ul class="nav-dropdown-menu"><li><a href="services.html">Servizi di Sicurezza</a></li><li><a href="ai-security.html">Sicurezza AI</a></li><li><a href="vibe-coding.html">Sicurezza Vibe-Coding</a></li></ul></li>
+        <li><a href="track-record.html">Track Record</a></li>
+        <li><a href="contact.html">Contatti</a></li>
+        <li class="nav-dropdown">
+          <a href="#">Risorse &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="demo.html">Demo Interattiva</a></li>
+            <li><a href="insights.html">Approfondimenti</a></li>
+            <li><a href="disclosure.html">Divulgazione Responsabile</a></li>
+          </ul>
+        </li>
+        <li class="nav-dropdown lang-switcher">
+          <a href="#">IT &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#" data-lang="en">English</a></li>
+            <li><a href="#" data-lang="it">Italiano</a></li>
+            <li><a href="#" data-lang="de">Deutsch</a></li>
+            <li><a href="#" data-lang="fr">Fran&ccedil;ais</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a href="contact.html" class="nav-cta">Valutazione Gratuita</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Apri menu">&#9776;</button>
+    </div>
+  </nav>
+
+  <main class="page-content" id="main">
+    <!-- Hero -->
+    <section class="hero" style="min-height: 55vh;">
+      <div class="container">
+        <div class="hero-content">
+          <div class="label">Sicurezza AI</div>
+          <h1>La Sua AI prende decisioni.<br>Noi testiamo cosa succede quando<br>qualcuno <span class="accent">infrange le regole.</span></h1>
+          <p>LLM, agenti e server MCP elaborano dati dei clienti, eseguono logiche finanziarie e accedono a strumenti interni. Noi testiamo cosa succede quando gli input non sono cortesi &mdash; prompt injection, tool poisoning, esfiltrazione dati e le catene di attacco che emergono quando i sistemi AI si fidano troppo.</p>
+          <div class="hero-buttons">
+            <a href="contact.html" class="btn-primary">Richieda Valutazione &rarr;</a>
+            <a href="#tiers" class="btn-secondary">Veda i Livelli &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stat Ribbon -->
+    <section>
+      <div class="container">
+        <div class="stat-ribbon fade-in">
+          <div class="stat-ribbon-item">
+            <div class="stat-ribbon-number stat-number">43%</div>
+            <div class="stat-ribbon-label">dei server MCP ha vulnerabilit&agrave; di injection</div>
+          </div>
+          <div class="stat-ribbon-item">
+            <div class="stat-ribbon-number">4.2</div>
+            <div class="stat-ribbon-label">vettori di injection medi per deployment di agenti AI</div>
+          </div>
+          <div class="stat-ribbon-item">
+            <div class="stat-ribbon-number">0</div>
+            <div class="stat-ribbon-label">concorrenti svizzeri offrono audit di sicurezza AI dedicati</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Attack Chain Visualization -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Come funzionano gli attacchi AI</div>
+          <h2>Un'injection.<br>Quattro passi alla violazione.</h2>
+          <p>Ecco come appare in pratica una catena di attacco di prompt injection &mdash; e cosa la nostra valutazione intercetta prima degli attaccanti.</p>
+        </div>
+
+        <div class="attack-chain">
+          <div>
+            <div class="chain-column-header exploited">Senza valutazione</div>
+            <div class="chain-step step-neutral fade-in fade-in-delay-1">
+              <div class="chain-step-number">Passo 1</div>
+              <div class="chain-step-text">L'utente invia una richiesta apparentemente normale al Suo assistente AI</div>
+            </div>
+            <div class="chain-step step-warning fade-in fade-in-delay-2">
+              <div class="chain-step-number">Passo 2</div>
+              <div class="chain-step-text">Istruzione nascosta estratta dal contesto del documento &mdash; invisibile all'utente, eseguita dal modello</div>
+            </div>
+            <div class="chain-step step-escalation fade-in fade-in-delay-3">
+              <div class="chain-step-number">Passo 3</div>
+              <div class="chain-step-text">L'agente invoca uno strumento interno con parametri controllati dall'attaccante &mdash; query al database, chiamata API, accesso file</div>
+            </div>
+            <div class="chain-step step-exploited fade-in fade-in-delay-4">
+              <div class="chain-step-number">Passo 4</div>
+              <div class="chain-step-text">Dati sensibili esfiltrati tramite la risposta del tool</div>
+              <div class="chain-badge exploited">Sfruttato</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="chain-column-header identified">Con QuantumSearch</div>
+            <div class="chain-step step-neutral fade-in fade-in-delay-1">
+              <div class="chain-step-number">Passo 1</div>
+              <div class="chain-step-text">Stessa richiesta &mdash; simuliamo scenari di attacco realistici</div>
+            </div>
+            <div class="chain-step step-warning fade-in fade-in-delay-2">
+              <div class="chain-step-number">Passo 2</div>
+              <div class="chain-step-text">Superficie di injection identificata &mdash; documentata con proof-of-concept riproducibile</div>
+            </div>
+            <div class="chain-step step-escalation fade-in fade-in-delay-3">
+              <div class="chain-step-number">Passo 3</div>
+              <div class="chain-step-text">Catena di abuso tool mappata &mdash; ogni confine di permesso testato e catalogato</div>
+            </div>
+            <div class="chain-step step-identified fade-in fade-in-delay-4">
+              <div class="chain-step-number">Passo 4</div>
+              <div class="chain-step-text">Intera catena di attacco documentata. PoC consegnato. Roadmap di risoluzione fornita.</div>
+              <div class="chain-badge identified">Identificato</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Is This For Me? -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Fa per me?</div>
+          <h2>Trovi il Suo punto di partenza</h2>
+        </div>
+
+        <div class="scenario-grid fade-in">
+          <div class="scenario-card">
+            <p>&laquo;Abbiamo implementato un chatbot AI che accede ai dati dei clienti&raquo;</p>
+            <div class="scenario-answer">&rarr; Inizi con l'Audit Server MCP</div>
+          </div>
+          <div class="scenario-card">
+            <p>&laquo;I nostri agenti usano server MCP per connettersi a strumenti interni&raquo;</p>
+            <div class="scenario-answer">&rarr; Audit Server MCP o Audit Agenti AI</div>
+          </div>
+          <div class="scenario-card">
+            <p>&laquo;Stiamo integrando LLM in flussi di lavoro finanziari o legali&raquo;</p>
+            <div class="scenario-answer">&rarr; Audit Sicurezza Agenti AI</div>
+          </div>
+          <div class="scenario-card">
+            <p>&laquo;Dobbiamo dimostrare la sicurezza dell'AI per la conformit&agrave; normativa&raquo;</p>
+            <div class="scenario-answer">&rarr; Valutazione Stack AI Completo</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tier Cards -->
+    <section id="tiers" class="section-alpine">
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Livelli di valutazione</div>
+          <h2>Scelga la profondit&agrave;</h2>
+          <p>Ogni livello fornisce exploit proof-of-concept funzionanti, impatto sul business quantificato e risoluzione operativa &mdash; non elenchi di rischi teorici.</p>
+        </div>
+
+        <div class="pricing-grid ai-pricing fade-in">
+
+          <div class="pricing-card tier-mcp">
+            <div class="pricing-name">Audit Server MCP</div>
+            <div class="pricing-tagline">Protegga le Sue integrazioni tool</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 3.000 <span class="period">a partire da</span>
+            </div>
+            <div class="pricing-equiv">3&ndash;5 giorni &middot; per server MCP</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li>Test di command injection</li>
+              <li>Analisi tool poisoning</li>
+              <li>Revisione OAuth e flussi auth</li>
+              <li>Mappatura escalation privilegi</li>
+              <li>Exploit PoC per ogni finding</li>
+            </ul>
+            <a href="#tier-mcp" class="btn-secondary">Dettagli &darr;</a>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Consigliato</div>
+            <div class="pricing-name">Audit Sicurezza Agenti AI</div>
+            <div class="pricing-tagline">Valutazione completa delle minacce agente</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 8.000 <span class="period">a partire da</span>
+            </div>
+            <div class="pricing-equiv">1&ndash;2 settimane &middot; per sistema agente</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">Test OWASP Agentic Top 10</li>
+              <li class="highlight">Goal hijacking e tool misuse</li>
+              <li>Analisi memory poisoning</li>
+              <li>Catene di errori a cascata</li>
+              <li>Audit dipendenze supply chain</li>
+              <li>Documentazione catene di attacco</li>
+            </ul>
+            <a href="contact.html" class="btn-primary">Richieda Valutazione &rarr;</a>
+          </div>
+
+          <div class="pricing-card tier-full">
+            <div class="pricing-name">Valutazione Stack AI Completo</div>
+            <div class="pricing-tagline">Audit end-to-end dell'infrastruttura AI</div>
+            <div class="pricing-price" style="font-size: 1.6rem;">
+              Ci contatti
+            </div>
+            <div class="pricing-equiv">3&ndash;5 settimane &middot; ambito personalizzato</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">Tutto incluso nell'Audit Agenti</li>
+              <li class="highlight">Test ML adversariale</li>
+              <li>Estrazione modelli e data poisoning</li>
+              <li>Mappatura conformit&agrave; EU AI Act</li>
+              <li>Executive summary per il CdA</li>
+              <li>Roadmap strategica di risoluzione</li>
+            </ul>
+            <a href="contact.html" class="btn-secondary">Contattaci &rarr;</a>
+          </div>
+
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin-top: 2rem; max-width: 520px; margin-left: auto; margin-right: auto;">Tutte le valutazioni sono calibrate sul Suo specifico deployment AI. I prezzi indicati sono punti di partenza &mdash; il costo finale riflette la complessit&agrave;, il numero di agenti e la profondit&agrave; dell'integrazione.</p>
+      </div>
+    </section>
+
+    <!-- Tier Details -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Cosa include</div>
+          <h2>Dettagli della valutazione</h2>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-mcp">
+          <div class="service-number">01</div>
+          <div class="label">3&ndash;5 giorni</div>
+          <h3>Audit Server MCP</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Auditiamo i Suoi deployment di server Model Context Protocol per le vulnerabilit&agrave; che il 43% dei server MCP presenta &mdash; command injection, tool poisoning, misconfigurazioni OAuth e concessioni di privilegi eccessive. Ogni finding include un exploit proof-of-concept funzionante.</p>
+          <ul class="service-includes">
+            <li>Enumerazione tool MCP e mappatura permessi</li>
+            <li>Command injection su ogni tool esposto</li>
+            <li>Tool poisoning e manipolazione risposte</li>
+            <li>Revisione flusso OAuth e gestione token</li>
+            <li>Fuga dati tramite risposte tool</li>
+            <li>Test confini di privilegio</li>
+            <li>Quantificazione rischio in CHF/EUR</li>
+            <li>Retest di verifica a 30 giorni</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-agent">
+          <div class="service-number">02</div>
+          <div class="label">1&ndash;2 settimane</div>
+          <h3>Audit Sicurezza Agenti AI</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Valutazione completa dei sistemi agente AI implementati secondo la OWASP Top 10 per Applicazioni Agentiche. Testiamo chatbot, copilot, sistemi RAG e agenti personalizzati per goal hijacking, abuso tool, memory poisoning e le catene di errori a cascata che emergono quando gli agenti si fidano troppo.</p>
+          <ul class="service-includes">
+            <li>Copertura completa OWASP Agentic Top 10</li>
+            <li>Goal hijacking e override istruzioni</li>
+            <li>Abuso tool e attacchi confused deputy</li>
+            <li>Memory e context poisoning</li>
+            <li>Sfruttamento cascata cross-agente</li>
+            <li>Audit dipendenze supply chain</li>
+            <li>Threat model e documentazione catene di attacco</li>
+            <li>Workshop risoluzione (2 ore)</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-full">
+          <div class="service-number">03</div>
+          <div class="label">3&ndash;5 settimane</div>
+          <h3>Valutazione Stack AI Completo</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">L'incarico di sicurezza AI pi&ugrave; completo. Valutazione end-to-end dell'intera infrastruttura AI &mdash; modelli, agenti, server MCP, pipeline dati e dati di addestramento. Include test di machine learning adversariale, mappatura conformit&agrave; EU AI Act e roadmap strategica di risoluzione per il Consiglio di Amministrazione.</p>
+          <ul class="service-includes">
+            <li>Tutto incluso in Audit MCP + Audit Agenti</li>
+            <li>Test ML adversariale (jailbreaking, prompt injection)</li>
+            <li>Estrazione modelli e data poisoning</li>
+            <li>Valutazione fuga dati di addestramento</li>
+            <li>Conformit&agrave; test adversariali EU AI Act</li>
+            <li>Revisione sicurezza architetturale</li>
+            <li>Executive summary per il CdA</li>
+            <li>Roadmap strategica di risoluzione</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <h2>Come funziona</h2>
+          <p>Un modello di incarico strutturato che rispetta il Suo tempo e produce risultati.</p>
+        </div>
+
+        <div class="process-timeline fade-in">
+          <div class="process-step">
+            <div class="process-dot">01</div>
+            <h4>Chiamata conoscitiva</h4>
+            <p>30 minuti. Comprendiamo il Suo stack AI, modello di minaccia e obiettivi.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">02</div>
+            <h4>Ambito e NDA</h4>
+            <p>Definiamo sistemi target, inventario agenti e confini della valutazione.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">03</div>
+            <h4>Valutazione</h4>
+            <p>Testiamo. Catene di injection critiche segnalate immediatamente.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">04</div>
+            <h4>Report e PoC</h4>
+            <p>Report completo con exploit funzionanti, catene di attacco e risoluzione.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">05</div>
+            <h4>Supporto risoluzione</h4>
+            <p>Workshop, retest di verifica e consulenza continuativa se necessario.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Servizi Correlati -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Servizi Correlati</div>
+          <h2>Esplori le nostre altre specializzazioni</h2>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: var(--border); margin-bottom: 1rem;">
+          <div>
+            <div class="label">Servizio Base</div>
+            <h3>Servizi di Sicurezza</h3>
+            <p>Valutazioni di sicurezza complete, penetration testing e piani di protezione continua. Dalla valutazione gratuita alla fortezza annuale &mdash; ogni incarico fornisce exploit funzionanti e impatto di business quantificato.</p>
+          </div>
+          <div>
+            <a href="services.html" class="btn-secondary">Esplori i Servizi di Sicurezza &rarr;</a>
+          </div>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: rgba(91, 35, 255, 0.15);">
+          <div>
+            <div class="label">Servizio Specializzato</div>
+            <h3>Vibe-Coding Security</h3>
+            <p>Audit di sicurezza per codice generato dall'AI. Cursor, Copilot, Bolt, v0 &mdash; troviamo le vulnerabilit&agrave; che gli assistenti AI mancano sistematicamente prima che raggiungano la produzione.</p>
+          </div>
+          <div>
+            <a href="vibe-coding.html" class="btn-secondary" style="border-color: var(--electric); color: var(--electric);">Esplori Vibe-Coding Security &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container fade-in">
+        <h2>La Sua AI &egrave; live.<br>&Egrave; sicura?</h2>
+        <p>Inizi con una valutazione gratuita della Sua superficie di attacco AI. Nessun obbligo &mdash; solo risultati.</p>
+        <a href="contact.html" class="btn-primary">Richieda Valutazione Gratuita &rarr;</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo"><img src="../logo-mark.svg" alt="Q" width="24" height="24"> QuantumSearch</a>
+          <p class="footer-tagline">Ricerca di sicurezza offensiva svizzera. Troviamo ci&ograve; che trovano gli attaccanti &mdash; prima di loro.</p>
+        </div>
+        <nav class="footer-nav">
+          <div class="footer-nav-col"><h5>Azienda</h5><ul><li><a href="about.html">Chi Siamo</a></li><li><a href="track-record.html">Track Record</a></li><li><a href="contact.html">Contatti</a></li></ul></div>
+          <div class="footer-nav-col"><h5>Servizi</h5><ul><li><a href="services.html">Piani e Prezzi</a></li><li><a href="ai-security.html">Sicurezza AI</a></li><li><a href="vibe-coding.html">Sicurezza Vibe-Coding</a></li><li><a href="demo.html">Demo Interattiva</a></li><li><a href="insights.html">Approfondimenti</a></li></ul></div>
+          <div class="footer-nav-col"><h5>Legale</h5><ul><li><a href="disclosure.html">Divulgazione</a></li><li><a href="privacy.html">Privacy Policy</a></li></ul></div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">&copy; 2026 QuantumSearch Security Research. Svizzera.</div>
+        <ul class="footer-legal"><li><a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a></li><li><a href="privacy.html">Privacy</a></li></ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script data-goatcounter="https://qsearch.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

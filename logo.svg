@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60">
+  <!-- QuantumSearch Logo — Obsidian + Emerald -->
+  <!-- Mark: Q in emerald rounded square -->
+  <rect x="2" y="6" width="48" height="48" rx="10" fill="#10b981"/>
+  <text x="26" y="36" dominant-baseline="middle" text-anchor="middle"
+        font-family="'Bricolage Grotesque', sans-serif" font-weight="800" font-size="28" fill="#09090b">Q</text>
+  <!-- Wordmark -->
+  <text x="62" y="30" dominant-baseline="middle"
+        font-family="'Bricolage Grotesque', sans-serif" font-weight="700" font-size="22" fill="#fafaf9">Quantum</text>
+  <text x="155" y="30" dominant-baseline="middle"
+        font-family="'Bricolage Grotesque', sans-serif" font-weight="700" font-size="22" fill="#10b981">Search</text>
+  <text x="62" y="50" dominant-baseline="middle"
+        font-family="'Plus Jakarta Sans', sans-serif" font-weight="400" font-size="9.5" fill="#a1a1aa" letter-spacing="2.5">SECURITY RESEARCH</text>
+</svg>

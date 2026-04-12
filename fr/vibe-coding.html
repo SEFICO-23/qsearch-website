@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr" class="vibe-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://qsearch.ch/fr/vibe-coding.html">
+  <title>S&eacute;curit&eacute; Vibe-Coding | QuantumSearch Security Research</title>
+  <meta name="description" content="Audits de s&eacute;curit&eacute; pour le code g&eacute;n&eacute;r&eacute; par IA. Cursor, Copilot, Bolt, v0, Lovable, Replit Agent &mdash; nous trouvons les vuln&eacute;rabilit&eacute;s que les assistants IA manquent syst&eacute;matiquement. Bas&eacute; en Suisse.">
+  <meta property="og:title" content="S&eacute;curit&eacute; Vibe-Coding | QuantumSearch Security Research">
+  <meta property="og:description" content="Votre IA a &eacute;crit le code. Qui l'a v&eacute;rifi&eacute; ?">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qsearch.ch/fr/vibe-coding.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://qsearch.ch/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://qsearch.ch/og-image.png">
+  <link rel="alternate" hreflang="en" href="https://qsearch.ch/vibe-coding.html">
+  <link rel="alternate" hreflang="it" href="https://qsearch.ch/it/vibe-coding.html">
+  <link rel="alternate" hreflang="de" href="https://qsearch.ch/de/vibe-coding.html">
+  <link rel="alternate" hreflang="fr" href="https://qsearch.ch/fr/vibe-coding.html">
+  <link rel="alternate" hreflang="x-default" href="https://qsearch.ch/vibe-coding.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%235B23FF'/><stop offset='100%25' stop-color='%23008BFF'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23g)'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='18' fill='%23E4FF30'>Q</text></svg>">
+</head>
+<body>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"QuantumSearch Security Research","url":"https://qsearch.ch/fr/vibe-coding.html","description":"Audits de s\u00e9curit\u00e9 pour le code g\u00e9n\u00e9r\u00e9 par IA : Cursor, Copilot, Bolt, v0, Lovable, Replit Agent. Nous trouvons les vuln\u00e9rabilit\u00e9s que les assistants IA manquent.","areaServed":["CH","EU"],"serviceType":["AI Code Audit","Vibe-Coding Security Review","Pre-Launch Security Review"]}</script>
+
+  <a href="#main" class="skip-link" style="position:absolute;top:-100%;left:0;padding:0.5rem 1rem;background:var(--accent);color:var(--bg-primary);z-index:9999;font-weight:700;font-size:0.85rem;border-radius:0 0 8px 0;transition:top 0.2s">Aller au contenu</a>
+  <style>.skip-link:focus{top:0}</style>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="../logo-mark.svg" alt="Q" class="logo-mark-img" width="30" height="30"> QuantumSearch</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="about.html">&Agrave; Propos</a></li>
+        <li class="nav-dropdown"><a href="#" class="active">Services &#9662;</a><ul class="nav-dropdown-menu"><li><a href="services.html">Services de S&eacute;curit&eacute;</a></li><li><a href="ai-security.html">S&eacute;curit&eacute; IA</a></li><li><a href="vibe-coding.html">S&eacute;curit&eacute; Vibe-Coding</a></li></ul></li>
+        <li><a href="track-record.html">R&eacute;f&eacute;rences</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-dropdown">
+          <a href="#">Ressources &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="demo.html">D&eacute;mo Interactive</a></li>
+            <li><a href="insights.html">Analyses &amp; Recherche</a></li>
+            <li><a href="disclosure.html">Divulgation Responsable</a></li>
+          </ul>
+        </li>
+        <li class="nav-dropdown lang-switcher">
+          <a href="#">FR &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#" data-lang="en">English</a></li>
+            <li><a href="#" data-lang="it">Italiano</a></li>
+            <li><a href="#" data-lang="de">Deutsch</a></li>
+            <li><a href="#" data-lang="fr">Fran&ccedil;ais</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a href="contact.html" class="nav-cta">&Eacute;valuation Gratuite</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Ouvrir le menu">&#9776;</button>
+    </div>
+  </nav>
+
+  <main class="page-content" id="main">
+
+    <!-- Hero -->
+    <section class="hero" style="min-height: 55vh;">
+      <div class="vibe-hero-bg">
+        <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <pattern id="codepattern" x="0" y="0" width="120" height="100" patternUnits="userSpaceOnUse">
+              <text x="10" y="25" font-family="monospace" font-size="11" fill="currentColor" opacity="0.7">{ }</text>
+              <text x="70" y="20" font-family="monospace" font-size="9" fill="currentColor" opacity="0.5">=&gt;</text>
+              <text x="45" y="55" font-family="monospace" font-size="10" fill="currentColor" opacity="0.6">( )</text>
+              <text x="95" y="50" font-family="monospace" font-size="9" fill="currentColor" opacity="0.4">;</text>
+              <text x="15" y="80" font-family="monospace" font-size="9" fill="currentColor" opacity="0.5">//</text>
+              <text x="60" y="85" font-family="monospace" font-size="10" fill="currentColor" opacity="0.6">[ ]</text>
+              <text x="100" y="75" font-family="monospace" font-size="8" fill="currentColor" opacity="0.4">**</text>
+            </pattern>
+          </defs>
+          <rect width="800" height="600" fill="url(#codepattern)" style="color: var(--electric)"/>
+        </svg>
+      </div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="label">S&eacute;curit&eacute; Vibe-Coding</div>
+          <h1>Votre IA a &eacute;crit le code.<br>Qui l'a <span class="accent">v&eacute;rifi&eacute; ?</span></h1>
+          <p>Cursor, Copilot, Bolt, v0, Lovable, Replit Agent &mdash; les outils IA vous permettent de livrer en jours au lieu de mois. Mais la vitesse sans relecture, c'est ainsi que les vuln&eacute;rabilit&eacute;s atteignent la production. Nous auditons les applications g&eacute;n&eacute;r&eacute;es par IA pour d&eacute;tecter les failles de s&eacute;curit&eacute; que les assistants IA manquent syst&eacute;matiquement.</p>
+          <div class="hero-buttons">
+            <a href="contact.html" class="btn-primary">Demander une Revue de Code &rarr;</a>
+            <a href="#vulns" class="btn-secondary">Voir nos D&eacute;couvertes &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reality Check -->
+    <section>
+      <div class="container">
+        <div class="sticky-note danger centered fade-in">
+          <span class="sticky-icon">!</span>
+          <p><strong>En 2025, des chercheurs ont d&eacute;couvert que 36 % des suggestions de code g&eacute;n&eacute;r&eacute;es par IA contenaient des vuln&eacute;rabilit&eacute;s de s&eacute;curit&eacute;.</strong> Le code a &eacute;t&eacute; d&eacute;ploy&eacute; quand m&ecirc;me &mdash; parce que personne ne le relisait.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What AI Gets Wrong -->
+    <section id="vulns">
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Les Angles Morts</div>
+          <h2>Ce que les assistants IA<br>manquent syst&eacute;matiquement</h2>
+          <p>L'IA &eacute;crit du code fonctionnel. Fonctionnel ne signifie pas s&eacute;curis&eacute;. Voici les cat&eacute;gories de vuln&eacute;rabilit&eacute;s que nous trouvons dans chaque application vibe-cod&eacute;e que nous auditons.</p>
+        </div>
+
+        <div class="vuln-grid fade-in">
+          <div class="vuln-card">
+            <div class="vuln-icon">require('l0dash')</div>
+            <h4>D&eacute;pendances Fant&ocirc;mes</h4>
+            <p>L'IA hallucine des noms de paquets qui n'existent pas &mdash; ou que des attaquants ont enregistr&eacute;s. Nous auditons chaque d&eacute;pendance contre les attaques connues de typosquatting et de confusion.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">"sk-proj-4f8a..."</div>
+            <h4>Secrets en Dur</h4>
+            <p>Cl&eacute;s API, identifiants de base de donn&eacute;es, secrets JWT &mdash; l'IA g&eacute;n&egrave;re des valeurs d'exemple qui finissent en production. Nous analysons l'int&eacute;gralit&eacute; de votre code &agrave; la recherche de secrets expos&eacute;s.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">db.query(req.body.id)</div>
+            <h4>Validation d'Entr&eacute;es Manquante</h4>
+            <p>Les formulaires, API et endpoints g&eacute;n&eacute;r&eacute;s par IA acceptent souvent n'importe quelle entr&eacute;e sans assainissement. SQL injection, XSS, traversement de chemin &mdash; le OWASP Top 10 prosp&egrave;re dans le code non relu.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">if (user.role)</div>
+            <h4>Authentification D&eacute;faillante</h4>
+            <p>L'IA construit des flux de connexion qui semblent corrects mais ne le sont pas. Protection CSRF manquante, gestion de session faible, stockage de mots de passe non s&eacute;curis&eacute;, contr&ocirc;les d'acc&egrave;s cass&eacute;s.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">crypto.createCipher()</div>
+            <h4>Patterns Obsol&egrave;tes</h4>
+            <p>Les donn&eacute;es d'entra&icirc;nement de l'IA incluent des ann&eacute;es d'API obsol&egrave;tes, de valeurs par d&eacute;faut non s&eacute;curis&eacute;es et de versions de biblioth&egrave;ques vuln&eacute;rables. Nous identifions les patterns qui &eacute;taient s&ucirc;rs en 2021 mais ne le sont plus en 2026.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">// TODO: add auth</div>
+            <h4>C&eacute;cit&eacute; Architecturale</h4>
+            <p>L'IA &eacute;crit chaque fonction isol&eacute;ment. Elle ne comprend pas l'architecture de votre syst&egrave;me, les flux de donn&eacute;es ou les fronti&egrave;res de confiance. Nous cartographions la surface d'attaque compl&egrave;te que l'IA ne peut pas voir.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Is This You? -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Construit avec l'IA ?</div>
+          <h2>Si l'une de ces situations vous parle</h2>
+        </div>
+
+        <div class="scenario-grid fade-in">
+          <div class="scenario-card">
+            <p>&laquo; Nous avons construit notre MVP avec Cursor/Bolt/v0 et il part en production &raquo;</p>
+            <div class="scenario-answer">&rarr; Vous avez besoin d'une Revue Pr&eacute;-Lancement</div>
+          </div>
+          <div class="scenario-card">
+            <p>&laquo; Nos d&eacute;veloppeurs utilisent Copilot au quotidien mais nous n'avons pas de processus de revue de s&eacute;curit&eacute; &raquo;</p>
+            <div class="scenario-answer">&rarr; Vous avez besoin d'un Audit de Code IA</div>
+          </div>
+          <div class="scenario-card">
+            <p>&laquo; Un freelance ou une agence a construit notre application avec des outils IA &raquo;</p>
+            <div class="scenario-answer">&rarr; Vous avez besoin d'une Revue de Code Tiers</div>
+          </div>
+          <div class="scenario-card">
+            <p>&laquo; Nous livrons du code g&eacute;n&eacute;r&eacute; par IA depuis des mois sans contr&ocirc;le de s&eacute;curit&eacute; &raquo;</p>
+            <div class="scenario-answer">&rarr; Vous avez besoin d'un Audit de Code IA &mdash; de toute urgence</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Tiers -->
+    <section id="tiers" class="section-alpine">
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Niveaux de Revue de Code</div>
+          <h2>Choisissez votre profondeur</h2>
+          <p>Chaque niveau fournit des d&eacute;couvertes actionables avec des niveaux de s&eacute;v&eacute;rit&eacute;, des preuves de concept exploitables le cas &eacute;ch&eacute;ant, et des recommandations de rem&eacute;diation &eacute;tape par &eacute;tape.</p>
+        </div>
+
+        <div class="pricing-grid vibe-pricing fade-in">
+
+          <!-- Tier 1: Pre-Launch Review -->
+          <div class="pricing-card tier-launch">
+            <div class="pricing-name">Revue Pr&eacute;-Lancement</div>
+            <div class="pricing-tagline">Revue de s&eacute;curit&eacute; rapide avant mise en production</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 2'000 <span class="period">&agrave; partir de</span>
+            </div>
+            <div class="pricing-equiv">3&ndash;5 jours &middot; par application</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li>Scan automatis&eacute; de vuln&eacute;rabilit&eacute;s</li>
+              <li>Audit des d&eacute;pendances (hallucin&eacute;es + vuln&eacute;rables)</li>
+              <li>D&eacute;tection de secrets dans le code</li>
+              <li>V&eacute;rification de surface OWASP Top 10</li>
+              <li>Rapport de risques prioris&eacute; avec recommandations</li>
+            </ul>
+            <a href="#tier-launch" class="btn-secondary">En savoir plus &darr;</a>
+          </div>
+
+          <!-- Tier 2: AI Code Audit (Featured) -->
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Le plus populaire</div>
+            <div class="pricing-name">Audit de Code IA</div>
+            <div class="pricing-tagline">Revue manuelle approfondie du code g&eacute;n&eacute;r&eacute; par IA</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 5'000 <span class="period">&agrave; partir de</span>
+            </div>
+            <div class="pricing-equiv">1&ndash;2 semaines &middot; par application</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">Tout ce qui est inclus dans la Revue Pr&eacute;-Lancement</li>
+              <li class="highlight">Revue manuelle par un ing&eacute;nieur en s&eacute;curit&eacute;</li>
+              <li>Tests d'authentification et d'autorisation</li>
+              <li>Analyse de s&eacute;curit&eacute; de la logique m&eacute;tier</li>
+              <li>&Eacute;valuation de la s&eacute;curit&eacute; des endpoints API</li>
+              <li>Mod&egrave;le de menaces architecturales</li>
+            </ul>
+            <a href="contact.html" class="btn-primary">Demander un Audit &rarr;</a>
+          </div>
+
+          <!-- Tier 3: Continuous AI Code Review -->
+          <div class="pricing-card tier-continuous">
+            <div class="pricing-name">Revue Continue de Code IA</div>
+            <div class="pricing-tagline">Revue de s&eacute;curit&eacute; continue pendant que vous livrez</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 990 <span class="period">/ mois</span>
+            </div>
+            <div class="pricing-equiv">Continu &middot; minimum 3 mois</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">Scans automatis&eacute;s mensuels</li>
+              <li class="highlight">Revue au niveau PR sur les changements critiques</li>
+              <li>Audit manuel approfondi trimestriel</li>
+              <li>Surveillance des d&eacute;pendances et alertes</li>
+              <li>Contact s&eacute;curit&eacute; d&eacute;di&eacute;</li>
+              <li>Support incident prioritaire</li>
+            </ul>
+            <a href="contact.html" class="btn-secondary">Commencer &rarr;</a>
+          </div>
+
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin-top: 2rem; max-width: 520px; margin-left: auto; margin-right: auto;">Toutes les revues sont dimensionn&eacute;es selon votre application. Les prix sont des points de d&eacute;part &mdash; le tarif final d&eacute;pend de la taille du code, de la pile technologique et de la complexit&eacute;.</p>
+      </div>
+    </section>
+
+    <!-- Tier Details -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Ce qui est inclus</div>
+          <h2>D&eacute;tails des revues</h2>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-launch">
+          <div class="service-number">01</div>
+          <div class="label">3&ndash;5 jours</div>
+          <h3>Revue Pr&eacute;-Lancement</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Revue de s&eacute;curit&eacute; automatis&eacute;e et semi-automatis&eacute;e rapide, con&ccedil;ue pour les applications g&eacute;n&eacute;r&eacute;es par IA en route vers la production. Nous analysons votre code pour d&eacute;tecter les vuln&eacute;rabilit&eacute;s que les outils IA introduisent le plus fr&eacute;quemment &mdash; d&eacute;pendances hallucin&eacute;es, secrets expos&eacute;s, validation manquante et patterns vuln&eacute;rables connus.</p>
+          <ul class="service-includes">
+            <li>Audit complet des d&eacute;pendances (npm, pip, go modules, etc.)</li>
+            <li>D&eacute;tection de typosquatting et de paquets hallucin&eacute;s</li>
+            <li>Scan de secrets (cl&eacute;s API, tokens, identifiants)</li>
+            <li>V&eacute;rifications automatis&eacute;es OWASP Top 10</li>
+            <li>D&eacute;tection de versions de biblioth&egrave;ques vuln&eacute;rables connues</li>
+            <li>Rapport de risques prioris&eacute;</li>
+            <li>Recommandations de rem&eacute;diation par d&eacute;couverte</li>
+            <li>Retest de v&eacute;rification &agrave; 30 jours</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-audit">
+          <div class="service-number">02</div>
+          <div class="label">1&ndash;2 semaines</div>
+          <h3>Audit de Code IA</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Revue manuelle compl&egrave;te par un ing&eacute;nieur en s&eacute;curit&eacute; humain. Nous allons au-del&agrave; du scan automatis&eacute; pour tester la logique m&eacute;tier, les flux d'authentification, la s&eacute;curit&eacute; des API et les d&eacute;cisions architecturales que l'IA prend isol&eacute;ment. Chaque d&eacute;couverte inclut un niveau de s&eacute;v&eacute;rit&eacute;, une preuve de concept et des &eacute;tapes de rem&eacute;diation.</p>
+          <ul class="service-includes">
+            <li>Tout ce qui est inclus dans la Revue Pr&eacute;-Lancement</li>
+            <li>Revue manuelle du code (authentification, autorisation, gestion des donn&eacute;es)</li>
+            <li>Tests de vuln&eacute;rabilit&eacute;s de la logique m&eacute;tier</li>
+            <li>&Eacute;valuation de la s&eacute;curit&eacute; des endpoints API</li>
+            <li>Mod&egrave;le de menaces architecturales</li>
+            <li>Analyse des fronti&egrave;res de confiance inter-composants</li>
+            <li>Exploits PoC pour les d&eacute;couvertes critiques</li>
+            <li>Atelier de rem&eacute;diation (2 heures)</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-continuous">
+          <div class="service-number">03</div>
+          <div class="label">Continu</div>
+          <h3>Revue Continue de Code IA</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Pour les &eacute;quipes qui livrent fr&eacute;quemment avec l'aide de l'IA. Nous nous int&eacute;grons &agrave; votre workflow de d&eacute;veloppement avec des scans automatis&eacute;s mensuels, une revue de s&eacute;curit&eacute; au niveau PR sur les changements critiques, et des audits approfondis trimestriels. Votre contact s&eacute;curit&eacute; d&eacute;di&eacute; conna&icirc;t votre code et votre mod&egrave;le de menaces.</p>
+          <ul class="service-includes">
+            <li>Scans automatis&eacute;s mensuels de vuln&eacute;rabilit&eacute;s</li>
+            <li>Revue de s&eacute;curit&eacute; au niveau PR sur les chemins de code critiques</li>
+            <li>Audit manuel approfondi trimestriel</li>
+            <li>Surveillance continue des d&eacute;pendances</li>
+            <li>Alertes sur les paquets hallucin&eacute;s</li>
+            <li>Contact s&eacute;curit&eacute; d&eacute;di&eacute; nomm&eacute;</li>
+            <li>R&eacute;ponse prioritaire aux incidents</li>
+            <li>Rapport trimestriel de posture de s&eacute;curit&eacute;</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Trust Builder -->
+    <section>
+      <div class="container">
+        <div class="trust-callout fade-in">
+          <div class="trust-stat">Lors d'un audit r&eacute;cent, nous avons d&eacute;couvert 23 vuln&eacute;rabilit&eacute;s dans une application SaaS construite avec Cursor &mdash; dont un endpoint admin non authentifi&eacute;, 3 cl&eacute;s API cod&eacute;es en dur, et une d&eacute;pendance qui n'existait pas sur npm.</div>
+          <div class="trust-detail">Le nom du paquet avait &eacute;t&eacute; enregistr&eacute; par un attaquant 6 mois plus t&ocirc;t. Chaque installation ex&eacute;cutait son code. L'application &eacute;tait &agrave; 3 jours du lancement.</div>
+          <div class="trust-source">Bas&eacute; sur des d&eacute;couvertes courantes dans les codebases g&eacute;n&eacute;r&eacute;s par IA</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <h2>Comment &ccedil;a fonctionne</h2>
+          <p>Un processus de revue structur&eacute; qui respecte votre rythme de livraison.</p>
+        </div>
+
+        <div class="process-timeline fade-in">
+          <div class="process-step">
+            <div class="process-dot">01</div>
+            <h4>Soumettez votre Repo</h4>
+            <p>Partagez l'acc&egrave;s &agrave; votre codebase. GitHub, GitLab, Bitbucket ou zip.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">02</div>
+            <h4>P&eacute;rim&egrave;tre &amp; NDA</h4>
+            <p>D&eacute;finissez le p&eacute;rim&egrave;tre, signez le NDA, convenez du d&eacute;lai.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">03</div>
+            <h4>Scan Automatis&eacute;</h4>
+            <p>Nos outils identifient les patterns de vuln&eacute;rabilit&eacute;s connus, les probl&egrave;mes de d&eacute;pendances et les secrets.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">04</div>
+            <h4>Revue Manuelle</h4>
+            <p>Un ing&eacute;nieur en s&eacute;curit&eacute; examine le code g&eacute;n&eacute;r&eacute; par IA pour les failles logiques, les lacunes d'authentification et les risques architecturaux.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">05</div>
+            <h4>Rapport &amp; Correction</h4>
+            <p>Rapport complet avec niveaux de s&eacute;v&eacute;rit&eacute;, exploits PoC et rem&eacute;diation &eacute;tape par &eacute;tape.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Connexes -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Services Connexes</div>
+          <h2>D&eacute;couvrez nos autres sp&eacute;cialisations</h2>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: var(--border); margin-bottom: 1rem;">
+          <div>
+            <div class="label">Service Principal</div>
+            <h3>Services de S&eacute;curit&eacute;</h3>
+            <p>&Eacute;valuations de s&eacute;curit&eacute; compl&egrave;tes, tests d'intrusion et plans de protection continue. De l'&eacute;valuation gratuite &agrave; la forteresse annuelle &mdash; chaque mission fournit des exploits fonctionnels et un impact commercial quantifi&eacute;.</p>
+          </div>
+          <div>
+            <a href="services.html" class="btn-secondary">D&eacute;couvrir les Services de S&eacute;curit&eacute; &rarr;</a>
+          </div>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: var(--border-signal);">
+          <div>
+            <div class="label">Service Sp&eacute;cialis&eacute;</div>
+            <h3>S&eacute;curit&eacute; IA</h3>
+            <p>&Eacute;valuations d&eacute;di&eacute;es pour les agents IA, serveurs MCP et d&eacute;ploiements LLM. Injection de prompts, empoisonnement d'outils, exfiltration de donn&eacute;es &mdash; test&eacute;s avec des exploits fonctionnels.</p>
+          </div>
+          <div>
+            <a href="ai-security.html" class="btn-secondary" style="border-color: var(--signal); color: var(--signal);">D&eacute;couvrir S&eacute;curit&eacute; IA &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container fade-in">
+        <h2>Livrez vite. Livrez s&ucirc;r.</h2>
+        <p>Votre code g&eacute;n&eacute;r&eacute; par IA est &agrave; une revue de la production. Sans jugement &mdash; juste des r&eacute;sultats.</p>
+        <a href="contact.html" class="btn-primary">Demander une Revue de Code &rarr;</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo"><img src="../logo-mark.svg" alt="Q" width="24" height="24"> QuantumSearch</a>
+          <p class="footer-tagline">Recherche de s&eacute;curit&eacute; offensive suisse. Nous trouvons ce que les attaquants trouvent &mdash; avant eux.</p>
+        </div>
+        <nav class="footer-nav">
+          <div class="footer-nav-col"><h5>Entreprise</h5><ul><li><a href="about.html">&Agrave; Propos</a></li><li><a href="track-record.html">R&eacute;f&eacute;rences</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+          <div class="footer-nav-col"><h5>Services</h5><ul><li><a href="services.html">Plans et Tarifs</a></li><li><a href="ai-security.html">S&eacute;curit&eacute; IA</a></li><li><a href="vibe-coding.html">S&eacute;curit&eacute; Vibe-Coding</a></li><li><a href="demo.html">D&eacute;mo Interactive</a></li><li><a href="insights.html">Analyses</a></li></ul></div>
+          <div class="footer-nav-col"><h5>L&eacute;gal</h5><ul><li><a href="disclosure.html">Divulgation</a></li><li><a href="privacy.html">Politique de Confidentialit&eacute;</a></li></ul></div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">&copy; 2026 QuantumSearch Security Research. Suisse.</div>
+        <ul class="footer-legal"><li><a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a></li><li><a href="privacy.html">Confidentialit&eacute;</a></li></ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script data-goatcounter="https://qsearch.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

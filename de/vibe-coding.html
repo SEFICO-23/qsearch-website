@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="de" class="vibe-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://qsearch.ch/de/vibe-coding.html">
+  <title>Vibe-Coding Sicherheit | QuantumSearch Security Research</title>
+  <meta name="description" content="Sicherheitsaudits f&uuml;r KI-generierten Code. Cursor, Copilot, Bolt, v0, Lovable, Replit Agent &mdash; wir finden die Schwachstellen, die KI-Assistenten konsequent &uuml;bersehen. Schweizer Sicherheitsforschung.">
+  <meta property="og:title" content="Vibe-Coding Sicherheit | QuantumSearch Security Research">
+  <meta property="og:description" content="Ihre KI hat den Code geschrieben. Wer hat ihn gepr&uuml;ft?">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qsearch.ch/de/vibe-coding.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://qsearch.ch/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://qsearch.ch/og-image.png">
+  <link rel="alternate" hreflang="en" href="https://qsearch.ch/vibe-coding.html">
+  <link rel="alternate" hreflang="it" href="https://qsearch.ch/it/vibe-coding.html">
+  <link rel="alternate" hreflang="de" href="https://qsearch.ch/de/vibe-coding.html">
+  <link rel="alternate" hreflang="fr" href="https://qsearch.ch/fr/vibe-coding.html">
+  <link rel="alternate" hreflang="x-default" href="https://qsearch.ch/vibe-coding.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%235B23FF'/><stop offset='100%25' stop-color='%23008BFF'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23g)'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='18' fill='%23E4FF30'>Q</text></svg>">
+</head>
+<body>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"QuantumSearch Security Research","url":"https://qsearch.ch/de/vibe-coding.html","description":"Sicherheitsaudits f\u00fcr KI-generierten Code: Cursor, Copilot, Bolt, v0, Lovable, Replit Agent. Wir finden die Schwachstellen, die KI-Assistenten \u00fcbersehen.","areaServed":["CH","EU"],"serviceType":["AI Code Audit","Vibe-Coding Security Review","Pre-Launch Security Review"]}</script>
+
+  <a href="#main" class="skip-link" style="position:absolute;top:-100%;left:0;padding:0.5rem 1rem;background:var(--accent);color:var(--bg-primary);z-index:9999;font-weight:700;font-size:0.85rem;border-radius:0 0 8px 0;transition:top 0.2s">Zum Inhalt springen</a>
+  <style>.skip-link:focus{top:0}</style>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="../logo-mark.svg" alt="Q" class="logo-mark-img" width="30" height="30"> QuantumSearch</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Startseite</a></li>
+        <li><a href="about.html">&Uuml;ber Uns</a></li>
+        <li class="nav-dropdown"><a href="#" class="active">Leistungen &#9662;</a><ul class="nav-dropdown-menu"><li><a href="services.html">Sicherheitsdienste</a></li><li><a href="ai-security.html">AI-Sicherheit</a></li><li><a href="vibe-coding.html">Vibe-Coding Sicherheit</a></li></ul></li>
+        <li><a href="track-record.html">Referenzen</a></li>
+        <li><a href="contact.html">Kontakt</a></li>
+        <li class="nav-dropdown">
+          <a href="#">Ressourcen &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="demo.html">Live-Demo</a></li>
+            <li><a href="insights.html">Analysen &amp; Forschung</a></li>
+            <li><a href="disclosure.html">Verantwortungsvolle Offenlegung</a></li>
+          </ul>
+        </li>
+        <li class="nav-dropdown lang-switcher">
+          <a href="#">DE &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#" data-lang="en">English</a></li>
+            <li><a href="#" data-lang="it">Italiano</a></li>
+            <li><a href="#" data-lang="de">Deutsch</a></li>
+            <li><a href="#" data-lang="fr">Fran&ccedil;ais</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a href="contact.html" class="nav-cta">Kostenlose Bewertung</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Men&uuml; umschalten">&#9776;</button>
+    </div>
+  </nav>
+
+  <main class="page-content" id="main">
+
+    <!-- Hero -->
+    <section class="hero" style="min-height: 55vh;">
+      <div class="vibe-hero-bg">
+        <svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <pattern id="codepattern" x="0" y="0" width="120" height="100" patternUnits="userSpaceOnUse">
+              <text x="10" y="25" font-family="monospace" font-size="11" fill="currentColor" opacity="0.7">{ }</text>
+              <text x="70" y="20" font-family="monospace" font-size="9" fill="currentColor" opacity="0.5">=&gt;</text>
+              <text x="45" y="55" font-family="monospace" font-size="10" fill="currentColor" opacity="0.6">( )</text>
+              <text x="95" y="50" font-family="monospace" font-size="9" fill="currentColor" opacity="0.4">;</text>
+              <text x="15" y="80" font-family="monospace" font-size="9" fill="currentColor" opacity="0.5">//</text>
+              <text x="60" y="85" font-family="monospace" font-size="10" fill="currentColor" opacity="0.6">[ ]</text>
+              <text x="100" y="75" font-family="monospace" font-size="8" fill="currentColor" opacity="0.4">**</text>
+            </pattern>
+          </defs>
+          <rect width="800" height="600" fill="url(#codepattern)" style="color: var(--electric)"/>
+        </svg>
+      </div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="label">Vibe-Coding Sicherheit</div>
+          <h1>Ihre KI hat den Code geschrieben.<br>Wer hat ihn <span class="accent">gepr&uuml;ft?</span></h1>
+          <p>Cursor, Copilot, Bolt, v0, Lovable, Replit Agent &mdash; KI-Tools erm&ouml;glichen es Ihnen, in Tagen statt Monaten zu liefern. Aber Geschwindigkeit ohne &Uuml;berpr&uuml;fung ist der Weg, wie Schwachstellen in die Produktion gelangen. Wir pr&uuml;fen KI-generierte Anwendungen auf die Sicherheitsl&uuml;cken, die KI-Assistenten konsequent &uuml;bersehen.</p>
+          <div class="hero-buttons">
+            <a href="contact.html" class="btn-primary">Code-Review anfordern &rarr;</a>
+            <a href="#vulns" class="btn-secondary">Was wir finden &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reality Check -->
+    <section>
+      <div class="container">
+        <div class="sticky-note danger centered fade-in">
+          <span class="sticky-icon">!</span>
+          <p><strong>Im Jahr 2025 stellten Forscher fest, dass 36% der KI-generierten Code-Vorschl&auml;ge Sicherheitsl&uuml;cken enthielten.</strong> Der Code wurde trotzdem ausgeliefert &mdash; weil ihn niemand &uuml;berpr&uuml;ft hat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- What AI Gets Wrong -->
+    <section id="vulns">
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Die blinden Flecken</div>
+          <h2>Was KI-Assistenten<br>konsequent &uuml;bersehen</h2>
+          <p>KI schreibt funktionalen Code. Funktional ist nicht dasselbe wie sicher. Dies sind die Schwachstellenkategorien, die wir in jeder Vibe-Coding-Anwendung finden, die wir pr&uuml;fen.</p>
+        </div>
+
+        <div class="vuln-grid fade-in">
+          <div class="vuln-card">
+            <div class="vuln-icon">require('l0dash')</div>
+            <h4>Phantom-Abh&auml;ngigkeiten</h4>
+            <p>KI halluziniert Paketnamen, die nicht existieren &mdash; oder die Angreifer registriert haben. Wir pr&uuml;fen jede Abh&auml;ngigkeit auf bekannte Typosquatting- und Verwechslungsangriffe.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">"sk-proj-4f8a..."</div>
+            <h4>Hartcodierte Geheimnisse</h4>
+            <p>API-Schl&uuml;ssel, Datenbank-Zugangsdaten, JWT-Secrets &mdash; KI generiert Beispielwerte, die in der Produktion landen. Wir scannen Ihre gesamte Codebasis auf exponierte Geheimnisse.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">db.query(req.body.id)</div>
+            <h4>Fehlende Eingabevalidierung</h4>
+            <p>KI-generierte Formulare, APIs und Endpunkte akzeptieren oft jede Eingabe ohne Bereinigung. SQL Injection, XSS, Path Traversal &mdash; die OWASP Top 10 gedeihen in ungepr&uuml;ftem Code.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">if (user.role)</div>
+            <h4>Fehlerhafte Authentifizierung</h4>
+            <p>KI erstellt Anmeldeabl&auml;ufe, die richtig aussehen, es aber nicht sind. Fehlender CSRF-Schutz, schwaches Session-Handling, unsichere Passwortspeicherung, defekte Zugriffskontrollen.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">crypto.createCipher()</div>
+            <h4>Veraltete Muster</h4>
+            <p>Die Trainingsdaten der KI umfassen Jahre veralteter APIs, unsicherer Standardeinstellungen und anf&auml;lliger Bibliotheksversionen. Wir identifizieren Code-Muster, die 2021 sicher waren, aber 2026 nicht mehr.</p>
+          </div>
+          <div class="vuln-card">
+            <div class="vuln-icon">// TODO: add auth</div>
+            <h4>Architektur-Blindheit</h4>
+            <p>KI schreibt jede Funktion isoliert. Sie versteht weder Ihre Systemarchitektur noch Ihren Datenfluss oder Vertrauensgrenzen. Wir kartieren die gesamte Angriffsfl&auml;che, die KI nicht sehen kann.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Is This You? -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Mit KI erstellt?</div>
+          <h2>Kommt Ihnen das bekannt vor?</h2>
+        </div>
+
+        <div class="scenario-grid fade-in">
+          <div class="scenario-card">
+            <p>&bdquo;Wir haben unser MVP mit Cursor/Bolt/v0 erstellt und es geht in Produktion&ldquo;</p>
+            <div class="scenario-answer">&rarr; Sie brauchen ein Pre-Launch-Review</div>
+          </div>
+          <div class="scenario-card">
+            <p>&bdquo;Unsere Entwickler nutzen t&auml;glich Copilot, aber wir haben keinen Sicherheits&uuml;berpr&uuml;fungsprozess&ldquo;</p>
+            <div class="scenario-answer">&rarr; Sie brauchen ein AI Code Audit</div>
+          </div>
+          <div class="scenario-card">
+            <p>&bdquo;Ein Freelancer oder eine Agentur hat unsere App mit KI-Tools erstellt&ldquo;</p>
+            <div class="scenario-answer">&rarr; Sie brauchen ein Drittanbieter-Code-Review</div>
+          </div>
+          <div class="scenario-card">
+            <p>&bdquo;Wir liefern seit Monaten KI-generierten Code ohne Sicherheits&uuml;berpr&uuml;fung aus&ldquo;</p>
+            <div class="scenario-answer">&rarr; Sie brauchen ein AI Code Audit &mdash; dringend</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Tiers -->
+    <section id="tiers" class="section-alpine">
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Code-Review-Stufen</div>
+          <h2>W&auml;hlen Sie Ihre Tiefe</h2>
+          <p>Jede Stufe liefert umsetzbare Ergebnisse mit Schweregradbewertung, Proof-of-Concept-Exploits wo zutreffend und Schritt-f&uuml;r-Schritt-Behebungsanleitungen.</p>
+        </div>
+
+        <div class="pricing-grid vibe-pricing fade-in">
+
+          <!-- Tier 1: Pre-Launch Review -->
+          <div class="pricing-card tier-launch">
+            <div class="pricing-name">Pre-Launch-Review</div>
+            <div class="pricing-tagline">Schnelle Sicherheitspr&uuml;fung vor dem Go-Live</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 2'000 <span class="period">ab</span>
+            </div>
+            <div class="pricing-equiv">3&ndash;5 Tage &middot; pro Anwendung</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li>Automatisierter Schwachstellen-Scan</li>
+              <li>Abh&auml;ngigkeitspr&uuml;fung (halluzinierte + verwundbare)</li>
+              <li>Erkennung exponierter Geheimnisse</li>
+              <li>OWASP Top 10 Oberfl&auml;chenpr&uuml;fung</li>
+              <li>Priorisierter Risikobericht mit Behebungsanleitung</li>
+            </ul>
+            <a href="#tier-launch" class="btn-secondary">Mehr erfahren &darr;</a>
+          </div>
+
+          <!-- Tier 2: AI Code Audit (Featured) -->
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Am beliebtesten</div>
+            <div class="pricing-name">AI Code Audit</div>
+            <div class="pricing-tagline">Tiefgehende manuelle Pr&uuml;fung von KI-generiertem Code</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 5'000 <span class="period">ab</span>
+            </div>
+            <div class="pricing-equiv">1&ndash;2 Wochen &middot; pro Anwendung</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">Alles aus dem Pre-Launch-Review</li>
+              <li class="highlight">Manuelle Code-Pr&uuml;fung durch Sicherheitsingenieur</li>
+              <li>Authentifizierungs- &amp; Autorisierungstests</li>
+              <li>Analyse der Gesch&auml;ftslogik-Sicherheit</li>
+              <li>API-Endpunkt-Sicherheitsbewertung</li>
+              <li>Architektur-Bedrohungsmodell</li>
+            </ul>
+            <a href="contact.html" class="btn-primary">Audit anfordern &rarr;</a>
+          </div>
+
+          <!-- Tier 3: Continuous AI Code Review -->
+          <div class="pricing-card tier-continuous">
+            <div class="pricing-name">Kontinuierliches AI Code Review</div>
+            <div class="pricing-tagline">Laufende Sicherheitspr&uuml;fung w&auml;hrend Sie ausliefern</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 990 <span class="period">/ Monat</span>
+            </div>
+            <div class="pricing-equiv">Laufend &middot; mindestens 3 Monate</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">Monatliche automatisierte Scans</li>
+              <li class="highlight">PR-Review bei kritischen &Auml;nderungen</li>
+              <li>Viertelj&auml;hrliche manuelle Tiefenpr&uuml;fung</li>
+              <li>Abh&auml;ngigkeits&uuml;berwachung &amp; Alarmierung</li>
+              <li>Dedizierter Sicherheitskontakt</li>
+              <li>Priorit&auml;rer Vorfall-Support</li>
+            </ul>
+            <a href="contact.html" class="btn-secondary">Jetzt starten &rarr;</a>
+          </div>
+
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin-top: 2rem; max-width: 520px; margin-left: auto; margin-right: auto;">Alle Reviews werden auf Ihre Anwendung zugeschnitten. Preise sind Ausgangspunkte &mdash; die endg&uuml;ltige Preisgestaltung h&auml;ngt von Codebasis-Gr&ouml;&szlig;e, Technologie-Stack und Komplexit&auml;t ab.</p>
+      </div>
+    </section>
+
+    <!-- Tier Details -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Was enthalten ist</div>
+          <h2>Review-Details</h2>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-launch">
+          <div class="service-number">01</div>
+          <div class="label">3&ndash;5 Tage</div>
+          <h3>Pre-Launch-Review</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Schnelles automatisiertes und halbautomatisiertes Sicherheitsreview, konzipiert f&uuml;r KI-generierte Anwendungen auf dem Weg in die Produktion. Wir scannen Ihre Codebasis auf die Schwachstellen, die KI-Tools am h&auml;ufigsten einf&uuml;hren &mdash; halluzinierte Abh&auml;ngigkeiten, exponierte Geheimnisse, fehlende Validierung und bekannt verwundbare Muster.</p>
+          <ul class="service-includes">
+            <li>Vollst&auml;ndige Abh&auml;ngigkeitspr&uuml;fung (npm, pip, Go-Module usw.)</li>
+            <li>Typosquatting- &amp; halluzinierte Paketerkennung</li>
+            <li>Geheimnis-Scanning (API-Schl&uuml;ssel, Tokens, Zugangsdaten)</li>
+            <li>Automatisierte OWASP Top 10 Pr&uuml;fungen</li>
+            <li>Erkennung bekannt verwundbarer Bibliotheksversionen</li>
+            <li>Priorisierter Risikobericht</li>
+            <li>Behebungsanleitung pro Ergebnis</li>
+            <li>30-Tage-Verifizierungsretest</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-audit">
+          <div class="service-number">02</div>
+          <div class="label">1&ndash;2 Wochen</div>
+          <h3>AI Code Audit</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Umfassende manuelle Sicherheitspr&uuml;fung durch einen menschlichen Sicherheitsingenieur. Wir gehen &uuml;ber automatisiertes Scanning hinaus und testen Gesch&auml;ftslogik, Authentifizierungsabl&auml;ufe, API-Sicherheit und die architektonischen Entscheidungen, die KI isoliert trifft. Jedes Ergebnis enth&auml;lt Schweregradbewertung, Proof-of-Concept und Behebungsschritte.</p>
+          <ul class="service-includes">
+            <li>Alles aus dem Pre-Launch-Review</li>
+            <li>Manuelle Code-Pr&uuml;fung (Authentifizierung, Autorisierung, Datenverarbeitung)</li>
+            <li>Tests der Gesch&auml;ftslogik-Schwachstellen</li>
+            <li>API-Endpunkt-Sicherheitsbewertung</li>
+            <li>Architektur-Bedrohungsmodell</li>
+            <li>Komponenten&uuml;bergreifende Vertrauensgrenzen-Analyse</li>
+            <li>PoC-Exploits f&uuml;r kritische Ergebnisse</li>
+            <li>Behebungs-Workshop (2 Stunden)</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-continuous">
+          <div class="service-number">03</div>
+          <div class="label">Laufend</div>
+          <h3>Kontinuierliches AI Code Review</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">F&uuml;r Teams, die h&auml;ufig mit KI-Unterst&uuml;tzung ausliefern. Wir integrieren uns in Ihren Entwicklungsworkflow mit monatlichen automatisierten Scans, PR-Sicherheitsreviews bei kritischen &Auml;nderungen und viertelj&auml;hrlichen Tiefenpr&uuml;fungen. Ihr dedizierter Sicherheitskontakt kennt Ihre Codebasis und Ihr Bedrohungsmodell.</p>
+          <ul class="service-includes">
+            <li>Monatliche automatisierte Schwachstellen-Scans</li>
+            <li>PR-Sicherheitsreview bei kritischen Code-Pfaden</li>
+            <li>Viertelj&auml;hrliche manuelle Tiefenpr&uuml;fung</li>
+            <li>Kontinuierliche Abh&auml;ngigkeits&uuml;berwachung</li>
+            <li>Halluzinierte-Pakete-Alarmierung</li>
+            <li>Dedizierter namentlicher Sicherheitskontakt</li>
+            <li>Priorit&auml;re Vorfallreaktion</li>
+            <li>Viertelj&auml;hrlicher Sicherheitslagebericht</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Trust Builder -->
+    <section>
+      <div class="container">
+        <div class="trust-callout fade-in">
+          <div class="trust-stat">Bei einem k&uuml;rzlichen Audit fanden wir 23 Schwachstellen in einer mit Cursor erstellten SaaS-Anwendung &mdash; darunter einen nicht authentifizierten Admin-Endpunkt, 3 hartcodierte API-Schl&uuml;ssel und eine Abh&auml;ngigkeit, die auf npm nicht existierte.</div>
+          <div class="trust-detail">Der Paketname war 6 Monate zuvor von einem Angreifer registriert worden. Jede Installation f&uuml;hrte dessen Code aus. Die Anwendung war 3 Tage vor dem Launch.</div>
+          <div class="trust-source">Basierend auf h&auml;ufigen Ergebnissen in KI-generierten Codebasen</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <h2>So funktioniert es</h2>
+          <p>Ein strukturierter Review-Prozess, der Ihre Liefergeschwindigkeit respektiert.</p>
+        </div>
+
+        <div class="process-timeline fade-in">
+          <div class="process-step">
+            <div class="process-dot">01</div>
+            <h4>Repository einreichen</h4>
+            <p>Teilen Sie den Zugang zu Ihrer Codebasis. GitHub, GitLab, Bitbucket oder Zip.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">02</div>
+            <h4>Umfang &amp; NDA</h4>
+            <p>Definieren Sie den Umfang, unterzeichnen Sie das NDA, vereinbaren Sie den Zeitplan.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">03</div>
+            <h4>Automatisierter Scan</h4>
+            <p>Unsere Tools erkennen bekannte Schwachstellenmuster, Abh&auml;ngigkeitsprobleme und Geheimnisse.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">04</div>
+            <h4>Manuelle Pr&uuml;fung</h4>
+            <p>Sicherheitsingenieur pr&uuml;ft KI-generierten Code auf Logikfehler, Authentifizierungsl&uuml;cken und Architekturrisiken.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">05</div>
+            <h4>Bericht &amp; Behebung</h4>
+            <p>Vollst&auml;ndiger Bericht mit Schweregradbewertungen, PoC-Exploits und Schritt-f&uuml;r-Schritt-Behebungsanleitung.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Verwandte Services -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Verwandte Services</div>
+          <h2>Entdecken Sie unsere anderen Spezialisierungen</h2>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: var(--border); margin-bottom: 1rem;">
+          <div>
+            <div class="label">Kernservice</div>
+            <h3>Sicherheitsservices</h3>
+            <p>Vollst&auml;ndige Sicherheitsbewertungen, Penetrationstests und kontinuierliche Schutzpl&auml;ne. Von der kostenlosen Bewertung bis zur j&auml;hrlichen Festung &mdash; jedes Engagement liefert funktionierende Exploits und quantifizierten Gesch&auml;ftsimpact.</p>
+          </div>
+          <div>
+            <a href="services.html" class="btn-secondary">Sicherheitsservices entdecken &rarr;</a>
+          </div>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: var(--border-signal);">
+          <div>
+            <div class="label">Spezialisierter Service</div>
+            <h3>AI-Sicherheit</h3>
+            <p>Dedizierte Bewertungen f&uuml;r AI-Agenten, MCP-Server und LLM-Deployments. Prompt Injection, Tool Poisoning, Datenexfiltration &mdash; getestet mit funktionierenden Exploits.</p>
+          </div>
+          <div>
+            <a href="ai-security.html" class="btn-secondary" style="border-color: var(--signal); color: var(--signal);">AI-Sicherheit entdecken &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container fade-in">
+        <h2>Schnell liefern. Sicher liefern.</h2>
+        <p>Ihr KI-generierter Code ist nur ein Review von der Produktionsreife entfernt. Kein Urteil &mdash; nur Ergebnisse.</p>
+        <a href="contact.html" class="btn-primary">Code-Review anfordern &rarr;</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <img src="../logo-mark.svg" alt="Q" width="24" height="24">
+            QuantumSearch
+          </a>
+          <p class="footer-tagline">Schweizer offensive Sicherheitsforschung. Wir finden, was Angreifer finden &mdash; bevor sie es tun.</p>
+        </div>
+        <nav class="footer-nav">
+          <div class="footer-nav-col">
+            <h5>Unternehmen</h5>
+            <ul>
+              <li><a href="about.html">&Uuml;ber Uns</a></li>
+              <li><a href="track-record.html">Referenzen</a></li>
+              <li><a href="contact.html">Kontakt</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <h5>Leistungen</h5>
+            <ul>
+              <li><a href="services.html">Angebote</a></li>
+              <li><a href="ai-security.html">AI-Sicherheit</a></li>
+              <li><a href="vibe-coding.html">Vibe-Coding Sicherheit</a></li>
+              <li><a href="demo.html">Live-Demo</a></li>
+              <li><a href="insights.html">Analysen &amp; Forschung</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <h5>Rechtliches</h5>
+            <ul>
+              <li><a href="disclosure.html">Offenlegung</a></li>
+              <li><a href="privacy.html">Datenschutz</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">&copy; 2026 QuantumSearch Security Research. Schweiz.</div>
+        <ul class="footer-legal">
+          <li><a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a></li>
+          <li><a href="privacy.html">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../main.js"></script>
+  <script data-goatcounter="https://qsearch.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <!-- QuantumSearch Logomark — Q monogram (Ultraviolet Volt) -->
+  <defs>
+    <linearGradient id="qg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B23FF"/>
+      <stop offset="100%" stop-color="#008BFF"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect x="2" y="2" width="56" height="56" rx="12" fill="url(#qg)"/>
+  <text x="30" y="36" dominant-baseline="middle" text-anchor="middle"
+        font-family="'Bricolage Grotesque', sans-serif" font-weight="800" font-size="34"
+        fill="#E4FF30" filter="url(#glow)">Q</text>
+</svg>

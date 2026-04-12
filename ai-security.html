@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="ai-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://qsearch.ch/ai-security.html">
+  <title>AI Security Research | QuantumSearch Security Research</title>
+  <meta name="description" content="Specialized security assessments for AI agents, MCP servers, and LLM deployments. Prompt injection, tool poisoning, data exfiltration testing. Swiss-based.">
+  <meta property="og:title" content="AI Security Research | QuantumSearch Security Research">
+  <meta property="og:description" content="Your AI makes decisions. We test what happens when someone breaks the rules.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qsearch.ch/ai-security.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="https://qsearch.ch/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://qsearch.ch/og-image.png">
+  <link rel="alternate" hreflang="en" href="https://qsearch.ch/ai-security.html">
+  <link rel="alternate" hreflang="it" href="https://qsearch.ch/it/ai-security.html">
+  <link rel="alternate" hreflang="de" href="https://qsearch.ch/de/ai-security.html">
+  <link rel="alternate" hreflang="fr" href="https://qsearch.ch/fr/ai-security.html">
+  <link rel="alternate" hreflang="x-default" href="https://qsearch.ch/ai-security.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%235B23FF'/><stop offset='100%25' stop-color='%23008BFF'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23g)'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='18' fill='%23E4FF30'>Q</text></svg>">
+</head>
+<body>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"QuantumSearch Security Research","url":"https://qsearch.ch/ai-security.html","description":"Specialized AI security assessments: MCP server audits, AI agent security testing, and full AI stack assessments.","areaServed":["CH","EU"],"serviceType":["MCP Security Audit","AI Agent Security Audit","AI Red Team Assessment"]}</script>
+
+  <a href="#main" class="skip-link" style="position:absolute;top:-100%;left:0;padding:0.5rem 1rem;background:var(--accent);color:var(--bg-primary);z-index:9999;font-weight:700;font-size:0.85rem;border-radius:0 0 8px 0;transition:top 0.2s">Skip to main content</a>
+  <style>.skip-link:focus{top:0}</style>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="logo-mark.svg" alt="Q" class="logo-mark-img" width="30" height="30"> QuantumSearch</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li class="nav-dropdown"><a href="#" class="active">Services &#9662;</a><ul class="nav-dropdown-menu"><li><a href="services.html">Security Services</a></li><li><a href="ai-security.html">AI Security Research</a></li><li><a href="vibe-coding.html">Vibe-Coding Security</a></li></ul></li>
+        <li><a href="track-record.html">Track Record</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-dropdown">
+          <a href="#">Resources &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="demo.html">Live Demo</a></li>
+            <li><a href="insights.html">Insights &amp; Research</a></li>
+            <li><a href="disclosure.html">Responsible Disclosure</a></li>
+          </ul>
+        </li>
+        <li class="nav-dropdown lang-switcher">
+          <a href="#">EN &#9662;</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#" data-lang="en">English</a></li>
+            <li><a href="#" data-lang="it">Italiano</a></li>
+            <li><a href="#" data-lang="de">Deutsch</a></li>
+            <li><a href="#" data-lang="fr">Fran&ccedil;ais</a></li>
+          </ul>
+        </li>
+      </ul>
+      <a href="contact.html" class="nav-cta">Free Assessment</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </nav>
+
+  <main class="page-content" id="main">
+    <!-- Hero -->
+    <section class="hero" style="min-height: 55vh;">
+      <div class="container">
+        <div class="hero-content">
+          <div class="label">AI Security Research</div>
+          <h1>Your AI makes decisions.<br>We test what happens when<br>someone <span class="accent">breaks the rules.</span></h1>
+          <p>LLMs, agents, and MCP servers process customer data, execute financial logic, and access internal tools. We test what happens when the inputs aren't polite &mdash; prompt injection, tool poisoning, data exfiltration, and the attack chains that emerge when AI systems trust too much.</p>
+          <div class="hero-buttons">
+            <a href="contact.html" class="btn-primary">Request Assessment &rarr;</a>
+            <a href="#tiers" class="btn-secondary">View Tiers &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stat Ribbon -->
+    <section>
+      <div class="container">
+        <div class="stat-ribbon fade-in">
+          <div class="stat-ribbon-item">
+            <div class="stat-ribbon-number stat-number">43%</div>
+            <div class="stat-ribbon-label">of MCP servers have injection vulnerabilities</div>
+          </div>
+          <div class="stat-ribbon-item">
+            <div class="stat-ribbon-number">4.2</div>
+            <div class="stat-ribbon-label">average injection vectors per AI agent deployment</div>
+          </div>
+          <div class="stat-ribbon-item">
+            <div class="stat-ribbon-number">0</div>
+            <div class="stat-ribbon-label">Swiss competitors offer dedicated AI security audits</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Attack Chain Visualization -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">How AI Attacks Work</div>
+          <h2>One injection.<br>Four steps to breach.</h2>
+          <p>This is what a prompt injection attack chain looks like in practice &mdash; and what our assessment catches before attackers do.</p>
+        </div>
+
+        <div class="attack-chain">
+          <!-- Left column: Without assessment -->
+          <div>
+            <div class="chain-column-header exploited">Without Assessment</div>
+            <div class="chain-step step-neutral fade-in fade-in-delay-1">
+              <div class="chain-step-number">Step 1</div>
+              <div class="chain-step-text">User sends a normal-looking query to your AI assistant</div>
+            </div>
+            <div class="chain-step step-warning fade-in fade-in-delay-2">
+              <div class="chain-step-number">Step 2</div>
+              <div class="chain-step-text">Hidden instruction extracted from document context &mdash; invisible to the user, executed by the model</div>
+            </div>
+            <div class="chain-step step-escalation fade-in fade-in-delay-3">
+              <div class="chain-step-number">Step 3</div>
+              <div class="chain-step-text">Agent calls internal tool with attacker-controlled parameters &mdash; database query, API call, file access</div>
+            </div>
+            <div class="chain-step step-exploited fade-in fade-in-delay-4">
+              <div class="chain-step-number">Step 4</div>
+              <div class="chain-step-text">Sensitive data exfiltrated via tool response</div>
+              <div class="chain-badge exploited">Exploited</div>
+            </div>
+          </div>
+
+          <!-- Right column: With QuantumSearch -->
+          <div>
+            <div class="chain-column-header identified">With QuantumSearch</div>
+            <div class="chain-step step-neutral fade-in fade-in-delay-1">
+              <div class="chain-step-number">Step 1</div>
+              <div class="chain-step-text">Same query &mdash; we simulate realistic attack scenarios</div>
+            </div>
+            <div class="chain-step step-warning fade-in fade-in-delay-2">
+              <div class="chain-step-number">Step 2</div>
+              <div class="chain-step-text">Injection surface identified &mdash; documented with reproducible proof-of-concept</div>
+            </div>
+            <div class="chain-step step-escalation fade-in fade-in-delay-3">
+              <div class="chain-step-number">Step 3</div>
+              <div class="chain-step-text">Tool misuse chain mapped &mdash; every permission boundary tested and catalogued</div>
+            </div>
+            <div class="chain-step step-identified fade-in fade-in-delay-4">
+              <div class="chain-step-number">Step 4</div>
+              <div class="chain-step-text">Full attack chain documented. PoC delivered. Remediation roadmap provided.</div>
+              <div class="chain-badge identified">Identified</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Is This For Me? -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Is This For Me?</div>
+          <h2>Find your starting point</h2>
+        </div>
+
+        <div class="scenario-grid fade-in">
+          <div class="scenario-card">
+            <p>&ldquo;We've deployed an AI chatbot that accesses customer data&rdquo;</p>
+            <div class="scenario-answer">&rarr; Start with MCP Server Audit</div>
+          </div>
+          <div class="scenario-card">
+            <p>&ldquo;Our agents use MCP servers to connect to internal tools&rdquo;</p>
+            <div class="scenario-answer">&rarr; MCP Server Audit or AI Agent Audit</div>
+          </div>
+          <div class="scenario-card">
+            <p>&ldquo;We're integrating LLMs into financial or legal workflows&rdquo;</p>
+            <div class="scenario-answer">&rarr; AI Agent Security Audit</div>
+          </div>
+          <div class="scenario-card">
+            <p>&ldquo;We need to demonstrate AI safety for regulatory compliance&rdquo;</p>
+            <div class="scenario-answer">&rarr; Full AI Stack Assessment</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tier Cards -->
+    <section id="tiers" class="section-alpine">
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <div class="label">Assessment Tiers</div>
+          <h2>Choose your depth</h2>
+          <p>Every tier delivers working proof-of-concept exploits, quantified business impact, and actionable remediation &mdash; not theoretical risk lists.</p>
+        </div>
+
+        <div class="pricing-grid ai-pricing fade-in">
+
+          <!-- Tier 1: MCP Server Audit -->
+          <div class="pricing-card tier-mcp">
+            <div class="pricing-name">MCP Server Audit</div>
+            <div class="pricing-tagline">Secure your tool integrations</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 3,000 <span class="period">starting from</span>
+            </div>
+            <div class="pricing-equiv">3&ndash;5 days &middot; per MCP server</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li>Command injection testing</li>
+              <li>Tool poisoning analysis</li>
+              <li>OAuth &amp; auth flow review</li>
+              <li>Privilege escalation mapping</li>
+              <li>PoC exploits for every finding</li>
+            </ul>
+            <a href="#tier-mcp" class="btn-secondary">Learn More &darr;</a>
+          </div>
+
+          <!-- Tier 2: AI Agent Security Audit (Featured) -->
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Recommended</div>
+            <div class="pricing-name">AI Agent Security Audit</div>
+            <div class="pricing-tagline">Full agent threat assessment</div>
+            <div class="pricing-price">
+              <span class="currency">CHF</span> 8,000 <span class="period">starting from</span>
+            </div>
+            <div class="pricing-equiv">1&ndash;2 weeks &middot; per agent system</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">OWASP Agentic Top 10 testing</li>
+              <li class="highlight">Goal hijacking &amp; tool misuse</li>
+              <li>Memory poisoning analysis</li>
+              <li>Cascading failure chains</li>
+              <li>Supply chain dependency audit</li>
+              <li>Attack chain documentation</li>
+            </ul>
+            <a href="contact.html" class="btn-primary">Request Assessment &rarr;</a>
+          </div>
+
+          <!-- Tier 3: Full AI Stack Assessment -->
+          <div class="pricing-card tier-full">
+            <div class="pricing-name">Full AI Stack Assessment</div>
+            <div class="pricing-tagline">End-to-end AI infrastructure audit</div>
+            <div class="pricing-price" style="font-size: 1.6rem;">
+              Contact us
+            </div>
+            <div class="pricing-equiv">3&ndash;5 weeks &middot; bespoke scope</div>
+            <div class="pricing-divider"></div>
+            <ul class="pricing-features">
+              <li class="highlight">Everything in Agent Audit</li>
+              <li class="highlight">Adversarial ML testing</li>
+              <li>Model extraction &amp; data poisoning</li>
+              <li>EU AI Act compliance mapping</li>
+              <li>Board-level executive summary</li>
+              <li>Strategic remediation roadmap</li>
+            </ul>
+            <a href="contact.html" class="btn-secondary">Contact Us &rarr;</a>
+          </div>
+
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin-top: 2rem; max-width: 520px; margin-left: auto; margin-right: auto;">All assessments are scoped to your specific AI deployment. Prices shown are starting points &mdash; final pricing reflects complexity, number of agents, and integration depth.</p>
+      </div>
+    </section>
+
+    <!-- Tier Details -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">What's Included</div>
+          <h2>Assessment details</h2>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-mcp">
+          <div class="service-number">01</div>
+          <div class="label">3&ndash;5 days</div>
+          <h3>MCP Server Audit</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">We audit your Model Context Protocol server deployments for the vulnerabilities that 43% of MCP servers carry &mdash; command injection, tool poisoning, OAuth misconfigurations, and excessive privilege grants. Every finding includes a working proof-of-concept exploit.</p>
+          <ul class="service-includes">
+            <li>MCP tool enumeration &amp; permission mapping</li>
+            <li>Command injection on every exposed tool</li>
+            <li>Tool poisoning &amp; response manipulation</li>
+            <li>OAuth flow &amp; token handling review</li>
+            <li>Data leakage via tool responses</li>
+            <li>Privilege boundary testing</li>
+            <li>Risk quantification in CHF/EUR</li>
+            <li>30-day verification retest</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-agent">
+          <div class="service-number">02</div>
+          <div class="label">1&ndash;2 weeks</div>
+          <h3>AI Agent Security Audit</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">Full assessment of deployed AI agent systems against the OWASP Top 10 for Agentic Applications. We test chatbots, copilots, RAG systems, and custom agents for goal hijacking, tool misuse, memory poisoning, and the cascading failure chains that emerge when agents trust too much.</p>
+          <ul class="service-includes">
+            <li>OWASP Agentic Top 10 full coverage</li>
+            <li>Goal hijacking &amp; instruction override</li>
+            <li>Tool misuse &amp; confused deputy attacks</li>
+            <li>Memory &amp; context poisoning</li>
+            <li>Cross-agent cascade exploitation</li>
+            <li>Supply chain dependency audit</li>
+            <li>Threat model &amp; attack chain documentation</li>
+            <li>Remediation workshop (2 hours)</li>
+          </ul>
+        </div>
+
+        <div class="service-detail fade-in" id="tier-full">
+          <div class="service-number">03</div>
+          <div class="label">3&ndash;5 weeks</div>
+          <h3>Full AI Stack Assessment</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 700px;">The most comprehensive AI security engagement. End-to-end assessment of your entire AI infrastructure &mdash; models, agents, MCP servers, data pipelines, and training data. Includes adversarial machine learning testing, EU AI Act compliance mapping, and a strategic remediation roadmap for your board.</p>
+          <ul class="service-includes">
+            <li>Everything in MCP + Agent Audit</li>
+            <li>Adversarial ML testing (jailbreaking, prompt injection)</li>
+            <li>Model extraction &amp; data poisoning</li>
+            <li>Training data leakage assessment</li>
+            <li>EU AI Act adversarial testing compliance</li>
+            <li>Architecture security review</li>
+            <li>Board-level executive summary</li>
+            <li>Strategic remediation roadmap</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section>
+      <div class="container">
+        <div class="section-header centered fade-in">
+          <h2>How it works</h2>
+          <p>A structured engagement model that respects your time and delivers results.</p>
+        </div>
+
+        <div class="process-timeline fade-in">
+          <div class="process-step">
+            <div class="process-dot">01</div>
+            <h4>Discovery Call</h4>
+            <p>30 minutes. We understand your AI stack, threat model, and goals.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">02</div>
+            <h4>Scope &amp; NDA</h4>
+            <p>Define target systems, agent inventory, and assessment boundaries.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">03</div>
+            <h4>Assessment</h4>
+            <p>We test. Critical injection chains reported immediately.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">04</div>
+            <h4>Report &amp; PoCs</h4>
+            <p>Full report with working exploits, attack chains, and remediation.</p>
+          </div>
+          <div class="process-step">
+            <div class="process-dot">05</div>
+            <h4>Remediation Support</h4>
+            <p>Workshop, verification retest, and ongoing advisory if needed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Services -->
+    <section>
+      <div class="container">
+        <div class="section-header fade-in">
+          <div class="label">Related Services</div>
+          <h2>Explore our other specializations</h2>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: var(--border); margin-bottom: 1rem;">
+          <div>
+            <div class="label">Core Service</div>
+            <h3>Security Services</h3>
+            <p>Full security assessments, penetration testing, and continuous protection plans. From free assessment to annual fortress &mdash; every engagement delivers working exploits and quantified business impact.</p>
+          </div>
+          <div>
+            <a href="services.html" class="btn-secondary">Explore Security Services &rarr;</a>
+          </div>
+        </div>
+        <div class="free-cta-card fade-in" style="border-color: rgba(91, 35, 255, 0.15);">
+          <div>
+            <div class="label">Specialized Service</div>
+            <h3>Vibe-Coding Security</h3>
+            <p>Security audits for AI-generated code. Cursor, Copilot, Bolt, v0 &mdash; we find the vulnerabilities AI assistants consistently miss before they reach production.</p>
+          </div>
+          <div>
+            <a href="vibe-coding.html" class="btn-secondary" style="border-color: var(--electric); color: var(--electric);">Explore Vibe-Coding Security &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container fade-in">
+        <h2>Your AI is live.<br>Is it secure?</h2>
+        <p>Start with a free assessment of your AI attack surface. No obligation &mdash; just results.</p>
+        <a href="contact.html" class="btn-primary">Request Free Assessment &rarr;</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <img src="logo-mark.svg" alt="Q" width="24" height="24">
+            QuantumSearch
+          </a>
+          <p class="footer-tagline">Swiss offensive security research. We find what attackers find &mdash; before they do.</p>
+        </div>
+        <nav class="footer-nav">
+          <div class="footer-nav-col">
+            <h5>Company</h5>
+            <ul>
+              <li><a href="about.html">About</a></li>
+              <li><a href="track-record.html">Track Record</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <h5>Services</h5>
+            <ul>
+              <li><a href="services.html">Plans &amp; Pricing</a></li>
+              <li><a href="ai-security.html">AI Security</a></li>
+              <li><a href="vibe-coding.html">Vibe-Coding Security</a></li>
+              <li><a href="demo.html">Live Demo</a></li>
+              <li><a href="insights.html">Insights</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <h5>Legal</h5>
+            <ul>
+              <li><a href="disclosure.html">Disclosure</a></li>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">&copy; 2026 QuantumSearch Security Research. Switzerland.</div>
+        <ul class="footer-legal">
+          <li><a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script data-goatcounter="https://qsearch.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

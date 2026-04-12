@@ -1,0 +1,15 @@
+# QuantumSearch Security Headers — translated from netlify.toml
+# Upload this alongside the HTML/CSS/JS files to the Infomaniak web root
+
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "DENY"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://gc.zgo.at; img-src 'self' data:; connect-src 'self' https://formspree.io https://qsearch.goatcounter.com"
+</IfModule>
+
+# HTTPS is handled by Infomaniak's reverse proxy — no rewrite needed here
+
+# Error pages
+ErrorDocument 404 /404.html
