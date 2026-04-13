@@ -4,15 +4,363 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QuantumSearch — Portfolio</title>
-<meta name="description" content="QuantumSearch Security Research — access-controlled portfolio.">
+<meta name="description" content="QuantumSearch Security Research portfolio. Restricted access.">
 <meta name="robots" content="noindex, nofollow">
-<meta property="og:title" content="QuantumSearch — Security Assessment Portfolio">
-<meta property="og:description" content="Access-controlled portfolio. Contact us for credentials.">
+<meta property="og:title" content="QuantumSearch — Security Portfolio">
+<meta property="og:description" content="Confidential security research portfolio. Access requires authorization.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://qsearch.ch/portfolio/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ═══════════════════════════════════════════════
+     GATE STYLES (inline, renders before JS)
+     ═══════════════════════════════════════════════ -->
+<style>
+/* Gate variables — always Ultraviolet Volt dark */
+.gate {
+  --g-abyss: #0f0d18;
+  --g-deep: #16132a;
+  --g-card: #1e1a35;
+  --g-electric: #5B23FF;
+  --g-signal: #008BFF;
+  --g-volt: #E4FF30;
+  --g-text: #eeedf5;
+  --g-t2: #a8a4be;
+  --g-t3: #7a7490;
+  --g-bdr: rgba(91,35,255,.2);
+  --g-e-glow: rgba(91,35,255,.2);
+  --g-s-glow: rgba(0,139,255,.15);
+  --g-v-glow: rgba(228,255,48,.15);
+  --g-fd: 'Bricolage Grotesque', sans-serif;
+  --g-fb: 'Plus Jakarta Sans', sans-serif;
+  --g-fm: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ═══ GATE PAGE ═══ */
+.gate {
+  min-height: 100vh;
+  background: var(--g-abyss);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient glow */
+.gate::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(91,35,255,.08) 0%, rgba(0,139,255,.04) 40%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Subtle grid pattern */
+.gate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(91,35,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,35,255,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.gate-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 460px;
+  width: 100%;
+}
+
+/* Logo */
+.gate-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--g-electric), var(--g-signal));
+  margin-bottom: 2.5rem;
+  box-shadow: 0 12px 48px var(--g-e-glow), 0 0 0 1px rgba(91,35,255,.15);
+}
+.gate-logo span {
+  font-family: var(--g-fd);
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: var(--g-volt);
+  line-height: 1;
+}
+
+/* Status indicator */
+.gate-status {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .4rem 1rem;
+  border-radius: 100px;
+  background: rgba(91,35,255,.08);
+  border: 1px solid rgba(91,35,255,.15);
+  margin-bottom: 2rem;
+  font-family: var(--g-fm);
+  font-size: .7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--g-signal);
+}
+.gate-status::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--g-signal);
+  box-shadow: 0 0 8px var(--g-signal);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: .6; }
+  50% { opacity: 1; }
+}
+
+/* Heading */
+.gate h1 {
+  font-family: var(--g-fd);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  color: var(--g-text);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: .75rem;
+}
+
+.gate-sub {
+  font-size: .95rem;
+  color: var(--g-t2);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Form */
+.gate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.gate-input-wrap {
+  position: relative;
+}
+
+.gate-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--g-bdr);
+  background: var(--g-deep);
+  color: var(--g-text);
+  font-family: var(--g-fm);
+  font-size: .9rem;
+  letter-spacing: .08em;
+  outline: none;
+  transition: all .3s ease;
+}
+.gate-input::placeholder {
+  color: var(--g-t3);
+  letter-spacing: .05em;
+}
+.gate-input:focus {
+  border-color: var(--g-signal);
+  box-shadow: 0 0 0 3px rgba(0,139,255,.1), 0 4px 20px rgba(0,139,255,.08);
+}
+
+.gate-submit {
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  border: none;
+  background: var(--g-volt);
+  color: var(--g-abyss);
+  font-family: var(--g-fb);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .3s ease;
+  letter-spacing: .01em;
+}
+.gate-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--g-v-glow);
+}
+.gate-submit:focus-visible {
+  outline: 2px solid var(--g-volt);
+  outline-offset: 3px;
+}
+.gate-submit:active {
+  transform: translateY(0);
+}
+
+/* Error shake */
+.gate-error {
+  font-family: var(--g-fm);
+  font-size: .78rem;
+  color: #ef4444;
+  opacity: 0;
+  transition: opacity .3s ease;
+  min-height: 1.2em;
+}
+.gate-error.visible {
+  opacity: 1;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.shake { animation: shake .4s ease-in-out; }
+
+/* Contact link */
+.gate-contact {
+  font-size: .85rem;
+  color: var(--g-t3);
+  margin-bottom: 1rem;
+}
+.gate-contact a {
+  color: var(--g-signal);
+  text-decoration: none;
+  font-weight: 500;
+}
+.gate-contact a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.gate-footer {
+  font-family: var(--g-fm);
+  font-size: .7rem;
+  color: var(--g-t3);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  line-height: 1.8;
+}
+.gate-footer a {
+  color: var(--g-t3);
+  text-decoration: none;
+}
+.gate-footer a:hover {
+  color: var(--g-signal);
+}
+
+/* Divider line */
+.gate-divider {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--g-electric), var(--g-signal));
+  border-radius: 2px;
+  margin: 0 auto 2rem;
+}
+
+/* ═══ DASHBOARD (hidden until validated) ═══ */
+#dashboard {
+  display: none;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 480px) {
+  .gate { padding: 1.5rem; }
+  .gate-logo { width: 64px; height: 64px; border-radius: 16px; }
+  .gate-logo span { font-size: 2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════
+     GATE VALIDATION (runs before body renders dashboard)
+     ═══════════════════════════════════════════════ -->
+<script>
+(function() {
+  var ACCESS_CODE = 'QS2026';
+  var params = new URLSearchParams(window.location.search);
+  window.__qs_access = params.get('key') === ACCESS_CODE;
+})();
+</script>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     ACCESS GATE
+     ════════════════════════════════════════════════ -->
+<div id="gate" class="gate">
+  <div class="gate-content">
+    <div class="gate-logo" aria-hidden="true"><span>Q</span></div>
+
+    <div class="gate-status">Restricted Access</div>
+
+    <h1>Security Portfolio</h1>
+    <p class="gate-sub">This portfolio contains confidential security research. Access requires authorization.</p>
+
+    <div class="gate-divider"></div>
+
+    <form class="gate-form" id="gate-form" autocomplete="off">
+      <div class="gate-input-wrap">
+        <input
+          type="text"
+          class="gate-input"
+          id="gate-code"
+          placeholder="Enter access code"
+          aria-label="Access code"
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </div>
+      <button type="submit" class="gate-submit">Authenticate</button>
+      <div class="gate-error" id="gate-error" role="alert">Invalid access code</div>
+    </form>
+
+    <p class="gate-contact">Request access: <a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a></p>
+
+    <div class="gate-footer">
+      QuantumSearch Security Research<br>
+      Swiss Offensive Security<br>
+      <a href="https://qsearch.ch">qsearch.ch</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     PORTFOLIO DASHBOARD (hidden until key validated)
+     ════════════════════════════════════════════════ -->
+<div id="dashboard" style="display:none;">
+
+<!-- ═══ Dashboard styles ═══ -->
 <style>
 /* ═══════════════════════════════════════════════
    THEME SYSTEM — Forest Gradient (light) / Ultraviolet Volt (dark)
@@ -81,11 +429,9 @@
 }
 
 /* ═══════════════════════════════════════════════
-   RESET & BASE
+   RESET & BASE (dashboard scope)
    ═══════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body {
+body.dashboard-active {
   font-family: var(--fb);
   background: var(--abyss);
   color: var(--text);
@@ -94,133 +440,8 @@ body {
   overflow-x: hidden;
   transition: background .4s ease, color .4s ease;
 }
-a { color: var(--signal); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-/* ═══════════════════════════════════════════════
-   ACCESS GATE
-   ═══════════════════════════════════════════════ */
-#gate {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
-  text-align: center;
-  position: relative;
-}
-#gate::before {
-  content: '';
-  position: absolute;
-  top: -200px; left: 50%; transform: translateX(-50%);
-  width: 900px; height: 900px;
-  background: radial-gradient(circle, rgba(91,35,255,.06) 0%, transparent 70%);
-  pointer-events: none; z-index: 0;
-}
-[data-theme="light"] #gate::before {
-  background: radial-gradient(circle, rgba(34,87,122,.04) 0%, transparent 70%);
-}
-.gate-logo {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 88px; height: 88px; border-radius: 22px;
-  background: linear-gradient(135deg, #5B23FF, #008BFF);
-  margin-bottom: 2.5rem; position: relative; z-index: 1;
-  box-shadow: 0 12px 48px rgba(91,35,255,.25);
-}
-[data-theme="light"] .gate-logo {
-  background: linear-gradient(135deg, #22577A, #38A3A5);
-  box-shadow: 0 12px 48px rgba(34,87,122,.15);
-}
-.gate-logo span {
-  font-family: var(--fd); font-weight: 800;
-  font-size: 2.75rem; color: #E4FF30; line-height: 1;
-}
-[data-theme="light"] .gate-logo span { color: #80ED99; }
-
-.gate-title {
-  font-family: var(--fd); font-weight: 700;
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
-  margin-bottom: .75rem; position: relative; z-index: 1;
-}
-.gate-sub {
-  color: var(--t2); font-size: .95rem;
-  margin-bottom: 2.5rem; max-width: 400px;
-  position: relative; z-index: 1;
-}
-
-.gate-form {
-  display: flex; gap: .75rem;
-  position: relative; z-index: 1;
-  max-width: 420px; width: 100%;
-}
-@media (max-width: 480px) {
-  .gate-form { flex-direction: column; }
-}
-.gate-input {
-  flex: 1; padding: .85rem 1.25rem;
-  border-radius: 100px;
-  border: 1px solid var(--bdr);
-  background: var(--card);
-  color: var(--text);
-  font-family: var(--fm);
-  font-size: .9rem;
-  outline: none;
-  transition: border-color .3s, box-shadow .3s;
-}
-.gate-input::placeholder { color: var(--t3); }
-.gate-input:focus {
-  border-color: var(--signal);
-  box-shadow: 0 0 0 3px var(--s-glow);
-}
-.gate-input.error {
-  border-color: var(--danger);
-  box-shadow: 0 0 0 3px rgba(239,68,68,.15);
-  animation: shake .4s ease;
-}
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
-
-.gate-btn {
-  padding: .85rem 2rem;
-  border-radius: 100px;
-  background: var(--volt); color: var(--abyss);
-  font-family: var(--fb); font-weight: 700;
-  font-size: .9rem; border: none; cursor: pointer;
-  transition: all .3s ease;
-  white-space: nowrap;
-}
-[data-theme="light"] .gate-btn { color: #fff; }
-.gate-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--v-glow);
-}
-.gate-btn:focus-visible {
-  outline: 2px solid var(--volt); outline-offset: 3px;
-}
-
-.gate-error {
-  color: var(--danger); font-size: .82rem;
-  margin-top: 1rem; opacity: 0;
-  transition: opacity .3s; position: relative; z-index: 1;
-}
-.gate-error.visible { opacity: 1; }
-
-.gate-footer {
-  position: absolute; bottom: 2rem;
-  font-family: var(--fm); font-size: .72rem;
-  color: var(--t3); letter-spacing: .05em; z-index: 1;
-}
-.gate-footer a { color: var(--signal); }
-
-/* ═══════════════════════════════════════════════
-   DASHBOARD (hidden until authenticated)
-   ═══════════════════════════════════════════════ */
-#dashboard { display: none; }
-#dashboard.unlocked { display: block; }
+body.dashboard-active a { color: var(--signal); text-decoration: none; }
+body.dashboard-active a:hover { text-decoration: underline; }
 
 /* ═══════════════════════════════════════════════
    SKIP LINK + SR-ONLY
@@ -364,23 +585,19 @@ section.visible { opacity: 1; transform: translateY(0); }
 .divider {
   width: 100%; height: 1px;
   background: linear-gradient(90deg, transparent, var(--bdr), transparent);
-  margin: 0;
+  margin: 0; border: none;
 }
 
 /* ═══════════════════════════════════════════════
    SECTION 1: SAMPLE ASSESSMENT
    ═══════════════════════════════════════════════ */
-
-/* Meta bar */
 .assessment-meta {
   display: flex; flex-wrap: wrap; gap: 1.5rem;
   margin-bottom: 2.5rem; padding: 1.25rem 1.5rem;
   border-radius: var(--r); background: var(--card);
   border: 1px solid var(--bdr);
 }
-.meta-item {
-  display: flex; flex-direction: column; gap: .15rem;
-}
+.meta-item { display: flex; flex-direction: column; gap: .15rem; }
 .meta-label {
   font-family: var(--fm); font-size: .68rem; font-weight: 500;
   text-transform: uppercase; letter-spacing: .15em; color: var(--t3);
@@ -388,28 +605,19 @@ section.visible { opacity: 1; transform: translateY(0); }
 .meta-value { font-weight: 600; font-size: .92rem; }
 .meta-value.redacted { color: var(--t3); font-style: italic; }
 
-/* Severity cards */
 .severity-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 2.5rem; align-items: center;
 }
 @media (max-width: 700px) { .severity-grid { grid-template-columns: 1fr; } }
-.severity-numbers {
-  display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
-}
+.severity-numbers { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
 .sev-card {
   padding: 1.5rem; border-radius: var(--r);
   background: var(--card); border: 1px solid var(--bdr);
   text-align: center; transition: all .35s ease;
 }
-.sev-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0,0,0,.08);
-}
-.sev-card .num {
-  font-family: var(--fd); font-weight: 800;
-  font-size: 2.75rem; line-height: 1;
-}
+.sev-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.sev-card .num { font-family: var(--fd); font-weight: 800; font-size: 2.75rem; line-height: 1; }
 .sev-card .label {
   font-family: var(--fm); font-size: .72rem; font-weight: 600;
   text-transform: uppercase; letter-spacing: .1em; margin-top: .4rem;
@@ -425,29 +633,20 @@ section.visible { opacity: 1; transform: translateY(0); }
 .sev-card.low .num { color: var(--signal); }
 .sev-card.low .label { color: var(--signal); }
 
-/* Donut */
-.donut-wrap {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 1.25rem;
-}
+.donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
 .donut {
-  position: relative; width: 220px; height: 220px;
-  border-radius: 50%;
+  position: relative; width: 220px; height: 220px; border-radius: 50%;
   background: conic-gradient(
-    var(--danger) 0deg 80deg,
-    var(--amber) 80deg 220deg,
-    var(--yellow) 220deg 300deg,
-    var(--signal) 300deg 360deg
+    var(--danger) 0deg 80deg, var(--amber) 80deg 220deg,
+    var(--yellow) 220deg 300deg, var(--signal) 300deg 360deg
   );
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 0 40px var(--e-dim);
 }
 [data-theme="light"] .donut {
   background: conic-gradient(
-    #dc2626 0deg 80deg,
-    #b45309 80deg 220deg,
-    #a16207 220deg 300deg,
-    #38A3A5 300deg 360deg
+    #dc2626 0deg 80deg, #b45309 80deg 220deg,
+    #a16207 220deg 300deg, #38A3A5 300deg 360deg
   );
   box-shadow: 0 0 40px rgba(34,87,122,.08);
 }
@@ -456,18 +655,10 @@ section.visible { opacity: 1; transform: translateY(0); }
   border-radius: 50%; background: var(--abyss);
   transition: background .4s ease;
 }
-.donut-center {
-  position: absolute; text-align: center; z-index: 1;
-}
-.donut-center .big {
-  font-family: var(--fd); font-weight: 800;
-  font-size: 2.75rem; line-height: 1;
-}
-.donut-center .small {
-  font-size: .75rem; color: var(--t3); font-weight: 500;
-}
+.donut-center { position: absolute; text-align: center; z-index: 1; }
+.donut-center .big { font-family: var(--fd); font-weight: 800; font-size: 2.75rem; line-height: 1; }
+.donut-center .small { font-size: .75rem; color: var(--t3); font-weight: 500; }
 
-/* Impact cards */
 .impact-cards { display: grid; gap: 1rem; margin-top: 2.5rem; }
 .impact-card {
   display: grid; grid-template-columns: 56px 1fr;
@@ -497,11 +688,9 @@ section.visible { opacity: 1; transform: translateY(0); }
 }
 .impact-card p { color: var(--t2); font-size: .9rem; line-height: 1.6; }
 
-/* Risk gauge */
 .risk-meter {
   background: var(--card); border: 1px solid var(--bdr);
-  border-radius: var(--rl); padding: 2.5rem;
-  margin-top: 2.5rem;
+  border-radius: var(--rl); padding: 2.5rem; margin-top: 2.5rem;
 }
 .risk-headline { text-align: center; margin-bottom: 2rem; }
 .risk-headline .label-text {
@@ -513,8 +702,7 @@ section.visible { opacity: 1; transform: translateY(0); }
   font-family: var(--fd); font-weight: 800;
   font-size: clamp(1.4rem, 4vw, 2rem);
   background: linear-gradient(90deg, var(--amber), var(--danger));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 [data-theme="light"] .risk-headline .range {
   background: linear-gradient(90deg, #b45309, #dc2626);
@@ -526,9 +714,7 @@ section.visible { opacity: 1; transform: translateY(0); }
   display: grid; grid-template-columns: 100px 1fr 80px;
   align-items: center; gap: 1rem;
 }
-@media (max-width: 480px) {
-  .risk-bar-row { grid-template-columns: 1fr; gap: .35rem; }
-}
+@media (max-width: 480px) { .risk-bar-row { grid-template-columns: 1fr; gap: .35rem; } }
 .risk-bar-label { font-size: .82rem; font-weight: 600; color: var(--t2); }
 .risk-bar-track {
   height: 12px; border-radius: 6px;
@@ -537,29 +723,22 @@ section.visible { opacity: 1; transform: translateY(0); }
 [data-theme="light"] .risk-bar-track { background: #e8eeeb; }
 .risk-bar-fill {
   height: 100%; border-radius: 6px;
-  transition: width 1.2s cubic-bezier(.22,1,.36,1);
-  width: 0;
+  transition: width 1.2s cubic-bezier(.22,1,.36,1); width: 0;
 }
 .risk-bar-fill.low-risk { background: linear-gradient(90deg, var(--yellow), var(--amber)); }
 .risk-bar-fill.med-risk { background: linear-gradient(90deg, var(--amber), #ef7b00); }
 .risk-bar-fill.high-risk { background: linear-gradient(90deg, #ef7b00, var(--danger)); }
-.risk-bar-value {
-  font-family: var(--fd); font-weight: 700; font-size: .88rem; text-align: right;
-}
+.risk-bar-value { font-family: var(--fd); font-weight: 700; font-size: .88rem; text-align: right; }
 .risk-bar-value.c-val { color: var(--yellow); }
 .risk-bar-value.r-val { color: var(--amber); }
 .risk-bar-value.w-val { color: var(--danger); }
 
-/* Positive findings */
 .positive-section {
-  background: var(--card);
-  border: 1px solid rgba(34,197,94,.12);
-  border-radius: var(--rl); padding: 2.5rem 2rem;
-  margin-top: 2.5rem;
+  background: var(--card); border: 1px solid rgba(34,197,94,.12);
+  border-radius: var(--rl); padding: 2.5rem 2rem; margin-top: 2.5rem;
 }
 [data-theme="light"] .positive-section {
-  border-color: rgba(22,163,74,.1);
-  background: rgba(22,163,74,.02);
+  border-color: rgba(22,163,74,.1); background: rgba(22,163,74,.02);
 }
 .positive-items { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.25rem; }
 .positive-item { display: flex; gap: .75rem; align-items: start; }
@@ -589,8 +768,7 @@ section.visible { opacity: 1; transform: translateY(0); }
   border: 1px solid var(--bdr); transition: all .35s ease;
 }
 .stat-card:hover {
-  border-color: var(--signal);
-  transform: translateY(-3px);
+  border-color: var(--signal); transform: translateY(-3px);
   box-shadow: 0 8px 24px var(--s-dim);
 }
 .stat-num {
@@ -598,12 +776,8 @@ section.visible { opacity: 1; transform: translateY(0); }
   font-size: clamp(2rem, 4vw, 2.75rem);
   color: var(--volt); line-height: 1;
 }
-.stat-label {
-  font-size: .82rem; color: var(--t2);
-  margin-top: .5rem; font-weight: 500;
-}
+.stat-label { font-size: .82rem; color: var(--t2); margin-top: .5rem; font-weight: 500; }
 
-/* Platform badges */
 .platforms {
   display: flex; flex-wrap: wrap; gap: 1rem;
   justify-content: center; margin: 2.5rem 0;
@@ -615,20 +789,17 @@ section.visible { opacity: 1; transform: translateY(0); }
   transition: all .35s ease;
 }
 .platform-badge:hover {
-  border-color: var(--volt);
-  box-shadow: 0 4px 16px var(--v-dim);
+  border-color: var(--volt); box-shadow: 0 4px 16px var(--v-dim);
   transform: translateY(-2px);
 }
 .platform-icon {
-  font-family: var(--fm); font-weight: 700;
-  font-size: .85rem; letter-spacing: .05em;
+  font-family: var(--fm); font-weight: 700; font-size: .85rem; letter-spacing: .05em;
   width: 40px; height: 40px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   background: var(--v-dim); color: var(--volt);
 }
 .platform-name { font-weight: 600; font-size: .9rem; }
 
-/* Highlight box */
 .highlight-box {
   background: var(--card); border: 1px solid var(--bdr);
   border-radius: var(--rl); padding: 2rem 2.5rem;
@@ -672,10 +843,7 @@ section.visible { opacity: 1; transform: translateY(0); }
 .pipeline-step:first-child { border-radius: var(--r) 0 0 var(--r); }
 .pipeline-step:last-child { border-radius: 0 var(--r) var(--r) 0; }
 .pipeline-step:not(:last-child) { border-right: none; }
-.pipeline-step:hover {
-  background: var(--card-hover);
-  z-index: 1;
-}
+.pipeline-step:hover { background: var(--card-hover); z-index: 1; }
 .pipeline-step .step-num {
   font-family: var(--fm); font-size: .65rem; font-weight: 600;
   text-transform: uppercase; letter-spacing: .15em;
@@ -683,16 +851,13 @@ section.visible { opacity: 1; transform: translateY(0); }
 }
 .pipeline-step .step-icon {
   font-family: var(--fm); font-weight: 700;
-  font-size: 1.5rem; color: var(--volt); margin-bottom: .75rem;
-  line-height: 1;
+  font-size: 1.5rem; color: var(--volt); margin-bottom: .75rem; line-height: 1;
 }
 .pipeline-step h4 {
   font-family: var(--fd); font-weight: 700;
   font-size: .95rem; margin-bottom: .35rem;
 }
-.pipeline-step p {
-  font-size: .78rem; color: var(--t3); line-height: 1.5;
-}
+.pipeline-step p { font-size: .78rem; color: var(--t3); line-height: 1.5; }
 .pipeline-arrow {
   display: flex; align-items: center; justify-content: center;
   width: 32px; flex-shrink: 0;
@@ -735,8 +900,7 @@ section.visible { opacity: 1; transform: translateY(0); }
 }
 .cta-box h2 {
   font-family: var(--fd); font-weight: 700;
-  font-size: clamp(1.25rem, 3vw, 1.6rem);
-  margin-bottom: .75rem;
+  font-size: clamp(1.25rem, 3vw, 1.6rem); margin-bottom: .75rem;
 }
 .cta-box .cta-sub {
   color: var(--t2); font-size: .95rem;
@@ -757,9 +921,7 @@ section.visible { opacity: 1; transform: translateY(0); }
   box-shadow: 0 8px 24px var(--v-glow);
   text-decoration: none;
 }
-.cta-btn:focus-visible {
-  outline: 2px solid var(--volt); outline-offset: 3px;
-}
+.cta-btn:focus-visible { outline: 2px solid var(--volt); outline-offset: 3px; }
 .cta-fine {
   margin-top: 1.75rem; font-size: .8rem;
   color: var(--t3); max-width: 480px;
@@ -812,38 +974,12 @@ footer a { color: var(--signal); }
 /* Print */
 @media print {
   body { background: #fff; color: #000; }
-  .theme-toggle-dash, .skip-link, #gate { display: none; }
-  #dashboard { display: block !important; }
+  .theme-toggle-dash, .skip-link { display: none; }
   section { opacity: 1 !important; transform: none !important; break-inside: avoid; }
   .cta-btn { border: 2px solid #000; background: transparent; color: #000; }
 }
 </style>
-<noscript><style>section{opacity:1!important;transform:none!important}#gate{display:none}#dashboard{display:block}</style></noscript>
-</head>
-<body>
-
-<!-- ════════════════════════════════════════════
-     ACCESS GATE
-     ════════════════════════════════════════════ -->
-<div id="gate">
-  <div class="gate-logo" aria-hidden="true"><span>Q</span></div>
-  <h1 class="gate-title">This content is access-controlled.</h1>
-  <p class="gate-sub">Enter the access code provided to you to view this portfolio.</p>
-  <form class="gate-form" id="gate-form" autocomplete="off">
-    <label for="gate-code" class="sr-only">Access code</label>
-    <input type="text" id="gate-code" class="gate-input" placeholder="Enter access code" autofocus>
-    <button type="submit" class="gate-btn">Unlock</button>
-  </form>
-  <p class="gate-error" id="gate-error">Invalid access code. Please try again.</p>
-  <div class="gate-footer">
-    QuantumSearch Security Research &mdash; <a href="https://qsearch.ch">qsearch.ch</a>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════════════
-     DASHBOARD (hidden until authenticated)
-     ════════════════════════════════════════════ -->
-<div id="dashboard">
+<noscript><style>section{opacity:1!important;transform:none!important}</style></noscript>
 
 <a href="#main" class="skip-link">Skip to content</a>
 
@@ -1178,46 +1314,54 @@ footer a { color: var(--signal); }
   </div>
 </footer>
 
-</div><!-- end #dashboard -->
+</div><!-- /dashboard -->
 
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS — Gate logic + Dashboard animations
+     ═══════════════════════════════════════════════ -->
 <script>
-/* ═══════════════════════════════════════════════
-   ACCESS GATE LOGIC
-   ═══════════════════════════════════════════════ */
 (function() {
-  var ACCESS_KEY = 'QS2026';
-  var params = new URLSearchParams(window.location.search);
-  var gate = document.getElementById('gate');
-  var dashboard = document.getElementById('dashboard');
+  var ACCESS_CODE = 'QS2026';
 
-  if (params.get('key') === ACCESS_KEY) {
-    gate.style.display = 'none';
-    dashboard.classList.add('unlocked');
-    initDashboard();
-  } else {
-    var form = document.getElementById('gate-form');
-    var input = document.getElementById('gate-code');
-    var error = document.getElementById('gate-error');
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      var code = input.value.trim();
-      if (code === ACCESS_KEY) {
-        var url = new URL(window.location);
-        url.searchParams.set('key', ACCESS_KEY);
-        window.location.href = url.toString();
-      } else {
-        input.classList.add('error');
-        error.classList.add('visible');
-        setTimeout(function() { input.classList.remove('error'); }, 500);
-        input.focus();
-        input.select();
-      }
-    });
+  // Check URL param
+  if (window.__qs_access) {
+    showDashboard();
+    return;
   }
 
-  function initDashboard() {
-    // Theme toggle
+  // Gate form handler
+  var form = document.getElementById('gate-form');
+  var input = document.getElementById('gate-code');
+  var error = document.getElementById('gate-error');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var code = input.value.trim();
+    if (code === ACCESS_CODE) {
+      var url = new URL(window.location);
+      url.searchParams.set('key', ACCESS_CODE);
+      window.location.href = url.toString();
+    } else {
+      error.classList.add('visible');
+      input.classList.add('shake');
+      input.addEventListener('animationend', function() {
+        input.classList.remove('shake');
+      }, { once: true });
+      setTimeout(function() {
+        error.classList.remove('visible');
+      }, 3000);
+    }
+  });
+
+  function showDashboard() {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.body.classList.add('dashboard-active');
+    initTheme();
+    initAnimations();
+  }
+
+  function initTheme() {
     var KEY = 'qs-dash-theme';
     var html = document.documentElement;
     var btn = document.querySelector('.theme-toggle-dash');
@@ -1227,20 +1371,19 @@ footer a { color: var(--signal); }
     } else {
       html.setAttribute('data-theme', 'light');
     }
-    if (btn) {
-      btn.addEventListener('click', function() {
-        var isLight = html.getAttribute('data-theme') === 'light';
-        if (isLight) {
-          html.removeAttribute('data-theme');
-          localStorage.setItem(KEY, 'dark');
-        } else {
-          html.setAttribute('data-theme', 'light');
-          localStorage.setItem(KEY, 'light');
-        }
-      });
-    }
+    btn.addEventListener('click', function() {
+      var isLight = html.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem(KEY, 'dark');
+      } else {
+        html.setAttribute('data-theme', 'light');
+        localStorage.setItem(KEY, 'light');
+      }
+    });
+  }
 
-    // Scroll animations
+  function initAnimations() {
     var sections = document.querySelectorAll('#dashboard section:not(.hero)');
     var riskBars = document.querySelectorAll('.risk-bar-fill');
     var barsAnimated = false;
@@ -1302,18 +1445,6 @@ footer a { color: var(--signal); }
       }, { threshold: 0.15 });
       sevObserver.observe(assessmentSection);
     }
-  }
-})();
-
-/* Theme toggle for the gate page too */
-(function() {
-  var KEY = 'qs-dash-theme';
-  var html = document.documentElement;
-  var saved = localStorage.getItem(KEY);
-  if (saved === 'dark') {
-    html.removeAttribute('data-theme');
-  } else {
-    html.setAttribute('data-theme', 'light');
   }
 })();
 </script>
