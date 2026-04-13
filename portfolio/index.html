@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuantumSearch — Portfolio</title>
+<meta name="description" content="QuantumSearch Security Research — access-controlled portfolio.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="QuantumSearch — Security Assessment Portfolio">
+<meta property="og:description" content="Access-controlled portfolio. Contact us for credentials.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://qsearch.ch/portfolio/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   THEME SYSTEM — Forest Gradient (light) / Ultraviolet Volt (dark)
+   ═══════════════════════════════════════════════ */
+:root {
+  --abyss: #0f0d18;
+  --deep: #16132a;
+  --card: #1e1a35;
+  --card-hover: #262042;
+  --elev: #2e2650;
+  --surf: #120f20;
+  --electric: #5B23FF;
+  --signal: #008BFF;
+  --volt: #E4FF30;
+  --e-dim: rgba(91,35,255,.08);
+  --s-dim: rgba(0,139,255,.06);
+  --v-dim: rgba(228,255,48,.06);
+  --e-glow: rgba(91,35,255,.2);
+  --s-glow: rgba(0,139,255,.15);
+  --v-glow: rgba(228,255,48,.15);
+  --text: #eeedf5;
+  --t2: #a8a4be;
+  --t3: #7a7490;
+  --danger: #ef4444;
+  --amber: #d97706;
+  --yellow: #eab308;
+  --green: #22c55e;
+  --d-dim: rgba(239,68,68,.06);
+  --a-dim: rgba(217,119,6,.06);
+  --bdr: rgba(91,35,255,.2);
+  --bdr-accent: rgba(228,255,48,.15);
+  --fd: 'Bricolage Grotesque', sans-serif;
+  --fb: 'Plus Jakarta Sans', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r: 12px;
+  --rl: 20px;
+}
+
+[data-theme="light"] {
+  --abyss: #f8faf9;
+  --deep: #f0f4f2;
+  --card: #ffffff;
+  --card-hover: #f5f8f6;
+  --elev: #f5f8f6;
+  --surf: #e8eeeb;
+  --electric: #57CC99;
+  --signal: #38A3A5;
+  --volt: #22577A;
+  --e-dim: rgba(87,204,153,.1);
+  --s-dim: rgba(56,163,165,.08);
+  --v-dim: rgba(34,87,122,.06);
+  --e-glow: rgba(87,204,153,.25);
+  --s-glow: rgba(56,163,165,.2);
+  --v-glow: rgba(34,87,122,.15);
+  --text: #1a2e3a;
+  --t2: #4a6670;
+  --t3: #6b8a9e;
+  --danger: #dc2626;
+  --amber: #b45309;
+  --yellow: #a16207;
+  --green: #16a34a;
+  --d-dim: rgba(220,38,38,.04);
+  --a-dim: rgba(180,83,9,.04);
+  --bdr: rgba(34,87,122,.12);
+  --bdr-accent: rgba(34,87,122,.2);
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--fb);
+  background: var(--abyss);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background .4s ease, color .4s ease;
+}
+a { color: var(--signal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ═══════════════════════════════════════════════
+   ACCESS GATE
+   ═══════════════════════════════════════════════ */
+#gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+}
+#gate::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 900px;
+  background: radial-gradient(circle, rgba(91,35,255,.06) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+[data-theme="light"] #gate::before {
+  background: radial-gradient(circle, rgba(34,87,122,.04) 0%, transparent 70%);
+}
+.gate-logo {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 88px; height: 88px; border-radius: 22px;
+  background: linear-gradient(135deg, #5B23FF, #008BFF);
+  margin-bottom: 2.5rem; position: relative; z-index: 1;
+  box-shadow: 0 12px 48px rgba(91,35,255,.25);
+}
+[data-theme="light"] .gate-logo {
+  background: linear-gradient(135deg, #22577A, #38A3A5);
+  box-shadow: 0 12px 48px rgba(34,87,122,.15);
+}
+.gate-logo span {
+  font-family: var(--fd); font-weight: 800;
+  font-size: 2.75rem; color: #E4FF30; line-height: 1;
+}
+[data-theme="light"] .gate-logo span { color: #80ED99; }
+
+.gate-title {
+  font-family: var(--fd); font-weight: 700;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  margin-bottom: .75rem; position: relative; z-index: 1;
+}
+.gate-sub {
+  color: var(--t2); font-size: .95rem;
+  margin-bottom: 2.5rem; max-width: 400px;
+  position: relative; z-index: 1;
+}
+
+.gate-form {
+  display: flex; gap: .75rem;
+  position: relative; z-index: 1;
+  max-width: 420px; width: 100%;
+}
+@media (max-width: 480px) {
+  .gate-form { flex-direction: column; }
+}
+.gate-input {
+  flex: 1; padding: .85rem 1.25rem;
+  border-radius: 100px;
+  border: 1px solid var(--bdr);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--fm);
+  font-size: .9rem;
+  outline: none;
+  transition: border-color .3s, box-shadow .3s;
+}
+.gate-input::placeholder { color: var(--t3); }
+.gate-input:focus {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px var(--s-glow);
+}
+.gate-input.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239,68,68,.15);
+  animation: shake .4s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.gate-btn {
+  padding: .85rem 2rem;
+  border-radius: 100px;
+  background: var(--volt); color: var(--abyss);
+  font-family: var(--fb); font-weight: 700;
+  font-size: .9rem; border: none; cursor: pointer;
+  transition: all .3s ease;
+  white-space: nowrap;
+}
+[data-theme="light"] .gate-btn { color: #fff; }
+.gate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--v-glow);
+}
+.gate-btn:focus-visible {
+  outline: 2px solid var(--volt); outline-offset: 3px;
+}
+
+.gate-error {
+  color: var(--danger); font-size: .82rem;
+  margin-top: 1rem; opacity: 0;
+  transition: opacity .3s; position: relative; z-index: 1;
+}
+.gate-error.visible { opacity: 1; }
+
+.gate-footer {
+  position: absolute; bottom: 2rem;
+  font-family: var(--fm); font-size: .72rem;
+  color: var(--t3); letter-spacing: .05em; z-index: 1;
+}
+.gate-footer a { color: var(--signal); }
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD (hidden until authenticated)
+   ═══════════════════════════════════════════════ */
+#dashboard { display: none; }
+#dashboard.unlocked { display: block; }
+
+/* ═══════════════════════════════════════════════
+   SKIP LINK + SR-ONLY
+   ═══════════════════════════════════════════════ */
+.skip-link {
+  position: absolute; top: -100%; left: 1rem;
+  background: var(--volt); color: var(--abyss);
+  padding: .5rem 1rem; border-radius: 0 0 8px 8px;
+  font-weight: 600; z-index: 9999;
+  transition: top .2s;
+}
+.skip-link:focus { top: 0; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+/* ═══════════════════════════════════════════════
+   THEME TOGGLE
+   ═══════════════════════════════════════════════ */
+.theme-toggle-dash {
+  position: fixed; top: 1rem; right: 1rem; z-index: 999;
+  width: 44px; height: 44px; border-radius: 12px;
+  border: 1px solid var(--bdr); background: var(--card);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .3s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+}
+.theme-toggle-dash:hover {
+  border-color: var(--signal);
+  box-shadow: 0 2px 20px var(--s-glow);
+  transform: scale(1.05);
+}
+.theme-toggle-dash:focus-visible {
+  outline: 2px solid var(--volt); outline-offset: 3px;
+}
+.theme-toggle-dash svg { width: 20px; height: 20px; fill: var(--text); transition: fill .3s; }
+.icon-sun { display: none; }
+[data-theme="light"] .icon-moon { display: none; }
+[data-theme="light"] .icon-sun { display: block; }
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════ */
+.container { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+@media (max-width: 768px) { .container { padding: 0 1.25rem; } }
+
+section {
+  padding: 5rem 0;
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1);
+}
+section.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════════
+   SECTION HEADERS
+   ═══════════════════════════════════════════════ */
+.section-label {
+  font-family: var(--fm); font-size: .74rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .2em;
+  color: var(--signal); margin-bottom: .75rem;
+  display: flex; align-items: center; gap: .75rem;
+}
+.section-label::before {
+  content: ''; display: block; width: 28px; height: 2px;
+  background: linear-gradient(90deg, var(--electric), var(--signal), transparent);
+  border-radius: 2px;
+}
+[data-theme="light"] .section-label::before {
+  background: linear-gradient(90deg, #22577A, #38A3A5, transparent);
+}
+.section-header h2 {
+  font-family: var(--fd); font-weight: 700;
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  letter-spacing: -0.02em; line-height: 1.15;
+}
+.section-header p {
+  color: var(--t2); font-size: .95rem;
+  margin-top: .5rem; max-width: 620px;
+}
+
+/* ═══════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════ */
+.hero {
+  text-align: center; padding: 6rem 0 4rem;
+  position: relative;
+}
+.hero::before {
+  content: ''; position: absolute;
+  top: -100px; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, var(--e-dim) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+.logo-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 72px; height: 72px; border-radius: 18px;
+  background: linear-gradient(135deg, var(--electric), var(--signal));
+  margin-bottom: 2rem; position: relative; z-index: 1;
+  box-shadow: 0 8px 32px var(--e-glow);
+}
+.logo-mark span {
+  font-family: var(--fd); font-weight: 800;
+  font-size: 2.25rem; color: var(--volt); line-height: 1;
+}
+[data-theme="light"] .logo-mark {
+  background: linear-gradient(135deg, #22577A, #38A3A5);
+  box-shadow: 0 8px 32px rgba(34,87,122,.2);
+}
+[data-theme="light"] .logo-mark span { color: #80ED99; }
+.hero h1 {
+  font-family: var(--fd); font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.08; letter-spacing: -0.03em;
+  position: relative; z-index: 1;
+  max-width: 700px; margin: 0 auto;
+}
+.hero h1 .accent {
+  background: linear-gradient(90deg, var(--electric), var(--signal), var(--volt));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme="light"] .hero h1 .accent {
+  background: linear-gradient(90deg, #22577A, #38A3A5);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+  margin-top: 1.25rem; font-size: 1.05rem;
+  color: var(--t2); position: relative; z-index: 1;
+  max-width: 540px; margin-left: auto; margin-right: auto;
+}
+.hero-brand {
+  margin-top: 1.5rem; font-family: var(--fm);
+  font-size: .78rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .15em;
+  color: var(--t3); position: relative; z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   DIVIDER
+   ═══════════════════════════════════════════════ */
+.divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bdr), transparent);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 1: SAMPLE ASSESSMENT
+   ═══════════════════════════════════════════════ */
+
+/* Meta bar */
+.assessment-meta {
+  display: flex; flex-wrap: wrap; gap: 1.5rem;
+  margin-bottom: 2.5rem; padding: 1.25rem 1.5rem;
+  border-radius: var(--r); background: var(--card);
+  border: 1px solid var(--bdr);
+}
+.meta-item {
+  display: flex; flex-direction: column; gap: .15rem;
+}
+.meta-label {
+  font-family: var(--fm); font-size: .68rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .15em; color: var(--t3);
+}
+.meta-value { font-weight: 600; font-size: .92rem; }
+.meta-value.redacted { color: var(--t3); font-style: italic; }
+
+/* Severity cards */
+.severity-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2.5rem; align-items: center;
+}
+@media (max-width: 700px) { .severity-grid { grid-template-columns: 1fr; } }
+.severity-numbers {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
+}
+.sev-card {
+  padding: 1.5rem; border-radius: var(--r);
+  background: var(--card); border: 1px solid var(--bdr);
+  text-align: center; transition: all .35s ease;
+}
+.sev-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+.sev-card .num {
+  font-family: var(--fd); font-weight: 800;
+  font-size: 2.75rem; line-height: 1;
+}
+.sev-card .label {
+  font-family: var(--fm); font-size: .72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em; margin-top: .4rem;
+}
+.sev-card.critical .num { color: var(--danger); }
+.sev-card.critical { border-color: rgba(239,68,68,.15); background: var(--d-dim); }
+.sev-card.critical .label { color: var(--danger); }
+.sev-card.high .num { color: var(--amber); }
+.sev-card.high { border-color: rgba(217,119,6,.15); background: var(--a-dim); }
+.sev-card.high .label { color: var(--amber); }
+.sev-card.medium .num { color: var(--yellow); }
+.sev-card.medium .label { color: var(--yellow); }
+.sev-card.low .num { color: var(--signal); }
+.sev-card.low .label { color: var(--signal); }
+
+/* Donut */
+.donut-wrap {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1.25rem;
+}
+.donut {
+  position: relative; width: 220px; height: 220px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--danger) 0deg 80deg,
+    var(--amber) 80deg 220deg,
+    var(--yellow) 220deg 300deg,
+    var(--signal) 300deg 360deg
+  );
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 40px var(--e-dim);
+}
+[data-theme="light"] .donut {
+  background: conic-gradient(
+    #dc2626 0deg 80deg,
+    #b45309 80deg 220deg,
+    #a16207 220deg 300deg,
+    #38A3A5 300deg 360deg
+  );
+  box-shadow: 0 0 40px rgba(34,87,122,.08);
+}
+.donut::after {
+  content: ''; width: 145px; height: 145px;
+  border-radius: 50%; background: var(--abyss);
+  transition: background .4s ease;
+}
+.donut-center {
+  position: absolute; text-align: center; z-index: 1;
+}
+.donut-center .big {
+  font-family: var(--fd); font-weight: 800;
+  font-size: 2.75rem; line-height: 1;
+}
+.donut-center .small {
+  font-size: .75rem; color: var(--t3); font-weight: 500;
+}
+
+/* Impact cards */
+.impact-cards { display: grid; gap: 1rem; margin-top: 2.5rem; }
+.impact-card {
+  display: grid; grid-template-columns: 56px 1fr;
+  gap: 1.25rem; padding: 1.5rem;
+  border-radius: var(--r); background: var(--card);
+  border: 1px solid var(--bdr);
+  transition: all .35s ease; align-items: start;
+}
+.impact-card:hover {
+  border-color: var(--signal);
+  box-shadow: 0 4px 20px var(--s-dim);
+  transform: translateY(-2px);
+}
+.impact-icon {
+  width: 56px; height: 56px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-family: var(--fm); font-weight: 700; font-size: 1.1rem;
+}
+.impact-icon.financial { background: var(--d-dim); color: var(--danger); }
+.impact-icon.game { background: var(--a-dim); color: var(--amber); }
+.impact-icon.email { background: rgba(217,119,6,.06); color: var(--amber); }
+.impact-icon.data { background: rgba(234,179,8,.06); color: var(--yellow); }
+.impact-icon.infra { background: var(--s-dim); color: var(--signal); }
+.impact-card h3 {
+  font-family: var(--fd); font-weight: 700;
+  font-size: 1.05rem; margin-bottom: .25rem;
+}
+.impact-card p { color: var(--t2); font-size: .9rem; line-height: 1.6; }
+
+/* Risk gauge */
+.risk-meter {
+  background: var(--card); border: 1px solid var(--bdr);
+  border-radius: var(--rl); padding: 2.5rem;
+  margin-top: 2.5rem;
+}
+.risk-headline { text-align: center; margin-bottom: 2rem; }
+.risk-headline .label-text {
+  font-family: var(--fm); font-size: .72rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: .15em; color: var(--t3);
+  margin-bottom: .5rem;
+}
+.risk-headline .range {
+  font-family: var(--fd); font-weight: 800;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  background: linear-gradient(90deg, var(--amber), var(--danger));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme="light"] .risk-headline .range {
+  background: linear-gradient(90deg, #b45309, #dc2626);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.risk-bars { display: flex; flex-direction: column; gap: 1.25rem; }
+.risk-bar-row {
+  display: grid; grid-template-columns: 100px 1fr 80px;
+  align-items: center; gap: 1rem;
+}
+@media (max-width: 480px) {
+  .risk-bar-row { grid-template-columns: 1fr; gap: .35rem; }
+}
+.risk-bar-label { font-size: .82rem; font-weight: 600; color: var(--t2); }
+.risk-bar-track {
+  height: 12px; border-radius: 6px;
+  background: var(--surf); overflow: hidden;
+}
+[data-theme="light"] .risk-bar-track { background: #e8eeeb; }
+.risk-bar-fill {
+  height: 100%; border-radius: 6px;
+  transition: width 1.2s cubic-bezier(.22,1,.36,1);
+  width: 0;
+}
+.risk-bar-fill.low-risk { background: linear-gradient(90deg, var(--yellow), var(--amber)); }
+.risk-bar-fill.med-risk { background: linear-gradient(90deg, var(--amber), #ef7b00); }
+.risk-bar-fill.high-risk { background: linear-gradient(90deg, #ef7b00, var(--danger)); }
+.risk-bar-value {
+  font-family: var(--fd); font-weight: 700; font-size: .88rem; text-align: right;
+}
+.risk-bar-value.c-val { color: var(--yellow); }
+.risk-bar-value.r-val { color: var(--amber); }
+.risk-bar-value.w-val { color: var(--danger); }
+
+/* Positive findings */
+.positive-section {
+  background: var(--card);
+  border: 1px solid rgba(34,197,94,.12);
+  border-radius: var(--rl); padding: 2.5rem 2rem;
+  margin-top: 2.5rem;
+}
+[data-theme="light"] .positive-section {
+  border-color: rgba(22,163,74,.1);
+  background: rgba(22,163,74,.02);
+}
+.positive-items { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.25rem; }
+.positive-item { display: flex; gap: .75rem; align-items: start; }
+.positive-check {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(34,197,94,.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+[data-theme="light"] .positive-check { background: rgba(22,163,74,.08); }
+.positive-check svg { width: 14px; height: 14px; fill: var(--green); }
+[data-theme="light"] .positive-check svg { fill: #16a34a; }
+.positive-item p { font-size: .92rem; color: var(--t2); line-height: 1.6; }
+.positive-item strong { color: var(--text); font-weight: 600; }
+
+/* ═══════════════════════════════════════════════
+   SECTION 2: PLATFORM TRACK RECORD
+   ═══════════════════════════════════════════════ */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1rem; margin: 2.5rem 0;
+}
+@media (max-width: 700px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+.stat-card {
+  text-align: center; padding: 2rem 1rem;
+  border-radius: var(--r); background: var(--card);
+  border: 1px solid var(--bdr); transition: all .35s ease;
+}
+.stat-card:hover {
+  border-color: var(--signal);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--s-dim);
+}
+.stat-num {
+  font-family: var(--fd); font-weight: 800;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  color: var(--volt); line-height: 1;
+}
+.stat-label {
+  font-size: .82rem; color: var(--t2);
+  margin-top: .5rem; font-weight: 500;
+}
+
+/* Platform badges */
+.platforms {
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  justify-content: center; margin: 2.5rem 0;
+}
+.platform-badge {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .85rem 1.5rem; border-radius: var(--r);
+  background: var(--card); border: 1px solid var(--bdr);
+  transition: all .35s ease;
+}
+.platform-badge:hover {
+  border-color: var(--volt);
+  box-shadow: 0 4px 16px var(--v-dim);
+  transform: translateY(-2px);
+}
+.platform-icon {
+  font-family: var(--fm); font-weight: 700;
+  font-size: .85rem; letter-spacing: .05em;
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--v-dim); color: var(--volt);
+}
+.platform-name { font-weight: 600; font-size: .9rem; }
+
+/* Highlight box */
+.highlight-box {
+  background: var(--card); border: 1px solid var(--bdr);
+  border-radius: var(--rl); padding: 2rem 2.5rem;
+  margin-top: 2rem; position: relative; overflow: hidden;
+}
+.highlight-box::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--electric), var(--signal), var(--volt));
+}
+[data-theme="light"] .highlight-box::before {
+  background: linear-gradient(90deg, #22577A, #38A3A5, #57CC99);
+}
+.highlight-box h3 {
+  font-family: var(--fd); font-weight: 700;
+  font-size: 1.15rem; margin-bottom: .75rem;
+}
+.highlight-box p { color: var(--t2); font-size: .92rem; line-height: 1.65; }
+.highlight-box .callout {
+  margin-top: 1rem; padding: .85rem 1.25rem;
+  border-radius: var(--r); background: var(--v-dim);
+  border-left: 3px solid var(--volt);
+  font-weight: 600; font-size: .88rem; color: var(--volt);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 3: METHODOLOGY PIPELINE
+   ═══════════════════════════════════════════════ */
+.pipeline {
+  display: flex; align-items: stretch;
+  gap: 0; margin: 2.5rem 0;
+  overflow-x: auto; padding-bottom: .5rem;
+}
+.pipeline-step {
+  flex: 1; min-width: 160px;
+  padding: 1.75rem 1.25rem;
+  background: var(--card); border: 1px solid var(--bdr);
+  text-align: center; position: relative;
+  transition: all .35s ease;
+}
+.pipeline-step:first-child { border-radius: var(--r) 0 0 var(--r); }
+.pipeline-step:last-child { border-radius: 0 var(--r) var(--r) 0; }
+.pipeline-step:not(:last-child) { border-right: none; }
+.pipeline-step:hover {
+  background: var(--card-hover);
+  z-index: 1;
+}
+.pipeline-step .step-num {
+  font-family: var(--fm); font-size: .65rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .15em;
+  color: var(--signal); margin-bottom: .75rem;
+}
+.pipeline-step .step-icon {
+  font-family: var(--fm); font-weight: 700;
+  font-size: 1.5rem; color: var(--volt); margin-bottom: .75rem;
+  line-height: 1;
+}
+.pipeline-step h4 {
+  font-family: var(--fd); font-weight: 700;
+  font-size: .95rem; margin-bottom: .35rem;
+}
+.pipeline-step p {
+  font-size: .78rem; color: var(--t3); line-height: 1.5;
+}
+.pipeline-arrow {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; flex-shrink: 0;
+  color: var(--signal); font-size: 1.25rem;
+}
+@media (max-width: 768px) {
+  .pipeline { flex-direction: column; }
+  .pipeline-step { border-radius: 0 !important; border-right: 1px solid var(--bdr); }
+  .pipeline-step:first-child { border-radius: var(--r) var(--r) 0 0 !important; }
+  .pipeline-step:last-child { border-radius: 0 0 var(--r) var(--r) !important; }
+  .pipeline-step:not(:last-child) { border-right: 1px solid var(--bdr); border-bottom: none; }
+  .pipeline-arrow { width: auto; height: 28px; transform: rotate(90deg); }
+}
+
+.methodology-note {
+  text-align: center; margin-top: 1.5rem;
+  padding: 1.25rem; border-radius: var(--r);
+  background: var(--card); border: 1px solid var(--bdr);
+  font-size: .88rem; color: var(--t2);
+}
+.methodology-note strong { color: var(--text); }
+
+/* ═══════════════════════════════════════════════
+   CTA SECTION
+   ═══════════════════════════════════════════════ */
+.cta-section { text-align: center; padding: 5rem 0 4rem; }
+.cta-box {
+  background: var(--card); border: 1px solid var(--bdr);
+  border-radius: var(--rl); padding: 3.5rem 2.5rem;
+  position: relative; overflow: hidden;
+  max-width: 680px; margin: 0 auto;
+}
+.cta-box::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--electric), var(--signal), var(--volt));
+}
+[data-theme="light"] .cta-box::before {
+  background: linear-gradient(90deg, #22577A, #38A3A5, #57CC99);
+}
+.cta-box h2 {
+  font-family: var(--fd); font-weight: 700;
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  margin-bottom: .75rem;
+}
+.cta-box .cta-sub {
+  color: var(--t2); font-size: .95rem;
+  margin-bottom: 2rem; max-width: 500px;
+  margin-left: auto; margin-right: auto;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .9rem 2.5rem; border-radius: 100px;
+  background: var(--volt); color: var(--abyss);
+  font-family: var(--fb); font-weight: 700; font-size: 1rem;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: all .3s ease;
+}
+[data-theme="light"] .cta-btn { color: #fff; }
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--v-glow);
+  text-decoration: none;
+}
+.cta-btn:focus-visible {
+  outline: 2px solid var(--volt); outline-offset: 3px;
+}
+.cta-fine {
+  margin-top: 1.75rem; font-size: .8rem;
+  color: var(--t3); max-width: 480px;
+  margin-left: auto; margin-right: auto; line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════ */
+footer {
+  text-align: center; padding: 3rem 0;
+  border-top: 1px solid var(--bdr);
+}
+footer p { font-size: .8rem; color: var(--t3); line-height: 1.7; }
+footer a { color: var(--signal); }
+
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════ */
+.stagger-1 { transition-delay: .1s; }
+.stagger-2 { transition-delay: .2s; }
+.stagger-3 { transition-delay: .3s; }
+.stagger-4 { transition-delay: .4s; }
+.stagger-5 { transition-delay: .5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  section { opacity: 1 !important; transform: none !important; }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .hero { padding: 4rem 0 2.5rem; }
+  section { padding: 3.5rem 0; }
+  .risk-meter { padding: 1.5rem; }
+  .positive-section { padding: 1.75rem 1.25rem; }
+  .cta-box { padding: 2.5rem 1.5rem; }
+  .impact-card { grid-template-columns: 48px 1fr; }
+  .impact-icon { width: 48px; height: 48px; border-radius: 12px; font-size: .95rem; }
+  .assessment-meta { flex-direction: column; gap: 1rem; }
+  .highlight-box { padding: 1.5rem; }
+}
+
+/* Print */
+@media print {
+  body { background: #fff; color: #000; }
+  .theme-toggle-dash, .skip-link, #gate { display: none; }
+  #dashboard { display: block !important; }
+  section { opacity: 1 !important; transform: none !important; break-inside: avoid; }
+  .cta-btn { border: 2px solid #000; background: transparent; color: #000; }
+}
+</style>
+<noscript><style>section{opacity:1!important;transform:none!important}#gate{display:none}#dashboard{display:block}</style></noscript>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     ACCESS GATE
+     ════════════════════════════════════════════ -->
+<div id="gate">
+  <div class="gate-logo" aria-hidden="true"><span>Q</span></div>
+  <h1 class="gate-title">This content is access-controlled.</h1>
+  <p class="gate-sub">Enter the access code provided to you to view this portfolio.</p>
+  <form class="gate-form" id="gate-form" autocomplete="off">
+    <label for="gate-code" class="sr-only">Access code</label>
+    <input type="text" id="gate-code" class="gate-input" placeholder="Enter access code" autofocus>
+    <button type="submit" class="gate-btn">Unlock</button>
+  </form>
+  <p class="gate-error" id="gate-error">Invalid access code. Please try again.</p>
+  <div class="gate-footer">
+    QuantumSearch Security Research &mdash; <a href="https://qsearch.ch">qsearch.ch</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     DASHBOARD (hidden until authenticated)
+     ════════════════════════════════════════════ -->
+<div id="dashboard">
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle-dash" aria-label="Toggle theme" title="Toggle light/dark theme">
+  <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm11.394-5.834a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59Zm-14.788 0a.75.75 0 0 1 1.06-1.06l1.591 1.59a.75.75 0 1 1-1.06 1.061L4.106 6.166ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18Zm5.834-1.106a.75.75 0 0 0-1.06 1.06l1.59 1.591a.75.75 0 0 0 1.061-1.06l-1.59-1.591Zm-11.668 0a.75.75 0 0 1 1.06 1.06l-1.59 1.591a.75.75 0 1 1-1.061-1.06l1.59-1.591ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12Z"/></svg>
+</button>
+
+<div class="container" id="main">
+
+  <!-- ════════════════════════════════════════════
+       HERO
+       ════════════════════════════════════════════ -->
+  <section class="hero visible" style="opacity:1;transform:none;" aria-label="Introduction">
+    <div class="logo-mark" aria-hidden="true"><span>Q</span></div>
+    <h1>What a <span class="accent">Security Assessment</span> Looks Like</h1>
+    <p class="hero-sub">Real findings from a real engagement. Client details redacted. Quality unfiltered.</p>
+    <p class="hero-brand">QuantumSearch Security Research</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ════════════════════════════════════════════
+       SECTION 1: SAMPLE SECURITY ASSESSMENT
+       ════════════════════════════════════════════ -->
+  <section id="assessment" aria-label="Sample Security Assessment">
+    <div class="section-header">
+      <div class="section-label">Sample Assessment</div>
+      <h2>Web Application Security Audit</h2>
+      <p>A full-scope red team engagement covering application security, infrastructure, OSINT, social engineering, and credential testing across 8 phases.</p>
+    </div>
+
+    <div class="assessment-meta" role="list" aria-label="Assessment metadata">
+      <div class="meta-item" role="listitem">
+        <span class="meta-label">Client</span>
+        <span class="meta-value redacted">[REDACTED]</span>
+      </div>
+      <div class="meta-item" role="listitem">
+        <span class="meta-label">Target</span>
+        <span class="meta-value redacted">client-alpha.example.com</span>
+      </div>
+      <div class="meta-item" role="listitem">
+        <span class="meta-label">Scope</span>
+        <span class="meta-value">Full Red Team</span>
+      </div>
+      <div class="meta-item" role="listitem">
+        <span class="meta-label">Duration</span>
+        <span class="meta-value">24 hours</span>
+      </div>
+      <div class="meta-item" role="listitem">
+        <span class="meta-label">Actors Deployed</span>
+        <span class="meta-value">26 specialists</span>
+      </div>
+      <div class="meta-item" role="listitem">
+        <span class="meta-label">Approach</span>
+        <span class="meta-value">Black-box to Gray-box</span>
+      </div>
+    </div>
+
+    <!-- Severity Overview -->
+    <div class="severity-grid">
+      <div class="severity-numbers">
+        <div class="sev-card critical stagger-1">
+          <div class="num" data-target="8">0</div>
+          <div class="label">Critical</div>
+        </div>
+        <div class="sev-card high stagger-2">
+          <div class="num" data-target="14">0</div>
+          <div class="label">High</div>
+        </div>
+        <div class="sev-card medium stagger-3">
+          <div class="num" data-target="8">0</div>
+          <div class="label">Medium</div>
+        </div>
+        <div class="sev-card low stagger-4">
+          <div class="num" data-target="6">0</div>
+          <div class="label">Low / Info</div>
+        </div>
+      </div>
+
+      <div class="donut-wrap" role="img" aria-label="Severity breakdown: 8 critical, 14 high, 8 medium, 6 low out of 36 total findings">
+        <div class="donut">
+          <div class="donut-center">
+            <div class="big" data-target="36">0</div>
+            <div class="small">findings</div>
+          </div>
+        </div>
+        <span class="sr-only">8 critical, 14 high, 8 medium, 6 low findings out of 36 total.</span>
+      </div>
+    </div>
+
+    <!-- Impact Categories -->
+    <div class="impact-cards">
+      <div class="impact-card stagger-1">
+        <div class="impact-icon financial" aria-hidden="true">$</div>
+        <div>
+          <h3>Financial Manipulation</h3>
+          <p>Multiple independent paths to unlimited platform credit generation discovered, requiring no authentication. Three distinct attack chains confirmed with proof-of-concept.</p>
+        </div>
+      </div>
+
+      <div class="impact-card stagger-2">
+        <div class="impact-icon game" aria-hidden="true">>_</div>
+        <div>
+          <h3>Application Logic Bypass</h3>
+          <p>Critical design flaw in the core business logic allowing complete outcome prediction. Every operation deterministic and exploitable via the public API.</p>
+        </div>
+      </div>
+
+      <div class="impact-card stagger-3">
+        <div class="impact-icon email" aria-hidden="true">@</div>
+        <div>
+          <h3>Identity Spoofing</h3>
+          <p>Domain impersonation fully operational for phishing attacks. We demonstrated delivery of test emails from 7 spoofed personas to controlled mailboxes.</p>
+        </div>
+      </div>
+
+      <div class="impact-card stagger-4">
+        <div class="impact-icon data" aria-hidden="true">db</div>
+        <div>
+          <h3>Data Exposure</h3>
+          <p>Sensitive database tables accessible without authorization, including financial records, configuration data, and platform economics. 87 accessible API endpoints mapped.</p>
+        </div>
+      </div>
+
+      <div class="impact-card stagger-5">
+        <div class="impact-icon infra" aria-hidden="true">/</div>
+        <div>
+          <h3>Infrastructure Exposure</h3>
+          <p>Internal administration services exposed directly to the internet without adequate protection, including database management panels and service dashboards.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risk Gauge -->
+    <div class="risk-meter">
+      <div class="risk-headline">
+        <div class="label-text">Estimated Monthly Exposure (Post-Launch)</div>
+        <div class="range">Significant to Catastrophic</div>
+      </div>
+
+      <div class="risk-bars">
+        <div class="risk-bar-row">
+          <div class="risk-bar-label">Conservative</div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill low-risk" data-width="12"></div>
+          </div>
+          <div class="risk-bar-value c-val">Low 6-fig</div>
+        </div>
+        <div class="risk-bar-row">
+          <div class="risk-bar-label">Realistic</div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill med-risk" data-width="45"></div>
+          </div>
+          <div class="risk-bar-value r-val">7-figure</div>
+        </div>
+        <div class="risk-bar-row">
+          <div class="risk-bar-label">Worst-Case</div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill high-risk" data-width="100"></div>
+          </div>
+          <div class="risk-bar-value w-val">8-figure</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Positive Findings -->
+    <div class="positive-section">
+      <div class="section-header">
+        <h2 style="color:var(--green);">What Held Strong</h2>
+      </div>
+
+      <div class="positive-items">
+        <div class="positive-item">
+          <div class="positive-check">
+            <svg viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p><strong>Credentials survived 14.3 million brute-force attempts.</strong> Every known leaked password database tested. Professional-grade credential management confirmed.</p>
+        </div>
+
+        <div class="positive-item">
+          <div class="positive-check">
+            <svg viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p><strong>Database access controls blocked all 14 bypass techniques.</strong> Row-Level Security policies correctly implemented on protected tables.</p>
+        </div>
+
+        <div class="positive-item">
+          <div class="positive-check">
+            <svg viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p><strong>Cryptographic foundation is solid.</strong> SSH credentials and authentication secrets are non-default and resilient. Strong foundation to build on.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ════════════════════════════════════════════
+       SECTION 2: PLATFORM TRACK RECORD
+       ════════════════════════════════════════════ -->
+  <section id="track-record" aria-label="Platform Track Record">
+    <div class="section-header">
+      <div class="section-label">Track Record</div>
+      <h2>Proven Across Platforms</h2>
+      <p>Active on all major bug bounty platforms. Our researchers independently discover vulnerabilities that top hunters also find.</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card stagger-1">
+        <div class="stat-num" data-target="100" data-suffix="+">0</div>
+        <div class="stat-label">Findings Reported</div>
+      </div>
+      <div class="stat-card stagger-2">
+        <div class="stat-num" data-target="20" data-suffix="+">0</div>
+        <div class="stat-label">Targets Assessed</div>
+      </div>
+      <div class="stat-card stagger-3">
+        <div class="stat-num" data-target="16" data-suffix="+">0</div>
+        <div class="stat-label">Submissions Filed</div>
+      </div>
+      <div class="stat-card stagger-4">
+        <div class="stat-num" data-target="8" data-suffix="">0</div>
+        <div class="stat-label">Assessment Phases</div>
+      </div>
+    </div>
+
+    <div class="platforms" role="list" aria-label="Bug bounty platforms">
+      <div class="platform-badge" role="listitem">
+        <div class="platform-icon" aria-hidden="true">H1</div>
+        <span class="platform-name">HackerOne</span>
+      </div>
+      <div class="platform-badge" role="listitem">
+        <div class="platform-icon" aria-hidden="true">BC</div>
+        <span class="platform-name">Bugcrowd</span>
+      </div>
+      <div class="platform-badge" role="listitem">
+        <div class="platform-icon" aria-hidden="true">IM</div>
+        <span class="platform-name">Immunefi</span>
+      </div>
+      <div class="platform-badge" role="listitem">
+        <div class="platform-icon" aria-hidden="true">IN</div>
+        <span class="platform-name">Intigriti</span>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <h3>Independent Validation</h3>
+      <p>Multiple findings submitted to major platforms were independently discovered by other top-ranked researchers and triaged as duplicates. This is not a failure metric — it's proof of capability.</p>
+      <p style="margin-top:.75rem;">When our researchers find the same vulnerabilities as established hunters with years of platform reputation, it validates our methodology and technical depth.</p>
+      <div class="callout">First bounty earned: PayPal via HackerOne</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ════════════════════════════════════════════
+       SECTION 3: OUR METHODOLOGY
+       ════════════════════════════════════════════ -->
+  <section id="methodology" aria-label="Our Methodology">
+    <div class="section-header">
+      <div class="section-label">Methodology</div>
+      <h2>How We Work</h2>
+      <p>Every finding passes through independent parallel review before delivery. No exceptions.</p>
+    </div>
+
+    <div class="pipeline" role="list" aria-label="Quality pipeline steps">
+      <div class="pipeline-step" role="listitem">
+        <div class="step-num">Phase 1</div>
+        <div class="step-icon" aria-hidden="true">>_</div>
+        <h4>Discover</h4>
+        <p>Multi-phase reconnaissance and exploitation by specialized actors</p>
+      </div>
+      <div class="pipeline-arrow" aria-hidden="true">&rarr;</div>
+      <div class="pipeline-step" role="listitem">
+        <div class="step-num">Phase 2</div>
+        <div class="step-icon" aria-hidden="true">J+N</div>
+        <h4>Judge + Nerdy</h4>
+        <p>Independent parallel review: verification checklist + devil's advocate</p>
+      </div>
+      <div class="pipeline-arrow" aria-hidden="true">&rarr;</div>
+      <div class="pipeline-step" role="listitem">
+        <div class="step-num">Phase 3</div>
+        <div class="step-icon" aria-hidden="true">QA</div>
+        <h4>Quality Assurance</h4>
+        <p>Anti-hallucination gate verifying all claims against primary sources</p>
+      </div>
+      <div class="pipeline-arrow" aria-hidden="true">&rarr;</div>
+      <div class="pipeline-step" role="listitem">
+        <div class="step-num">Phase 4</div>
+        <div class="step-icon" aria-hidden="true">&lt;/&gt;</div>
+        <h4>Deliver</h4>
+        <p>Full report with PoC evidence, attack narratives, and remediation roadmap</p>
+      </div>
+    </div>
+
+    <div class="methodology-note">
+      <strong>Judge + Nerdy Review:</strong> Every batch of findings undergoes parallel adversarial review. The Judge runs a 7-point verification checklist. The Nerdy argues against every finding — strongest counterarguments, scope challenges, severity inflation. Findings that fail are killed. This gate is non-negotiable.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ════════════════════════════════════════════
+       CTA
+       ════════════════════════════════════════════ -->
+  <section class="cta-section" id="contact" aria-label="Contact">
+    <div class="cta-box">
+      <h2>See what we find in yours.</h2>
+      <p class="cta-sub">Schedule a confidential conversation to discuss your security posture.</p>
+
+      <a href="mailto:contact@qsearch.ch?subject=Security%20Assessment%20Inquiry" class="cta-btn">
+        Get in Touch
+      </a>
+
+      <p class="cta-fine">This is a sanitized sample. Full reports are delivered under NDA with complete proof-of-concept evidence, CVSS scoring, and prioritized remediation roadmaps.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <div class="container">
+    <p>
+      <strong>QuantumSearch Security Research</strong><br>
+      Swiss Offensive Security<br>
+      <a href="https://qsearch.ch">qsearch.ch</a> &middot; <a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a>
+    </p>
+  </div>
+</footer>
+
+</div><!-- end #dashboard -->
+
+<script>
+/* ═══════════════════════════════════════════════
+   ACCESS GATE LOGIC
+   ═══════════════════════════════════════════════ */
+(function() {
+  var ACCESS_KEY = 'QS2026';
+  var params = new URLSearchParams(window.location.search);
+  var gate = document.getElementById('gate');
+  var dashboard = document.getElementById('dashboard');
+
+  if (params.get('key') === ACCESS_KEY) {
+    gate.style.display = 'none';
+    dashboard.classList.add('unlocked');
+    initDashboard();
+  } else {
+    var form = document.getElementById('gate-form');
+    var input = document.getElementById('gate-code');
+    var error = document.getElementById('gate-error');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var code = input.value.trim();
+      if (code === ACCESS_KEY) {
+        var url = new URL(window.location);
+        url.searchParams.set('key', ACCESS_KEY);
+        window.location.href = url.toString();
+      } else {
+        input.classList.add('error');
+        error.classList.add('visible');
+        setTimeout(function() { input.classList.remove('error'); }, 500);
+        input.focus();
+        input.select();
+      }
+    });
+  }
+
+  function initDashboard() {
+    // Theme toggle
+    var KEY = 'qs-dash-theme';
+    var html = document.documentElement;
+    var btn = document.querySelector('.theme-toggle-dash');
+    var saved = localStorage.getItem(KEY);
+    if (saved === 'dark') {
+      html.removeAttribute('data-theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+    }
+    if (btn) {
+      btn.addEventListener('click', function() {
+        var isLight = html.getAttribute('data-theme') === 'light';
+        if (isLight) {
+          html.removeAttribute('data-theme');
+          localStorage.setItem(KEY, 'dark');
+        } else {
+          html.setAttribute('data-theme', 'light');
+          localStorage.setItem(KEY, 'light');
+        }
+      });
+    }
+
+    // Scroll animations
+    var sections = document.querySelectorAll('#dashboard section:not(.hero)');
+    var riskBars = document.querySelectorAll('.risk-bar-fill');
+    var barsAnimated = false;
+    var countersAnimated = false;
+
+    function animateCounters() {
+      if (countersAnimated) return;
+      countersAnimated = true;
+      document.querySelectorAll('[data-target]').forEach(function(el) {
+        var target = parseInt(el.dataset.target, 10);
+        var suffix = el.dataset.suffix || '';
+        var duration = 1200;
+        var start = performance.now();
+        function step(now) {
+          var elapsed = now - start;
+          var progress = Math.min(elapsed / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = Math.round(eased * target);
+          el.textContent = current + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          if (entry.target.id === 'assessment' && !countersAnimated) {
+            setTimeout(animateCounters, 200);
+          }
+          if (entry.target.id === 'track-record' && !countersAnimated) {
+            setTimeout(animateCounters, 200);
+          }
+          if (!barsAnimated && entry.target.querySelector('.risk-bar-fill')) {
+            barsAnimated = true;
+            setTimeout(function() {
+              riskBars.forEach(function(bar) {
+                bar.style.width = bar.dataset.width + '%';
+              });
+            }, 300);
+          }
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    sections.forEach(function(s) { observer.observe(s); });
+
+    var assessmentSection = document.getElementById('assessment');
+    if (assessmentSection) {
+      var sevObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            setTimeout(animateCounters, 300);
+            sevObserver.disconnect();
+          }
+        });
+      }, { threshold: 0.15 });
+      sevObserver.observe(assessmentSection);
+    }
+  }
+})();
+
+/* Theme toggle for the gate page too */
+(function() {
+  var KEY = 'qs-dash-theme';
+  var html = document.documentElement;
+  var saved = localStorage.getItem(KEY);
+  if (saved === 'dark') {
+    html.removeAttribute('data-theme');
+  } else {
+    html.setAttribute('data-theme', 'light');
+  }
+})();
+</script>
+</body>
+</html>
