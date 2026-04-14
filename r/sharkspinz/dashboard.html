@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SharkSpinz — Security Assessment Results</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   THEME SYSTEM — Forest Gradient (light) / Ultraviolet Volt (dark)
+   ═══════════════════════════════════════════════ */
+:root {
+  --abyss: #0f0d18;
+  --deep: #16132a;
+  --card: #1c1835;
+  --elev: #231e42;
+  --surf: #2a244f;
+  --electric: #5B23FF;
+  --signal: #008BFF;
+  --volt: #E4FF30;
+  --e-dim: rgba(91,35,255,.15);
+  --s-dim: rgba(0,139,255,.12);
+  --v-dim: rgba(228,255,48,.1);
+  --e-glow: rgba(91,35,255,.4);
+  --s-glow: rgba(0,139,255,.35);
+  --v-glow: rgba(228,255,48,.3);
+  --text: #eeedf5;
+  --t2: #b8b5c9;
+  --t3: #7e7a94;
+  --danger: #ef4444;
+  --amber: #f59e0b;
+  --yellow: #eab308;
+  --green: #22c55e;
+  --d-dim: rgba(239,68,68,.12);
+  --a-dim: rgba(245,158,11,.1);
+  --bdr: rgba(91,35,255,.2);
+  --bdr-s: rgba(0,139,255,.15);
+  --fd: 'Bricolage Grotesque', sans-serif;
+  --fb: 'Plus Jakarta Sans', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r: 16px;
+  --rl: 24px;
+}
+
+[data-theme="light"] {
+  --abyss: #f8faf9;
+  --deep: #f0f4f2;
+  --card: #ffffff;
+  --elev: #f5f8f6;
+  --surf: #e8eeeb;
+  --electric: #57CC99;
+  --signal: #38A3A5;
+  --volt: #22577A;
+  --e-dim: rgba(87,204,153,.1);
+  --s-dim: rgba(56,163,165,.08);
+  --v-dim: rgba(34,87,122,.06);
+  --e-glow: rgba(87,204,153,.25);
+  --s-glow: rgba(56,163,165,.2);
+  --v-glow: rgba(34,87,122,.15);
+  --text: #1a2e3a;
+  --t2: #3d5a6e;
+  --t3: #6b8a9e;
+  --danger: #dc2626;
+  --amber: #b45309;
+  --yellow: #a16207;
+  --green: #16a34a;
+  --d-dim: rgba(220,38,38,.08);
+  --a-dim: rgba(180,83,9,.06);
+  --bdr: rgba(34,87,122,.12);
+  --bdr-s: rgba(56,163,165,.1);
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--fb);
+  background: var(--abyss);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background .4s ease, color .4s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   THEME TOGGLE
+   ═══════════════════════════════════════════════ */
+.theme-toggle-dash {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--bdr);
+  background: var(--card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+}
+.theme-toggle-dash:hover {
+  border-color: var(--signal);
+  box-shadow: 0 2px 20px var(--s-glow);
+  transform: scale(1.05);
+}
+.theme-toggle-dash svg { width: 20px; height: 20px; fill: var(--text); transition: fill .3s; }
+.icon-sun { display: none; }
+[data-theme="light"] .icon-moon { display: none; }
+[data-theme="light"] .icon-sun { display: block; }
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════ */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+section {
+  padding: 4rem 0;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════ */
+.hero {
+  text-align: center;
+  padding: 5rem 0 3rem;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--e-dim) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px; height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--electric), var(--signal));
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+.logo-mark span {
+  font-family: var(--fd);
+  font-weight: 800;
+  font-size: 2rem;
+  color: #fff;
+  line-height: 1;
+}
+[data-theme="light"] .logo-mark {
+  background: linear-gradient(135deg, #22577A, #38A3A5);
+}
+
+.hero h1 {
+  font-family: var(--fd);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 .brand {
+  background: linear-gradient(90deg, var(--electric), var(--signal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme="light"] .hero h1 .brand {
+  background: linear-gradient(90deg, #22577A, #38A3A5);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero-meta {
+  margin-top: 1rem;
+  font-size: .95rem;
+  color: var(--t2);
+  position: relative;
+  z-index: 1;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 1.25rem;
+  padding: .6rem 1.25rem;
+  border-radius: 100px;
+  background: var(--d-dim);
+  border: 1px solid var(--danger);
+  font-weight: 600;
+  font-size: .9rem;
+  color: var(--danger);
+  position: relative;
+  z-index: 1;
+}
+.status-badge .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.4); }
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION HEADERS
+   ═══════════════════════════════════════════════ */
+.section-header {
+  margin-bottom: 2rem;
+}
+.section-header h2 {
+  font-family: var(--fd);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  letter-spacing: -0.01em;
+}
+.section-header .subtitle {
+  font-size: .85rem;
+  color: var(--t3);
+  margin-top: .25rem;
+  font-style: italic;
+}
+.section-line {
+  display: block;
+  width: 48px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--electric), var(--signal));
+  margin-top: .75rem;
+}
+[data-theme="light"] .section-line {
+  background: linear-gradient(90deg, #22577A, #38A3A5, #57CC99);
+}
+
+/* ═══════════════════════════════════════════════
+   SEVERITY OVERVIEW
+   ═══════════════════════════════════════════════ */
+.severity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .severity-grid { grid-template-columns: 1fr; }
+}
+
+.severity-numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+
+.sev-card {
+  padding: 1.25rem;
+  border-radius: var(--r);
+  background: var(--card);
+  border: 1px solid var(--bdr);
+  text-align: center;
+  transition: all .3s ease;
+}
+.sev-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+.sev-card .num {
+  font-family: var(--fd);
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+.sev-card .label {
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: .35rem;
+}
+.sev-card.critical .num { color: var(--danger); }
+.sev-card.critical { border-color: rgba(239,68,68,.2); background: var(--d-dim); }
+[data-theme="light"] .sev-card.critical { background: rgba(220,38,38,.04); border-color: rgba(220,38,38,.15); }
+.sev-card.critical .label { color: var(--danger); }
+
+.sev-card.high .num { color: var(--amber); }
+.sev-card.high { border-color: rgba(245,158,11,.2); background: var(--a-dim); }
+[data-theme="light"] .sev-card.high { background: rgba(180,83,9,.04); border-color: rgba(180,83,9,.12); }
+.sev-card.high .label { color: var(--amber); }
+
+.sev-card.medium .num { color: var(--yellow); }
+.sev-card.medium .label { color: var(--yellow); }
+
+.sev-card.low .num { color: var(--signal); }
+.sev-card.low .label { color: var(--signal); }
+
+/* Donut Chart */
+.donut-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.donut {
+  position: relative;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--danger) 0deg 80deg,
+    var(--amber) 80deg 220deg,
+    var(--yellow) 220deg 300deg,
+    var(--signal) 300deg 360deg
+  );
+  display: flex; align-items: center; justify-content: center;
+}
+[data-theme="light"] .donut {
+  background: conic-gradient(
+    #dc2626 0deg 80deg,
+    #b45309 80deg 220deg,
+    #a16207 220deg 300deg,
+    #38A3A5 300deg 360deg
+  );
+}
+.donut::after {
+  content: '';
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: var(--abyss);
+  transition: background .4s ease;
+}
+.donut-center {
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+}
+.donut-center .big {
+  font-family: var(--fd);
+  font-weight: 800;
+  font-size: 2.25rem;
+  line-height: 1;
+}
+.donut-center .small {
+  font-size: .75rem;
+  color: var(--t3);
+  font-weight: 500;
+}
+
+.positive-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .45rem 1rem;
+  border-radius: 100px;
+  background: rgba(34,197,94,.08);
+  border: 1px solid rgba(34,197,94,.2);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--green);
+}
+[data-theme="light"] .positive-badge {
+  background: rgba(22,163,74,.06);
+  border-color: rgba(22,163,74,.15);
+  color: #16a34a;
+}
+.positive-badge svg { width: 16px; height: 16px; fill: var(--green); }
+[data-theme="light"] .positive-badge svg { fill: #16a34a; }
+
+/* ═══════════════════════════════════════════════
+   IMPACT CARDS
+   ═══════════════════════════════════════════════ */
+.impact-cards {
+  display: grid;
+  gap: 1rem;
+}
+
+.impact-card {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: var(--r);
+  background: var(--card);
+  border: 1px solid var(--bdr);
+  transition: all .3s ease;
+  align-items: start;
+}
+.impact-card:hover {
+  border-color: var(--signal);
+  box-shadow: 0 4px 20px var(--s-dim);
+  transform: translateY(-2px);
+}
+
+.impact-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.impact-icon svg { width: 28px; height: 28px; }
+
+.impact-icon.financial { background: var(--d-dim); }
+.impact-icon.financial svg { fill: var(--danger); }
+.impact-icon.game { background: var(--a-dim); }
+.impact-icon.game svg { fill: var(--amber); }
+.impact-icon.email { background: rgba(245,158,11,.1); }
+.impact-icon.email svg { fill: var(--amber); }
+.impact-icon.data { background: rgba(234,179,8,.08); }
+.impact-icon.data svg { fill: var(--yellow); }
+.impact-icon.infra { background: var(--s-dim); }
+.impact-icon.infra svg { fill: var(--signal); }
+
+.impact-card h3 {
+  font-family: var(--fd);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: .25rem;
+}
+.impact-card p {
+  color: var(--t2);
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════════════════
+   FINANCIAL RISK
+   ═══════════════════════════════════════════════ */
+.risk-meter {
+  background: var(--card);
+  border: 1px solid var(--bdr);
+  border-radius: var(--rl);
+  padding: 2rem;
+  margin-top: 1.5rem;
+}
+
+.risk-headline {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.risk-headline .range {
+  font-family: var(--fd);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  background: linear-gradient(90deg, var(--amber), var(--danger));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme="light"] .risk-headline .range {
+  background: linear-gradient(90deg, #b45309, #dc2626);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.risk-headline .per {
+  font-size: .9rem;
+  color: var(--t3);
+}
+
+.risk-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.risk-bar-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 90px;
+  align-items: center;
+  gap: 1rem;
+}
+@media (max-width: 480px) {
+  .risk-bar-row {
+    grid-template-columns: 1fr;
+    gap: .35rem;
+  }
+}
+.risk-bar-label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--t2);
+}
+.risk-bar-track {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--surf);
+  overflow: hidden;
+  position: relative;
+}
+[data-theme="light"] .risk-bar-track {
+  background: #e8eeeb;
+}
+.risk-bar-fill {
+  height: 100%;
+  border-radius: 7px;
+  transition: width 1.2s cubic-bezier(.22,1,.36,1);
+  width: 0;
+}
+.risk-bar-fill.conservative {
+  background: linear-gradient(90deg, var(--yellow), var(--amber));
+  width: 0;
+}
+.risk-bar-fill.realistic {
+  background: linear-gradient(90deg, var(--amber), #ef7b00);
+  width: 0;
+}
+.risk-bar-fill.worst {
+  background: linear-gradient(90deg, #ef7b00, var(--danger));
+  width: 0;
+}
+.risk-bar-value {
+  font-family: var(--fd);
+  font-weight: 700;
+  font-size: .9rem;
+  text-align: right;
+}
+.risk-bar-value.c-val { color: var(--yellow); }
+.risk-bar-value.r-val { color: var(--amber); }
+.risk-bar-value.w-val { color: var(--danger); }
+
+.risk-note {
+  text-align: center;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bdr);
+}
+.risk-note .current {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--green);
+}
+.risk-note .but {
+  font-size: .88rem;
+  color: var(--t2);
+  margin-top: .35rem;
+}
+
+/* ═══════════════════════════════════════════════
+   REGULATORY FLAGS
+   ═══════════════════════════════════════════════ */
+.reg-flags {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.reg-flag {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1.25rem;
+  border-radius: var(--r);
+  background: var(--card);
+  border: 1px solid var(--bdr);
+  transition: all .3s ease;
+}
+.reg-flag:hover {
+  border-color: var(--amber);
+  box-shadow: 0 4px 16px var(--a-dim);
+}
+
+.reg-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--a-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.reg-icon svg { width: 22px; height: 22px; fill: var(--amber); }
+
+.reg-flag .reg-text {
+  font-weight: 600;
+  font-size: .9rem;
+  line-height: 1.35;
+}
+
+/* ═══════════════════════════════════════════════
+   POSITIVE FINDINGS
+   ═══════════════════════════════════════════════ */
+.positive-section {
+  background: var(--card);
+  border: 1px solid rgba(34,197,94,.15);
+  border-radius: var(--rl);
+  padding: 2.5rem 2rem;
+}
+[data-theme="light"] .positive-section {
+  border-color: rgba(22,163,74,.12);
+  background: rgba(22,163,74,.02);
+}
+
+.positive-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+.positive-item {
+  display: flex;
+  gap: .75rem;
+  align-items: start;
+}
+.positive-check {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(34,197,94,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+[data-theme="light"] .positive-check { background: rgba(22,163,74,.08); }
+.positive-check svg { width: 14px; height: 14px; fill: var(--green); }
+[data-theme="light"] .positive-check svg { fill: #16a34a; }
+.positive-item p {
+  font-size: .95rem;
+  color: var(--t2);
+  line-height: 1.55;
+}
+.positive-item strong { color: var(--text); font-weight: 600; }
+
+.positive-footer {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(34,197,94,.1);
+  font-size: .88rem;
+  color: var(--t3);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════
+   CTA SECTION
+   ═══════════════════════════════════════════════ */
+.cta-section {
+  text-align: center;
+  padding: 4rem 0 3rem;
+}
+.cta-box {
+  background: var(--card);
+  border: 1px solid var(--bdr);
+  border-radius: var(--rl);
+  padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.cta-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--electric), var(--signal), var(--volt));
+}
+[data-theme="light"] .cta-box::before {
+  background: linear-gradient(90deg, #22577A, #38A3A5, #57CC99);
+}
+
+.cta-box h2 {
+  font-family: var(--fd);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  margin-bottom: .5rem;
+}
+.cta-box .cta-sub {
+  color: var(--t2);
+  font-size: .95rem;
+  margin-bottom: 2rem;
+}
+
+.cta-email {
+  font-size: 1rem;
+  color: var(--signal);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.cta-email a {
+  color: var(--signal);
+  text-decoration: none;
+  border-bottom: 1px solid var(--s-dim);
+  transition: border-color .3s;
+}
+.cta-email a:hover { border-color: var(--signal); }
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .9rem 2.25rem;
+  border-radius: 100px;
+  background: var(--volt);
+  color: var(--abyss);
+  font-family: var(--fb);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+[data-theme="light"] .cta-btn {
+  background: var(--volt);
+  color: #fff;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--v-glow);
+}
+.cta-btn svg { width: 18px; height: 18px; }
+[data-theme="light"] .cta-btn svg { fill: #fff; }
+
+.cta-fine {
+  margin-top: 1.5rem;
+  font-size: .82rem;
+  color: var(--t3);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════ */
+footer {
+  text-align: center;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--bdr);
+}
+footer p {
+  font-size: .8rem;
+  color: var(--t3);
+  line-height: 1.7;
+}
+footer a {
+  color: var(--signal);
+  text-decoration: none;
+}
+
+/* ═══════════════════════════════════════════════
+   DIVIDER
+   ═══════════════════════════════════════════════ */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--bdr);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stagger-1 { transition-delay: .1s; }
+.stagger-2 { transition-delay: .2s; }
+.stagger-3 { transition-delay: .3s; }
+.stagger-4 { transition-delay: .4s; }
+.stagger-5 { transition-delay: .5s; }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .hero { padding: 4rem 0 2rem; }
+  section { padding: 3rem 0; }
+  .risk-meter { padding: 1.5rem; }
+  .positive-section { padding: 1.75rem 1.25rem; }
+  .cta-box { padding: 2rem 1.25rem; }
+  .impact-card { grid-template-columns: 48px 1fr; }
+  .impact-icon { width: 48px; height: 48px; border-radius: 12px; }
+  .impact-icon svg { width: 24px; height: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+</style>
+<noscript><style>section{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle-dash" aria-label="Toggle theme" title="Toggle light/dark theme">
+  <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0Zm11.394-5.834a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59Zm-14.788 0a.75.75 0 0 1 1.06-1.06l1.591 1.59a.75.75 0 1 1-1.06 1.061L4.106 6.166ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18Zm5.834-1.106a.75.75 0 0 0-1.06 1.06l1.59 1.591a.75.75 0 0 0 1.061-1.06l-1.59-1.591Zm-11.668 0a.75.75 0 0 1 1.06 1.06l-1.59 1.591a.75.75 0 1 1-1.061-1.06l1.59-1.591ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12Z"/></svg>
+</button>
+
+<div class="container">
+
+  <!-- ════════════ HERO ════════════ -->
+  <section class="hero visible" style="opacity:1;transform:none;">
+    <div class="logo-mark"><span>Q</span></div>
+    <h1><span class="brand">SharkSpinz</span><br>Security Assessment Results</h1>
+    <p class="hero-meta">QuantumSearch Security Research &mdash; April 4, 2026</p>
+    <div class="status-badge">
+      <span class="dot"></span>
+      COMPLETE &mdash; 36 findings identified
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ════════════ RISK OVERVIEW / Panoramica dei Rischi ════════════ -->
+  <section id="overview">
+    <div class="section-header">
+      <h2>Risk Overview <span class="subtitle" lang="it">/ Panoramica dei Rischi</span></h2>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="severity-grid">
+      <div class="severity-numbers">
+        <div class="sev-card critical stagger-1">
+          <div class="num">8</div>
+          <div class="label">Critical</div>
+        </div>
+        <div class="sev-card high stagger-2">
+          <div class="num">14</div>
+          <div class="label">High</div>
+        </div>
+        <div class="sev-card medium stagger-3">
+          <div class="num">8</div>
+          <div class="label">Medium</div>
+        </div>
+        <div class="sev-card low stagger-4">
+          <div class="num">6</div>
+          <div class="label">Low</div>
+        </div>
+      </div>
+
+      <div class="donut-wrap" role="img" aria-label="Severity breakdown: 8 critical, 14 high, 8 medium, 6 low findings out of 36 total.">
+        <div class="donut">
+          <div class="donut-center">
+            <div class="big">36</div>
+            <div class="small">findings</div>
+          </div>
+        </div>
+        <span class="sr-only">Severity breakdown: 8 critical, 14 high, 8 medium, 6 low findings out of 36 total.</span>
+        <div class="positive-badge">
+          <svg viewBox="0 0 24 24"><path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          6 positive findings &mdash; areas where defenses held
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ════════════ IMPACT CATEGORIES / Categorie di Impatto ════════════ -->
+  <section id="impact">
+    <div class="section-header">
+      <h2>Impact Categories <span class="subtitle" lang="it">/ Categorie di Impatto</span></h2>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="impact-cards">
+      <!-- Financial Manipulation -->
+      <div class="impact-card stagger-1">
+        <div class="impact-icon financial">
+          <svg viewBox="0 0 24 24"><path d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div>
+          <h3>Financial Manipulation <span class="subtitle" lang="it">/ Manipolazione Finanziaria</span></h3>
+          <p>Multiple independent paths to unlimited platform credit generation were discovered, requiring no authentication.</p>
+        </div>
+      </div>
+
+      <!-- Game Integrity -->
+      <div class="impact-card stagger-2">
+        <div class="impact-icon game">
+          <svg viewBox="0 0 24 24"><path d="M6.429 6.429 3.858 3.858m0 16.284 2.571-2.571M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Zm0 3.75h.008v3.75H12V12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <h3>Game Integrity <span class="subtitle" lang="it">/ Integrit&agrave; del Gioco</span></h3>
+          <p>The provably fair system has a critical design flaw that allows outcome prediction for every game, every time.</p>
+        </div>
+      </div>
+
+      <!-- Email Security -->
+      <div class="impact-card stagger-3">
+        <div class="impact-icon email">
+          <svg viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div>
+          <h3>Email Security <span class="subtitle" lang="it">/ Sicurezza Email</span></h3>
+          <p>The domain can be fully impersonated for phishing attacks against users. We demonstrated this with 8 delivered test emails.</p>
+        </div>
+      </div>
+
+      <!-- Data Exposure -->
+      <div class="impact-card stagger-4">
+        <div class="impact-icon data">
+          <svg viewBox="0 0 24 24"><path d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 5.625c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div>
+          <h3>Data Exposure <span class="subtitle" lang="it">/ Esposizione Dati</span></h3>
+          <p>Sensitive database tables are accessible without proper authorization, including payment methods, bonus codes, and platform economics.</p>
+        </div>
+      </div>
+
+      <!-- Infrastructure -->
+      <div class="impact-card stagger-5">
+        <div class="impact-icon infra">
+          <svg viewBox="0 0 24 24"><path d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div>
+          <h3>Infrastructure <span class="subtitle" lang="it">/ Infrastruttura</span></h3>
+          <p>Internal services are exposed directly to the internet without protection, including database management and administration panels.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ════════════ FINANCIAL RISK / Rischio Finanziario ════════════ -->
+  <section id="financial">
+    <div class="section-header">
+      <h2>Financial Risk Summary <span class="subtitle" lang="it">/ Rischio Finanziario</span></h2>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="risk-meter">
+      <div class="risk-headline">
+        <div class="range">&euro;735K &mdash; &euro;27.75M</div>
+        <div class="per">Post-launch monthly exposure / Esposizione mensile dopo il lancio</div>
+      </div>
+
+      <div class="risk-bars">
+        <div class="risk-bar-row">
+          <div class="risk-bar-label">Conservative</div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill conservative" data-width="8"></div>
+          </div>
+          <div class="risk-bar-value c-val">&euro;735K</div>
+        </div>
+        <div class="risk-bar-row">
+          <div class="risk-bar-label">Realistic</div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill realistic" data-width="38"></div>
+          </div>
+          <div class="risk-bar-value r-val">&euro;10.5M</div>
+        </div>
+        <div class="risk-bar-row">
+          <div class="risk-bar-label">Worst-Case</div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill worst" data-width="100"></div>
+          </div>
+          <div class="risk-bar-value w-val">&euro;27.75M</div>
+        </div>
+      </div>
+
+      <div class="risk-note">
+        <div class="current">Current state: &euro;0 direct financial loss</div>
+        <div class="but">The window to fix is NOW &mdash; before withdrawals are enabled and these numbers become real.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ════════════ REGULATORY FLAGS / Requisiti Normativi ════════════ -->
+  <section id="regulatory">
+    <div class="section-header">
+      <h2>Regulatory Flags <span class="subtitle" lang="it">/ Requisiti Normativi</span></h2>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="reg-flags">
+      <div class="reg-flag">
+        <div class="reg-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="reg-text">Gambling License<br>Required</div>
+      </div>
+
+      <div class="reg-flag">
+        <div class="reg-icon">
+          <svg viewBox="0 0 24 24"><path d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="reg-text">GDPR<br>Applicable</div>
+      </div>
+
+      <div class="reg-flag">
+        <div class="reg-icon">
+          <svg viewBox="0 0 24 24"><path d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="reg-text">AML / KYC<br>Obligations</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ════════════ POSITIVE FINDINGS / Risultati Positivi ════════════ -->
+  <section id="positive">
+    <div class="positive-section">
+      <div class="section-header">
+        <h2 style="color:var(--green);">What Held Strong <span class="subtitle" style="color:var(--t3);" lang="it">/ Cosa Ha Resistito</span></h2>
+        <span class="section-line" style="background:var(--green);"></span>
+      </div>
+
+      <div class="positive-items">
+        <div class="positive-item">
+          <div class="positive-check">
+            <svg viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p><strong>Your passwords and encryption keys survived 14.3 million+ brute-force attempts.</strong> We tested every known leaked password database &mdash; nothing cracked. This is professional-grade credential management.</p>
+        </div>
+
+        <div class="positive-item">
+          <div class="positive-check">
+            <svg viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p><strong>Database access controls on protected tables blocked all 14 bypass techniques</strong> we attempted. The Row-Level Security policies that ARE in place are correctly implemented.</p>
+        </div>
+
+        <div class="positive-item">
+          <div class="positive-check">
+            <svg viewBox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <p><strong>SSH credentials and JWT secrets are non-default and resilient.</strong> The cryptographic foundation is solid &mdash; these are areas to build on.</p>
+        </div>
+      </div>
+
+      <div class="positive-footer">
+        Strong foundation &mdash; the locks that exist are excellent. The audit shows where to add walls around them.
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ════════════ CALL TO ACTION ════════════ -->
+  <section class="cta-section" id="cta">
+    <div class="cta-box">
+      <h2>Ready to see the full report?<br><span class="subtitle" lang="it">/ Pronto a vedere il report completo?</span></h2>
+      <p class="cta-sub">Schedule a call with our team to walk through the findings, remediation roadmap, and next steps.</p>
+
+      <div class="cta-email">
+        <a href="mailto:contact@qsearch.ch">contact@qsearch.ch</a>
+      </div>
+
+      <a href="mailto:contact@qsearch.ch?subject=SharkSpinz%20-%20Full%20Report%20Request" class="cta-btn">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" stroke="currentColor" stroke-width="1.8"/></svg>
+        Request Full Report
+      </a>
+
+      <p class="cta-fine">Full technical report includes all 36 findings with proof-of-concept evidence, attack chain narratives, and a prioritized remediation roadmap.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <div class="container">
+    <p>
+      <strong>QuantumSearch Security Research</strong> &mdash; Zurich, Switzerland<br>
+      This assessment is confidential and intended solely for SharkSpinz.<br>
+      <a href="https://qsearch.ch" target="_blank" rel="noopener">qsearch.ch</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════
+   THEME TOGGLE
+   ═══════════════════════════════════════════════ */
+(function() {
+  const KEY = 'qs-dash-theme';
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-toggle-dash');
+
+  // Restore saved preference (light is default)
+  const saved = localStorage.getItem(KEY);
+  if (saved === 'dark') {
+    html.removeAttribute('data-theme');
+  } else {
+    html.setAttribute('data-theme', 'light');
+  }
+
+  btn.addEventListener('click', function() {
+    const isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.setItem(KEY, 'dark');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem(KEY, 'light');
+    }
+  });
+})();
+
+/* ═══════════════════════════════════════════════
+   SCROLL ANIMATIONS (IntersectionObserver)
+   ═══════════════════════════════════════════════ */
+(function() {
+  const sections = document.querySelectorAll('section:not(.hero)');
+  const riskBars = document.querySelectorAll('.risk-bar-fill');
+  let barsAnimated = false;
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+
+        // Animate risk bars when financial section comes in
+        if (!barsAnimated && entry.target.id === 'financial') {
+          barsAnimated = true;
+          setTimeout(function() {
+            riskBars.forEach(function(bar) {
+              bar.style.width = bar.dataset.width + '%';
+            });
+          }, 300);
+        }
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  sections.forEach(function(s) { observer.observe(s); });
+})();
+</script>
+</body>
+</html>

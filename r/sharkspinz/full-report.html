@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SharkSpinz — Full Security Audit Report | QuantumSearch Security Research</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   QUANTUMSEARCH — FULL AUDIT DASHBOARD
+   Brand: Ultraviolet Volt (dark) / Forest Gradient (light)
+   ══════════════════════════════════════════════ */
+
+:root {
+  --abyss: #0f0d18; --deep: #16132a; --card: #1e1a35; --elev: #262042; --surf: #120f20;
+  --electric: #5B23FF; --signal: #008BFF; --volt: #E4FF30;
+  --e-dim: rgba(91,35,255,0.08); --s-dim: rgba(0,139,255,0.06); --v-dim: rgba(228,255,48,0.06);
+  --e-glow: rgba(91,35,255,0.2); --s-glow: rgba(0,139,255,0.15); --v-glow: rgba(228,255,48,0.15);
+  --text: #eeedf5; --t2: #a8a4be; --t3: #7a7490;
+  --danger: #ef4444; --amber: #f59e0b; --yellow: #eab308; --green: #22c55e;
+  --d-dim: rgba(239,68,68,0.08); --a-dim: rgba(245,158,11,0.08); --g-dim: rgba(34,197,94,0.08);
+  --bdr: rgba(91,35,255,0.08); --bdr-s: rgba(255,255,255,0.08);
+  --fd: 'Bricolage Grotesque', sans-serif;
+  --fb: 'Plus Jakarta Sans', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r: 12px; --rl: 20px;
+  --code-bg: #1a1a2e;
+  --sidebar-w: 260px;
+}
+
+[data-theme="light"] {
+  --abyss: #f8faf9; --deep: #f0f4f2; --card: #ffffff; --elev: #f5f7f6; --surf: #eef2f0;
+  --electric: #57CC99; --signal: #38A3A5; --volt: #22577A;
+  --e-dim: rgba(87,204,153,0.08); --s-dim: rgba(56,163,165,0.06); --v-dim: rgba(34,87,122,0.06);
+  --e-glow: rgba(87,204,153,0.15); --s-glow: rgba(56,163,165,0.12); --v-glow: rgba(34,87,122,0.12);
+  --text: #1a2e3a; --t2: #3d5a6e; --t3: #6b8a9e;
+  --danger: #dc2626; --amber: #b45309; --yellow: #a16207; --green: #15803d;
+  --d-dim: rgba(220,38,38,0.06); --a-dim: rgba(180,83,9,0.06); --g-dim: rgba(21,128,61,0.06);
+  --bdr: rgba(34,87,122,0.1); --bdr-s: rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; scroll-behavior:smooth; }
+body { font-family:var(--fb); background:var(--abyss); color:var(--text); line-height:1.65; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+::selection { background:var(--volt); color:var(--abyss); }
+[data-theme="light"] ::selection { background:var(--volt); color:#fff; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--abyss); }
+::-webkit-scrollbar-thumb { background:rgba(91,35,255,0.3); border-radius:3px; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background:rgba(34,87,122,0.3); }
+a { color:var(--signal); text-decoration:none; transition:color 0.2s; }
+a:hover { color:var(--volt); }
+
+/* ─── Sidebar Navigation ─── */
+.sidebar {
+  position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh;
+  background:var(--deep); border-right:1px solid var(--bdr);
+  padding:1.5rem 0; overflow-y:auto; z-index:100;
+  display:flex; flex-direction:column;
+}
+.sidebar-brand { padding:0 1.2rem 1.2rem; border-bottom:1px solid var(--bdr); margin-bottom:1rem; }
+.sidebar-brand svg { width:32px; height:32px; margin-bottom:0.5rem; }
+.sidebar-brand .name { font-family:var(--fd); font-weight:800; font-size:0.85rem; }
+.sidebar-brand .sub { font-size:0.65rem; color:var(--t3); margin-top:0.15rem; }
+.sidebar nav { flex:1; padding:0 0.6rem; }
+.sidebar nav a {
+  display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0.6rem;
+  font-size:0.75rem; color:var(--t2); border-radius:8px;
+  transition:all 0.2s; text-decoration:none; margin-bottom:2px;
+}
+.sidebar nav a:hover { background:var(--e-dim); color:var(--text); }
+.sidebar nav a.active { background:var(--e-dim); color:var(--volt); font-weight:600; }
+.sidebar nav a .nav-icon { font-size:0.85rem; width:1.4rem; text-align:center; flex-shrink:0; }
+.sidebar nav .nav-sep { font-family:var(--fm); font-size:0.55rem; text-transform:uppercase; letter-spacing:0.15em; color:var(--t3); padding:0.8rem 0.6rem 0.3rem; }
+.sidebar-footer { padding:0.8rem 1.2rem; border-top:1px solid var(--bdr); margin-top:auto; }
+.sidebar-footer p { font-size:0.6rem; color:var(--t3); line-height:1.5; }
+
+/* ─── Main Content ─── */
+.main { margin-left:var(--sidebar-w); padding:2rem 2.5rem 4rem; max-width:1100px; margin-right:auto; }
+
+/* ─── Theme Toggle ─── */
+.theme-toggle-dash {
+  position:fixed; top:1rem; right:1rem; z-index:999;
+  width:40px; height:40px; border-radius:10px;
+  background:var(--card); border:1px solid var(--bdr);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all 0.3s; color:var(--signal);
+}
+.theme-toggle-dash:hover { border-color:var(--electric); transform:scale(1.05); }
+.theme-toggle-dash svg { width:18px; height:18px; }
+[data-theme="light"] .icon-sun { display:none; }
+:root .icon-moon { display:none; }
+[data-theme="light"] .icon-moon { display:block; }
+:root .icon-sun { display:block; }
+
+/* ─── Typography ─── */
+h1 { font-family:var(--fd); font-size:clamp(1.8rem,4vw,2.6rem); font-weight:800; letter-spacing:-0.04em; line-height:1.1; }
+h2 { font-family:var(--fd); font-size:1.5rem; font-weight:700; letter-spacing:-0.03em; margin-bottom:0.8rem; }
+h3 { font-family:var(--fd); font-size:1.1rem; font-weight:700; }
+h4 { font-family:var(--fd); font-size:0.95rem; font-weight:700; }
+p { color:var(--t2); max-width:720px; }
+.section-label {
+  font-family:var(--fm); font-size:0.65rem; font-weight:500; text-transform:uppercase;
+  letter-spacing:0.18em; color:var(--signal); display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;
+}
+.section-label::before { content:''; width:20px; height:1.5px; background:linear-gradient(90deg,var(--signal),transparent); }
+
+section { padding:2.5rem 0; border-bottom:1px solid var(--bdr); }
+section:last-child { border-bottom:none; }
+
+/* ─── Hero ─── */
+.hero { padding:3rem 0 2.5rem; border-bottom:2px solid transparent; border-image:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)) 1; }
+.hero-badges { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1.2rem 0; }
+.badge {
+  display:inline-flex; align-items:center; gap:0.35rem;
+  padding:0.3rem 0.7rem; border-radius:6px; font-family:var(--fm); font-size:0.65rem; font-weight:600;
+}
+.badge-complete { background:var(--g-dim); color:var(--green); border:1px solid rgba(34,197,94,0.15); }
+.badge-method { background:var(--s-dim); color:var(--signal); border:1px solid rgba(0,139,255,0.15); }
+.badge-conf { background:var(--d-dim); color:var(--danger); border:1px solid rgba(239,68,68,0.15); }
+.hero-meta { display:grid; grid-template-columns:1fr 1fr; gap:0.2rem 2rem; font-size:0.78rem; color:var(--t3); margin-top:1rem; }
+.hero-meta strong { color:var(--t2); }
+
+/* ─── KPI Row ─── */
+.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:0.8rem; margin:1.5rem 0; }
+.kpi {
+  text-align:center; padding:1.2rem 0.5rem; background:var(--card); border:1px solid var(--bdr);
+  border-radius:var(--r); position:relative; overflow:hidden; transition:transform 0.3s;
+}
+.kpi:hover { transform:translateY(-2px); }
+.kpi::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.kpi.c::before { background:var(--danger); }
+.kpi.h::before { background:var(--amber); }
+.kpi.m::before { background:var(--signal); }
+.kpi.g::before { background:var(--green); }
+.kpi-n { font-family:var(--fd); font-size:2.4rem; font-weight:800; line-height:1; }
+.kpi-n.c { color:var(--danger); }
+.kpi-n.h { color:var(--amber); }
+.kpi-n.m { color:var(--signal); }
+.kpi-n.g { color:var(--volt); }
+.kpi-l { font-size:0.6rem; color:var(--t3); text-transform:uppercase; font-weight:600; letter-spacing:0.08em; margin-top:0.2rem; }
+
+/* ─── Donut Chart ─── */
+.chart-wrap {
+  display:flex; align-items:center; gap:2.5rem; margin:1.5rem 0; background:var(--card);
+  border:1px solid var(--bdr); border-radius:var(--rl); padding:2rem; position:relative; overflow:hidden;
+}
+.chart-wrap::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)); }
+.donut-svg { width:200px; height:200px; flex-shrink:0; cursor:pointer; }
+.donut-ring { fill:none; stroke-width:35; transition:opacity 0.3s, stroke-width 0.3s; cursor:pointer; }
+.donut-ring:hover { stroke-width:40; opacity:0.9; }
+.donut-ring:focus { outline:2px solid var(--volt); outline-offset:2px; }
+.donut-center { font-family:var(--fd); font-weight:800; font-size:1.8rem; fill:var(--text); }
+.donut-sub { font-size:0.6rem; fill:var(--t3); text-transform:uppercase; letter-spacing:0.06em; }
+.chart-legend { display:flex; flex-direction:column; gap:0.6rem; }
+.legend-item { display:flex; align-items:center; gap:0.6rem; font-size:0.82rem; color:var(--t2); cursor:pointer; transition:color 0.2s; }
+.legend-item:hover { color:var(--text); }
+.legend-dot { width:12px; height:12px; border-radius:4px; flex-shrink:0; }
+.legend-count { font-family:var(--fd); font-weight:700; margin-left:auto; }
+
+/* ─── Finding Cards ─── */
+.findings-grid { display:flex; flex-direction:column; gap:0.7rem; }
+.finding {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--r);
+  padding:1.3rem 1.5rem; position:relative; overflow:hidden;
+  transition:border-color 0.3s, transform 0.2s;
+}
+.finding:hover { border-color:rgba(91,35,255,0.2); }
+[data-theme="light"] .finding:hover { border-color:rgba(56,163,165,0.3); }
+.finding::before { content:''; position:absolute; top:0; left:0; bottom:0; width:4px; }
+.finding.sev-c::before { background:var(--danger); }
+.finding.sev-h::before { background:var(--amber); }
+.finding.sev-m::before { background:var(--signal); }
+.finding.sev-l::before { background:var(--t3); }
+.f-head { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem; flex-wrap:wrap; }
+.sev-badge {
+  padding:0.18rem 0.55rem; border-radius:5px; font-family:var(--fm);
+  font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+}
+.sev-badge.c { background:var(--d-dim); color:var(--danger); border:1px solid rgba(239,68,68,0.2); animation:pulse-c 2s ease-in-out infinite; }
+.sev-badge.h { background:var(--a-dim); color:var(--amber); border:1px solid rgba(245,158,11,0.2); }
+.sev-badge.m { background:var(--s-dim); color:var(--signal); border:1px solid rgba(0,139,255,0.2); }
+.sev-badge.l { background:rgba(122,116,144,0.08); color:var(--t3); border:1px solid rgba(122,116,144,0.15); }
+@keyframes pulse-c { 0%,100% { box-shadow:0 0 0 0 rgba(239,68,68,0); } 50% { box-shadow:0 0 10px 3px rgba(239,68,68,0.15); } }
+.f-id { font-family:var(--fm); font-size:0.65rem; color:var(--t3); }
+.cvss-badge { font-family:var(--fm); font-size:0.6rem; font-weight:600; padding:0.15rem 0.45rem; border-radius:4px; background:var(--v-dim); color:var(--volt); }
+.cat-badge { font-family:var(--fm); font-size:0.58rem; color:var(--t3); padding:0.15rem 0.5rem; background:var(--surf); border-radius:4px; }
+.finding h3 { margin-bottom:0.35rem; font-size:1rem; }
+.finding p { font-size:0.85rem; line-height:1.6; }
+.finding-expand { display:none; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--bdr); }
+.finding-expand.open { display:block; }
+.expand-btn {
+  display:inline-flex; align-items:center; gap:0.3rem; margin-top:0.6rem;
+  font-family:var(--fm); font-size:0.7rem; color:var(--signal); cursor:pointer;
+  padding:0.3rem 0.6rem; border-radius:6px; background:var(--s-dim); border:none;
+  transition:all 0.2s;
+}
+.expand-btn:hover { background:var(--signal); color:#fff; }
+.finding-expand h4 { margin-bottom:0.4rem; color:var(--text); }
+.finding-expand p { font-size:0.82rem; margin-bottom:0.6rem; }
+.finding-expand ul { list-style:none; margin:0.5rem 0; }
+.finding-expand li { display:flex; align-items:flex-start; gap:0.4rem; padding:0.15rem 0; font-size:0.82rem; color:var(--t2); }
+.finding-expand li::before { content:'\25B8'; color:var(--signal); flex-shrink:0; margin-top:0.1rem; }
+
+/* ─── Code Blocks (always dark) ─── */
+pre {
+  background:var(--code-bg) !important; color:#d4d4d8; padding:1rem 1.2rem;
+  border-radius:8px; overflow-x:auto; font-family:var(--fm); font-size:0.75rem;
+  line-height:1.7; margin:0.8rem 0; border:1px solid rgba(255,255,255,0.06);
+}
+code { font-family:var(--fm); font-size:0.78rem; }
+.code-comment { color:#6b7280; }
+.code-string { color:#a5f3c4; }
+.code-key { color:#93c5fd; }
+.code-url { color:#fbbf24; }
+
+/* ─── Business Observations ─── */
+.biz-card {
+  background:var(--card); border:1px solid rgba(245,158,11,0.15); border-radius:var(--r);
+  padding:1.3rem 1.5rem; position:relative; overflow:hidden; margin-bottom:0.7rem;
+}
+.biz-card::before { content:''; position:absolute; top:0; left:0; bottom:0; width:4px; background:var(--amber); }
+
+/* ─── Positive Findings ─── */
+.positive-card {
+  background:var(--card); border:1px solid rgba(34,197,94,0.15); border-radius:var(--r);
+  padding:1.2rem 1.5rem; position:relative; overflow:hidden; margin-bottom:0.7rem;
+  display:flex; gap:1rem; align-items:flex-start;
+}
+.positive-card::before { content:''; position:absolute; top:0; left:0; bottom:0; width:4px; background:var(--green); }
+.pos-check { font-size:1.3rem; flex-shrink:0; margin-left:0.3rem; }
+.pos-content h4 { color:var(--green); margin-bottom:0.2rem; }
+.pos-content p { font-size:0.82rem; }
+
+/* ─── Attack Chain Flowcharts ─── */
+.chain-viz {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--rl);
+  padding:1.8rem 2rem; margin:1rem 0; position:relative; overflow:hidden;
+}
+.chain-viz::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)); }
+.chain-viz h3 { margin-bottom:0.3rem; }
+.chain-viz .chain-sub { font-size:0.78rem; color:var(--t3); margin-bottom:1.2rem; }
+.chain-flow { display:flex; flex-direction:column; gap:0; align-items:flex-start; }
+.chain-step { display:flex; align-items:center; gap:0.8rem; width:100%; }
+.step-num {
+  width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-family:var(--fm); font-size:0.7rem; font-weight:700; flex-shrink:0;
+  border:2px solid var(--signal); color:var(--signal); background:var(--s-dim);
+}
+.step-num.blocked { border-color:var(--danger); color:var(--danger); background:var(--d-dim); }
+.step-num.success { border-color:var(--green); color:var(--green); background:var(--g-dim); }
+.step-content {
+  flex:1; padding:0.7rem 1rem; background:var(--surf); border:1px solid var(--bdr);
+  border-radius:8px; font-size:0.8rem; color:var(--t2);
+}
+.step-content strong { color:var(--text); }
+.step-content .step-id { font-family:var(--fm); font-size:0.6rem; color:var(--signal); }
+.step-content.blocked-step { border-color:rgba(239,68,68,0.2); background:var(--d-dim); }
+.step-content.blocked-step strong { color:var(--danger); }
+.chain-arrow-down { width:32px; display:flex; justify-content:center; padding:0.15rem 0; color:var(--t3); font-size:0.8rem; }
+
+/* ─── Financial Impact ─── */
+.risk-thermo {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--rl);
+  padding:2rem; margin:1rem 0; position:relative; overflow:hidden;
+}
+.risk-thermo::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--yellow),var(--danger)); }
+.thermo-bar { height:28px; border-radius:14px; background:var(--surf); position:relative; overflow:hidden; margin:1.5rem 0 0.5rem; }
+.thermo-fill { height:100%; border-radius:14px; transition:width 1s ease-out; }
+.thermo-labels { display:flex; justify-content:space-between; font-family:var(--fm); font-size:0.65rem; color:var(--t3); }
+.fin-table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.8rem; }
+.fin-table th { text-align:left; font-weight:600; color:var(--t3); font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; padding:0.5rem 0.7rem; border-bottom:1px solid var(--bdr-s); }
+.fin-table td { padding:0.6rem 0.7rem; border-bottom:1px solid var(--bdr); color:var(--t2); }
+.fin-table .tot td { border-top:2px solid var(--bdr-s); font-weight:700; color:var(--text); }
+.fin-table .val-danger { color:var(--danger); font-family:var(--fd); font-weight:700; }
+.fin-table .val-amber { color:var(--amber); font-family:var(--fd); font-weight:700; }
+.fin-table .val-green { color:var(--green); font-family:var(--fd); font-weight:700; }
+
+/* ─── Regulatory Flags ─── */
+.reg-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:0.8rem; margin:1rem 0; }
+.reg-card {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--r);
+  padding:1.3rem; position:relative; overflow:hidden;
+}
+.reg-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--danger); }
+.reg-flag { font-size:1.5rem; margin-bottom:0.5rem; }
+.reg-card h4 { margin-bottom:0.3rem; }
+.reg-card p { font-size:0.8rem; }
+.reg-card .fine { font-family:var(--fd); font-weight:700; color:var(--danger); font-size:1rem; margin-top:0.5rem; }
+
+/* ─── Remediation Roadmap ─── */
+.roadmap-tier {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--r);
+  padding:1.5rem; margin-bottom:1rem; position:relative; overflow:hidden;
+}
+.roadmap-tier::before { content:''; position:absolute; top:0; left:0; bottom:0; width:4px; }
+.roadmap-tier.immediate::before { background:var(--danger); }
+.roadmap-tier.urgent::before { background:var(--amber); }
+.roadmap-tier.shortterm::before { background:var(--yellow); }
+.tier-header { display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; }
+.tier-badge {
+  padding:0.25rem 0.7rem; border-radius:6px; font-family:var(--fm);
+  font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;
+}
+.tier-badge.imm { background:var(--d-dim); color:var(--danger); border:1px solid rgba(239,68,68,0.15); }
+.tier-badge.urg { background:var(--a-dim); color:var(--amber); border:1px solid rgba(245,158,11,0.15); }
+.tier-badge.sht { background:var(--v-dim); color:var(--volt); border:1px solid rgba(34,87,122,0.15); }
+.tier-header .cost { font-family:var(--fm); font-size:0.7rem; color:var(--t3); margin-left:auto; }
+.roadmap-item {
+  display:flex; align-items:flex-start; gap:0.6rem; padding:0.5rem 0;
+  border-bottom:1px solid var(--bdr); font-size:0.82rem;
+}
+.roadmap-item:last-child { border-bottom:none; }
+.roadmap-check {
+  width:20px; height:20px; border-radius:5px; border:2px solid var(--bdr-s);
+  flex-shrink:0; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center;
+  margin-top:0.1rem;
+}
+.roadmap-check:hover { border-color:var(--signal); }
+.roadmap-check.checked { background:var(--green); border-color:var(--green); }
+.roadmap-check.checked::after { content:'\2713'; color:#fff; font-size:0.7rem; font-weight:700; }
+.rm-content { flex:1; }
+.rm-content .rm-action { color:var(--text); font-weight:500; }
+.rm-content .rm-fixes { font-family:var(--fm); font-size:0.65rem; color:var(--signal); margin-top:0.15rem; }
+.rm-content .rm-effort { font-size:0.7rem; color:var(--t3); }
+
+/* ─── Tech Stack ─── */
+.tech-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:0.6rem; margin:1rem 0; }
+.tech-card {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--r);
+  padding:1rem; text-align:center; transition:transform 0.2s;
+}
+.tech-card:hover { transform:translateY(-2px); }
+.tech-icon { font-size:1.5rem; margin-bottom:0.3rem; }
+.tech-card h4 { font-size:0.85rem; margin-bottom:0.15rem; }
+.tech-card .tech-ver { font-family:var(--fm); font-size:0.7rem; color:var(--t3); }
+.tech-card .tech-layer { font-size:0.65rem; color:var(--signal); text-transform:uppercase; letter-spacing:0.06em; }
+
+/* ─── Appendix Tables ─── */
+.app-table { width:100%; border-collapse:collapse; margin:0.8rem 0; font-size:0.78rem; }
+.app-table th { text-align:left; font-weight:600; color:var(--t3); font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; padding:0.45rem 0.7rem; border-bottom:1px solid var(--bdr-s); background:var(--surf); }
+.app-table td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--bdr); color:var(--t2); }
+.app-table td code { font-family:var(--fm); font-size:0.72rem; color:var(--signal); background:var(--s-dim); padding:0.1rem 0.35rem; border-radius:3px; }
+
+/* ─── Footer ─── */
+.footer {
+  padding:2.5rem 0; text-align:center; border-top:2px solid transparent;
+  border-image:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)) 1;
+}
+.footer p { font-size:0.75rem; color:var(--t3); margin:0 auto 0.3rem; }
+.footer .conf { font-family:var(--fm); font-size:0.62rem; color:var(--danger); margin-top:1rem; padding:0.4rem 0.8rem; background:var(--d-dim); border-radius:6px; display:inline-block; }
+
+/* ─── Exec Summary Bilingual ─── */
+.lang-tabs { display:flex; gap:0.3rem; margin-bottom:1rem; }
+.lang-tab {
+  padding:0.35rem 0.8rem; border-radius:6px; font-family:var(--fm); font-size:0.7rem;
+  cursor:pointer; border:1px solid var(--bdr); color:var(--t3); background:transparent;
+  transition:all 0.2s;
+}
+.lang-tab.active { background:var(--volt); color:var(--abyss); border-color:var(--volt); font-weight:600; }
+[data-theme="light"] .lang-tab.active { color:#fff; }
+.lang-content { display:none; }
+.lang-content.active { display:block; }
+
+/* ─── Animated Numbers ─── */
+.stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:0.8rem; margin:1.5rem 0; }
+.stat-box { text-align:center; padding:1.5rem 1rem; background:var(--card); border:1px solid var(--bdr); border-radius:var(--r); }
+.stat-num { font-family:var(--fd); font-size:3rem; font-weight:800; color:var(--volt); line-height:1; }
+.stat-label { font-size:0.68rem; color:var(--t3); text-transform:uppercase; letter-spacing:0.08em; margin-top:0.3rem; }
+.stat-box.danger .stat-num { color:var(--danger); }
+
+/* ─── Infrastructure Diagram ─── */
+.infra-diagram {
+  background:var(--code-bg) !important; border-radius:var(--r); padding:1.5rem 2rem;
+  font-family:var(--fm); font-size:0.72rem; color:#d4d4d8; line-height:1.8;
+  overflow-x:auto; margin:1rem 0; border:1px solid rgba(255,255,255,0.06);
+  white-space:pre;
+}
+
+/* ─── Responsive ─── */
+@media (max-width:1024px) {
+  .sidebar { display:none; }
+  .main { margin-left:0; padding:1.5rem; }
+  .mobile-nav { display:block; }
+}
+@media (max-width:768px) {
+  .kpi-row { grid-template-columns:repeat(2,1fr); }
+  .stat-row { grid-template-columns:1fr; }
+  .chart-wrap { flex-direction:column; }
+  .hero-meta { grid-template-columns:1fr; }
+  .reg-grid { grid-template-columns:1fr; }
+  .tech-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:480px) {
+  .kpi-row { grid-template-columns:1fr; }
+  .tech-grid { grid-template-columns:1fr; }
+  h1 { font-size:1.5rem; }
+}
+
+/* ─── Mobile Hamburger ─── */
+.mobile-nav { display:none; position:fixed; top:1rem; left:1rem; z-index:200; }
+.hamburger {
+  width:40px; height:40px; border-radius:10px; background:var(--card); border:1px solid var(--bdr);
+  cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+}
+.hamburger span { width:18px; height:2px; background:var(--signal); border-radius:1px; transition:all 0.3s; }
+.mobile-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:150;
+}
+.mobile-overlay.open { display:block; }
+.sidebar.mobile-open { display:flex; z-index:200; }
+@media (max-width:1024px) { .mobile-nav { display:block; } }
+
+/* ─── Password Gate ─── */
+.pw-gate {
+  position:fixed; inset:0; z-index:10000;
+  background:var(--abyss);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:1.2rem;
+}
+.pw-gate.unlocked { display:none; }
+.pw-box {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--rl);
+  padding:2.5rem 2.5rem 2rem; text-align:center; max-width:400px; width:90%;
+  position:relative; overflow:hidden;
+}
+.pw-box::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)); }
+.pw-box svg { margin-bottom:1rem; }
+.pw-box h2 { margin-bottom:0.3rem; font-size:1.2rem; }
+.pw-box .pw-sub { font-size:0.78rem; color:var(--t3); margin-bottom:1.5rem; }
+.pw-input {
+  width:100%; padding:0.7rem 1rem; border-radius:8px; border:1px solid var(--bdr-s);
+  background:var(--surf); color:var(--text); font-family:var(--fm); font-size:0.85rem;
+  outline:none; transition:border-color 0.2s;
+}
+.pw-input:focus { border-color:var(--signal); }
+.pw-input.error { border-color:var(--danger); animation:shake 0.4s ease-in-out; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+.pw-submit {
+  width:100%; margin-top:0.8rem; padding:0.7rem; border:none; border-radius:8px;
+  background:var(--volt); color:var(--abyss); font-family:var(--fd); font-weight:700;
+  font-size:0.85rem; cursor:pointer; transition:opacity 0.2s;
+}
+[data-theme="light"] .pw-submit { color:#fff; }
+.pw-submit:hover { opacity:0.9; }
+.pw-error-msg { font-size:0.72rem; color:var(--danger); margin-top:0.5rem; min-height:1rem; }
+.pw-footer { font-size:0.6rem; color:var(--t3); }
+
+/* ─── Print Styles ─── */
+@media print {
+  .sidebar, .theme-toggle-dash, .mobile-nav, .expand-btn { display:none !important; }
+  .main { margin-left:0; padding:1rem; max-width:100%; }
+  .finding-expand { display:block !important; }
+  body { background:#fff; color:#000; font-size:11pt; }
+  .kpi, .finding, .chain-viz, .risk-thermo, .roadmap-tier, .tech-card, .reg-card, .biz-card, .positive-card, .stat-box, .chart-wrap { background:#fff; border:1px solid #ddd; break-inside:avoid; }
+  .kpi-n, .stat-num { color:#000 !important; }
+  .sev-badge.c { color:#dc2626 !important; border-color:#dc2626 !important; }
+  .sev-badge.h { color:#b45309 !important; border-color:#b45309 !important; }
+  pre { background:#f5f5f5 !important; color:#333 !important; border:1px solid #ddd !important; }
+  section { break-before:auto; }
+  h2 { break-after:avoid; }
+  a { color:#000; text-decoration:underline; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div class="pw-gate" id="pwGate">
+  <div class="pw-box">
+    <svg viewBox="0 0 40 40" fill="none" width="40" height="40">
+      <defs><linearGradient id="qgpw" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#5B23FF"/><stop offset="100%" stop-color="#008BFF"/></linearGradient></defs>
+      <rect width="40" height="40" rx="10" fill="url(#qgpw)"/>
+      <text x="50%" y="54%" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="22" fill="#E4FF30">Q</text>
+    </svg>
+    <h2>SharkSpinz Audit Report</h2>
+    <div class="pw-sub">This report is confidential. Enter the access code provided by QuantumSearch.</div>
+    <form id="pwForm" autocomplete="off">
+      <input type="password" class="pw-input" id="pwInput" placeholder="Access code" autofocus>
+      <button type="submit" class="pw-submit">Unlock Report</button>
+    </form>
+    <div class="pw-error-msg" id="pwError"></div>
+  </div>
+  <div class="pw-footer">QuantumSearch Security Research &bull; Zurich, Switzerland</div>
+</div>
+
+<!-- SIDEBAR NAVIGATION -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <svg viewBox="0 0 40 40" fill="none">
+      <defs><linearGradient id="qg" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#5B23FF"/><stop offset="100%" stop-color="#008BFF"/></linearGradient></defs>
+      <rect width="40" height="40" rx="10" fill="url(#qg)"/>
+      <text x="50%" y="54%" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="22" fill="#E4FF30">Q</text>
+    </svg>
+    <div class="name">QuantumSearch</div>
+    <div class="sub">Security Research</div>
+  </div>
+  <nav>
+    <div class="nav-sep">Report</div>
+    <a href="#hero" class="active"><span class="nav-icon" aria-hidden="true">&#9670;</span> Overview</a>
+    <a href="#exec-summary"><span class="nav-icon" aria-hidden="true">&#9654;</span> Executive Summary</a>
+    <a href="#severity"><span class="nav-icon" aria-hidden="true">&#9673;</span> Severity Overview</a>
+    <a href="#findings"><span class="nav-icon" aria-hidden="true">&#9888;</span> Findings (36)</a>
+    <a href="#business-obs"><span class="nav-icon" aria-hidden="true">&#9888;</span> Business Observations</a>
+    <a href="#positives"><span class="nav-icon" aria-hidden="true">&#10003;</span> What Held (6)</a>
+    <div class="nav-sep">Analysis</div>
+    <a href="#attack-chains"><span class="nav-icon" aria-hidden="true">&#8644;</span> Attack Chains</a>
+    <a href="#financial"><span class="nav-icon" aria-hidden="true">&#8364;</span> Financial Impact</a>
+    <a href="#regulatory"><span class="nav-icon" aria-hidden="true">&#9878;</span> Regulatory Exposure</a>
+    <div class="nav-sep">Action</div>
+    <a href="#roadmap"><span class="nav-icon" aria-hidden="true">&#9745;</span> Remediation Roadmap</a>
+    <a href="#techstack"><span class="nav-icon" aria-hidden="true">&#9881;</span> Technology Stack</a>
+    <a href="#appendix"><span class="nav-icon" aria-hidden="true">&#9776;</span> Appendix</a>
+  </nav>
+  <div class="sidebar-footer">
+    <p>QS-ENG-SHARKSPINZ-001<br>Version 1.0 &mdash; April 4, 2026<br>CONFIDENTIAL</p>
+  </div>
+</aside>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <div class="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileNav()"></div>
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle-dash" onclick="toggleTheme()" aria-label="Toggle theme">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- 1. HERO -->
+<section class="hero" id="hero">
+  <div class="section-label">Security Audit Report</div>
+  <h1>SharkSpinz &mdash; Full Security Audit</h1>
+  <div class="hero-badges">
+    <span class="badge badge-complete">&#10003; COMPLETE</span>
+    <span class="badge badge-method">8 Phases &bull; 26 Actors &bull; 36 Findings</span>
+    <span class="badge badge-conf">CONFIDENTIAL</span>
+  </div>
+  <div class="hero-meta">
+    <div><strong>Engagement ID:</strong> QS-ENG-SHARKSPINZ-001</div>
+    <div><strong>Client:</strong> Marco Marziale (SharkSpinz / GambleVerse)</div>
+    <div><strong>Target:</strong> sharkspinz.com / 167.71.2.239</div>
+    <div><strong>Period:</strong> April 3&ndash;4, 2026</div>
+    <div><strong>Scope:</strong> Full Red Team &mdash; No Constraints ("GOD MODE")</div>
+    <div><strong>Prepared by:</strong> QuantumSearch Security Research</div>
+  </div>
+</section>
+
+<!-- 2. EXECUTIVE SUMMARY -->
+<section id="exec-summary">
+  <div class="section-label">Executive Summary</div>
+  <h2>The Bottom Line</h2>
+
+  <div class="lang-tabs">
+    <button class="lang-tab active" data-lang="en">English</button>
+    <button class="lang-tab" data-lang="it">Italiano</button>
+  </div>
+
+  <div class="lang-content active" id="lang-en">
+    <p style="margin-bottom:1rem;"><strong style="color:var(--danger);">The platform is catastrophically vulnerable at the application layer.</strong> An unauthenticated attacker can generate unlimited platform credit, predict every game outcome, bet on any user's account, spoof any @sharkspinz.com email, and read the majority of 56 database tables &mdash; all using only the API key hardcoded in the frontend JavaScript and a standard web browser.</p>
+    <p style="margin-bottom:1rem;">The platform's strongest defense is its credential management: the JWT secret, database password, SSH credentials, and Studio login all survived extensive brute-force testing including the full 14.3M-entry rockyou.txt wordlist. Row-Level Security on configuration tables also held against all 14 bypass techniques.</p>
+    <p><strong>Important caveat:</strong> While an attacker can generate unlimited platform credit and manipulate all game outcomes, the withdrawal chain currently breaks at step 4 of 7 &mdash; no withdrawal processor exists. However, the moment a withdrawal handler is implemented, pre-staged "completed" withdrawal records in the database would be processed.</p>
+  </div>
+
+  <div class="lang-content" id="lang-it" lang="it">
+    <p style="margin-bottom:1rem;"><strong style="color:var(--danger);">La piattaforma &egrave; catastroficamente vulnerabile a livello applicativo.</strong> Un attaccante non autenticato pu&ograve; generare fondi illimitati, prevedere ogni risultato di gioco, scommettere sull'account di qualsiasi utente, falsificare qualsiasi email @sharkspinz.com e leggere la maggior parte delle 56 tabelle del database &mdash; il tutto usando solo la chiave API codificata nel JavaScript frontend e un browser web standard.</p>
+    <p style="margin-bottom:1rem;">La difesa pi&ugrave; forte della piattaforma &egrave; la gestione delle credenziali: il segreto JWT, la password del database, le credenziali SSH e il login Studio hanno resistito a test di forza bruta estesi, inclusa la lista completa di 14,3 milioni di voci rockyou.txt.</p>
+    <p><strong>Avvertenza importante:</strong> Sebbene un attaccante possa generare credito illimitato e manipolare tutti i risultati di gioco, la catena di prelievo attualmente si interrompe al passaggio 4 di 7 &mdash; non esiste un processore di prelievo. Tuttavia, nel momento in cui viene implementato un gestore di prelievi, i record "completati" pre-inseriti nel database verrebbero elaborati.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="stat-num" data-target="36">0</div>
+      <div class="stat-label">Total Findings</div>
+    </div>
+    <div class="stat-box danger">
+      <div class="stat-num" data-target="8">0</div>
+      <div class="stat-label">Critical</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" data-target="14300000">0</div>
+      <div class="stat-label">Credentials Tested</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. SEVERITY OVERVIEW -->
+<section id="severity">
+  <div class="section-label">Severity Distribution</div>
+  <h2>Risk Breakdown</h2>
+  <div class="chart-wrap">
+    <svg class="donut-svg" viewBox="0 0 200 200">
+      <circle class="donut-ring" cx="100" cy="100" r="75" stroke="var(--danger)" stroke-dasharray="104.72 366.52" stroke-dashoffset="0" transform="rotate(-90 100 100)" tabindex="0" role="button" aria-label="Critical findings: 8" onclick="scrollToSev('c')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();scrollToSev('c')}"/>
+      <circle class="donut-ring" cx="100" cy="100" r="75" stroke="var(--amber)" stroke-dasharray="183.18 288.06" stroke-dashoffset="-104.72" transform="rotate(-90 100 100)" tabindex="0" role="button" aria-label="High findings: 14" onclick="scrollToSev('h')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();scrollToSev('h')}"/>
+      <circle class="donut-ring" cx="100" cy="100" r="75" stroke="var(--signal)" stroke-dasharray="104.72 366.52" stroke-dashoffset="-287.9" transform="rotate(-90 100 100)" tabindex="0" role="button" aria-label="Medium findings: 8" onclick="scrollToSev('m')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();scrollToSev('m')}"/>
+      <circle class="donut-ring" cx="100" cy="100" r="75" stroke="var(--t3)" stroke-dasharray="78.54 392.7" stroke-dashoffset="-392.62" transform="rotate(-90 100 100)" tabindex="0" role="button" aria-label="Low findings: 6" onclick="scrollToSev('l')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();scrollToSev('l')}"/>
+      <text class="donut-center" x="100" y="96" text-anchor="middle">36</text>
+      <text class="donut-sub" x="100" y="114" text-anchor="middle">FINDINGS</text>
+    </svg>
+    <div class="chart-legend">
+      <div class="legend-item" onclick="scrollToSev('c')"><div class="legend-dot" style="background:var(--danger)"></div> Critical <span class="legend-count" style="color:var(--danger)">8</span></div>
+      <div class="legend-item" onclick="scrollToSev('h')"><div class="legend-dot" style="background:var(--amber)"></div> High <span class="legend-count" style="color:var(--amber)">14</span></div>
+      <div class="legend-item" onclick="scrollToSev('m')"><div class="legend-dot" style="background:var(--signal)"></div> Medium <span class="legend-count" style="color:var(--signal)">8</span></div>
+      <div class="legend-item" onclick="scrollToSev('l')"><div class="legend-dot" style="background:var(--t3)"></div> Low / Informational <span class="legend-count">6</span></div>
+    </div>
+  </div>
+  <div class="kpi-row">
+    <div class="kpi c"><div class="kpi-n c">8</div><div class="kpi-l">Critical</div></div>
+    <div class="kpi h"><div class="kpi-n h">14</div><div class="kpi-l">High</div></div>
+    <div class="kpi m"><div class="kpi-n m">8</div><div class="kpi-l">Medium</div></div>
+    <div class="kpi g"><div class="kpi-n g">6</div><div class="kpi-l">Low / Info</div></div>
+  </div>
+</section>
+
+<!-- 4. FINDING CARDS (ALL 36) -->
+<section id="findings">
+  <div class="section-label">Security Findings</div>
+  <h2>All 36 Findings</h2>
+
+  <!-- CRITICAL (8) -->
+  <h3 id="sev-c" style="color:var(--danger);margin:1.5rem 0 0.8rem;">Critical Findings</h3>
+  <div class="findings-grid">
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-001</span><span class="cvss-badge">CVSS 9.8</span><span class="cat-badge">Financial</span>
+      </div>
+      <h3>Infinite Money &mdash; 3 Independent Paths</h3>
+      <p>Three completely independent methods allow unlimited financial manipulation. An unauthenticated attacker can add unlimited funds using only the anon key hardcoded in frontend JavaScript.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+        <h4>Path A &mdash; Negative Balance Attack (No Auth Required)</h4>
+        <p>The <code>deduct_balance_atomic</code> RPC function accepts negative amounts. Calling with <code>p_amount: -100</code> triggers <code>balance = balance - (-100) = balance + 100</code>. Two calls added $200 to a zero-balance test account.</p>
+<pre><span class="code-comment"># No authentication beyond the public anon key</span>
+curl -s <span class="code-url">"https://sharkspinz.com/rest/v1/rpc/deduct_balance_atomic"</span> \
+  -H <span class="code-string">"apikey: &lt;ANON_KEY&gt;"</span> \
+  -H <span class="code-string">"Content-Type: application/json"</span> \
+  -d <span class="code-string">'{"p_user_id": "&lt;USER_ID&gt;", "p_amount": -100}'</span>
+<span class="code-comment"># Response: true &mdash; balance increased by $100</span></pre>
+        <h4>Path B &mdash; Direct Balance PATCH (Auth Required)</h4>
+        <p>Any authenticated user can PATCH their own profile's <code>balance</code> field to any value. RLS restricts row access but does NOT restrict column access. Balance set from $0 to $999,999 confirmed.</p>
+<pre>curl -s <span class="code-url">"https://sharkspinz.com/rest/v1/profiles?user_id=eq.&lt;ID&gt;"</span> \
+  -X PATCH -H <span class="code-string">"Authorization: Bearer &lt;TOKEN&gt;"</span> \
+  -d <span class="code-string">'{"balance": 999999}'</span>
+<span class="code-comment"># Response: [{"balance": 999999, ...}]</span></pre>
+        <h4>Path C &mdash; Wagering Requirement Bypass</h4>
+        <p><code>total_wagered</code> field is also PATCHable, allowing bypass of any wagering requirements before withdrawal.</p>
+        <h4>Remediation</h4>
+        <ul>
+          <li>Add <code>IF p_amount &lt;= 0 THEN RAISE EXCEPTION</code> to <code>deduct_balance_atomic</code></li>
+          <li>Create column-restricted RLS policy on <code>profiles</code> preventing modification of <code>balance</code>, <code>total_wagered</code>, <code>total_won</code>, <code>vip_tier</code>, and <code>banned</code></li>
+          <li>Move all financial operations to server-side Edge Functions with proper auth</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-002</span><span class="cvss-badge">CVSS 9.8</span><span class="cat-badge">Gambling Integrity</span>
+      </div>
+      <h3>Server Seed Plaintext Leak &mdash; Every Game Predictable</h3>
+      <p>The <code>process_single_bet</code> RPC function returns the <code>server_seed</code> in plaintext. The server seed determines every game outcome (dice, limbo, roulette, wheel, plinko). The entire "provably fair" guarantee is destroyed.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+<pre><span class="code-comment">// API response includes the secret seed</span>
+{
+  <span class="code-key">"success"</span>: true,
+  <span class="code-key">"result"</span>: <span class="code-string">"win"</span>,
+  <span class="code-key">"payout"</span>: 1.96,
+  <span class="code-key">"server_seed"</span>: <span class="code-string">"a1b2c3d4e5f6..."</span>,  <span class="code-comment">// PLAINTEXT SECRET</span>
+  <span class="code-key">"new_balance"</span>: 10098.00
+}</pre>
+        <p>Additionally, the <code>provably_fair_seeds</code> table is readable and exposes server seeds even when <code>revealed: false</code>. Combined with publicly readable game weights (SS-018), an attacker can calculate exact expected values and optimal strategies for every game.</p>
+        <h4>Remediation</h4>
+        <ul>
+          <li>NEVER return <code>server_seed</code> in bet responses &mdash; only after seed rotation</li>
+          <li>Add RLS to <code>provably_fair_seeds</code> restricting reads to revealed seeds only</li>
+          <li>Implement proper provably fair protocol: hash(server_seed) before game, reveal only after game + seed rotation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-003</span><span class="cvss-badge">CVSS 9.8</span><span class="cat-badge">Access Control</span>
+      </div>
+      <h3>Anonymous Betting on Any User's Account</h3>
+      <p><code>process_single_bet</code> accepts an arbitrary <code>user_id</code> parameter and is callable with the anon key. An attacker can place bets on ANY user's account, draining their balance. Combined with predictable outcomes (SS-002), the attacker controls whether bets win or lose.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+        <h4>Remediation</h4>
+        <ul>
+          <li>Add auth check to <code>process_single_bet</code> &mdash; validate that the caller's JWT <code>sub</code> matches the <code>user_id</code> parameter</li>
+          <li>Reject anon-key calls entirely</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-004</span><span class="cvss-badge">CVSS 9.1</span><span class="cat-badge">Email Security</span>
+      </div>
+      <h3>Email Spoofing &mdash; No DMARC/DKIM (8/8 Delivered)</h3>
+      <p>sharkspinz.com has zero email authentication: SPF softfail only, no DKIM, no DMARC. 8/8 spoofed emails delivered to test mailboxes. 7 unique @sharkspinz.com personas impersonated including billing@, security@, admin@, marco@.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+        <p>Three attack scenarios demonstrated:</p>
+        <ul>
+          <li><strong>User phishing</strong> &mdash; Fake withdrawal notification from billing@sharkspinz.com using real leaked email template</li>
+          <li><strong>Admin phishing</strong> &mdash; Security alert from security@sharkspinz.com citing real infrastructure details</li>
+          <li><strong>Multi-persona impersonation</strong> &mdash; 5 simultaneous personas, all delivered</li>
+        </ul>
+        <h4>Remediation</h4>
+        <ul>
+          <li>Add DMARC (<code>p=reject</code>), DKIM signing, and harden SPF to <code>-all</code> (hardfail)</li>
+          <li>Cost: $0, time: 30 minutes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-005</span><span class="cvss-badge">CVSS 8.6</span><span class="cat-badge">Data Exposure</span>
+      </div>
+      <h3>Database Tables Readable incl. Payment Methods &amp; Bonus Codes</h3>
+      <p>The Supabase anon key (hardcoded in frontend, 10-year expiry) grants SELECT access to most of the 56 database tables. Currently exposed: payment methods with IBAN/BIC/SWIFT, all bonus codes, email templates, blockchain configs, game economics, site configuration.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+        <p>When the platform goes live with real users, exposed tables will include: KYC documents, wallet addresses, transaction histories, API keys, and crypto treasury private keys.</p>
+        <h4>Remediation</h4>
+        <ul>
+          <li>Audit ALL RLS policies on every table</li>
+          <li>Apply SELECT restrictions: anon should access only public data (game catalog, site branding)</li>
+          <li>Financial tables require service_role or admin-only access</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-007</span><span class="cvss-badge">CVSS 8.6</span><span class="cat-badge">Information Disclosure</span>
+      </div>
+      <h3>Kong Exposes Full Swagger Schema (87 Endpoints)</h3>
+      <p>Kong on port 8000 returns the complete PostgREST OpenAPI specification with the anon key: 87 endpoints across 56 tables. Schema reveals fields like <code>private_key</code>, <code>totp_secret</code>, <code>server_seed</code>, and <code>api_key</code>.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+        <h4>Remediation</h4>
+        <ul><li>Firewall port 8000 &mdash; block external access entirely</li><li>If API gateway is needed externally, restrict the OpenAPI schema endpoint</li></ul>
+      </div>
+    </div>
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-008</span><span class="cvss-badge">CVSS 8.6</span><span class="cat-badge">Authentication</span>
+      </div>
+      <h3>Auto-Confirmed Signups (Unlimited Account Creation)</h3>
+      <p>Supabase auth configured with <code>mailer_autoconfirm: true</code>. Any signup request instantly creates a verified account &mdash; no email verification, no CAPTCHA, no rate limiting. Enables mass account creation for bonus abuse, self-referral chains, and bot armies.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+        <h4>Remediation</h4>
+        <ul><li>Disable <code>mailer_autoconfirm</code> &mdash; require email verification</li><li>Add CAPTCHA to signup flow</li><li>Implement rate limiting on auth endpoints</li></ul>
+      </div>
+    </div>
+
+    <div class="finding sev-c">
+      <div class="f-head">
+        <span class="sev-badge c">Critical</span><span class="f-id">SS-009</span><span class="cvss-badge">CVSS 8.6</span><span class="cat-badge">Data Integrity</span>
+      </div>
+      <h3>Transaction Record Injection (Audit Trail Forgery)</h3>
+      <p>Any authenticated user can INSERT records into the <code>transactions</code> table with arbitrary type, amount, and status. Fake deposit/withdrawal records destroy audit trail integrity. Combined with SS-001 and SS-014, enables complete fraud chain.</p>
+      <button class="expand-btn" data-state="closed" aria-expanded="false">&#9660; Details</button>
+      <div class="finding-expand">
+        <h4>Remediation</h4>
+        <ul><li>Add RLS INSERT policy on <code>transactions</code> &mdash; restrict to <code>service_role</code> only</li><li>All transaction creation should go through server-side Edge Functions with proper validation</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIGH (14) -->
+  <h3 id="sev-h" style="color:var(--amber);margin:2rem 0 0.8rem;">High Findings</h3>
+  <div class="findings-grid">
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-006</span><span class="cvss-badge">CVSS 7.4</span><span class="cat-badge">Cryptographic</span></div><h3>pgjwt sign()/verify() Publicly Callable &mdash; JWT Secret Oracle</h3><p>PostgreSQL <code>pgjwt</code> extension functions exposed as public RPC endpoints. <code>verify()</code> returns valid true/false at ~93 req/sec with zero rate limiting. If the secret is ever recovered, <code>sign()</code> forges a <code>service_role</code> JWT &mdash; total database compromise. Current mitigation: secret survived 14.3M+ attempts.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-010</span><span class="cvss-badge">CVSS 7.5</span><span class="cat-badge">Social Engineering</span></div><h3>Notification Injection (In-Platform Phishing)</h3><p>Any authenticated user can INSERT notifications targeting ANY user with <code>type: "system"</code>, making them appear as official platform messages. Includes a <code>link</code> field for redirect-based phishing.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-011</span><span class="cvss-badge">CVSS 8.1</span><span class="cat-badge">Infrastructure</span></div><h3>CVE-2024-6387 regreSSHion (Unauthenticated Root RCE)</h3><p>OpenSSH 9.6p1 confirmed vulnerable to the regreSSHion race condition. Practical exploitation on 64-bit systems has extremely low probability (~10,000 connections over 6-8 hours, ASLR-dependent). Recommendation: Upgrade to 9.8p1+.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-012</span><span class="cvss-badge">CVSS 8.6</span><span class="cat-badge">Infrastructure</span></div><h3>Adminer Publicly Accessible (Port 3000) incl. CVE-2026-25892 DoS</h3><p>Full-featured database management tool accessible from the internet with no IP restriction, no VPN, no auth proxy. Pre-configured with internal hostname <code>db</code>. Vulnerable to CVE-2026-25892 (unauthenticated persistent DoS). Credentials held against 25+ combinations tested.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-013</span><span class="cvss-badge">CVSS 7.5</span><span class="cat-badge">Infrastructure</span></div><h3>PostgreSQL Directly Internet-Exposed (Port 5432)</h3><p>PostgreSQL 15.5-15.6 listening on the public interface. Post-auth RCE CVEs exist (CVE-2024-10979 CVSS 8.8, CVE-2023-5869 CVSS 8.8). Credentials held against 50K+ brute-force attempts.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-014</span><span class="cvss-badge">CVSS 7.5</span><span class="cat-badge">Financial</span></div><h3>Withdrawal Transaction Injection (status=completed)</h3><p>Authenticated users can INSERT withdrawal transactions with <code>status: "completed"</code>, bypassing the intended lifecycle. No withdrawal processor currently exists &mdash; pre-staged records would activate when handler is added.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-015</span><span class="cvss-badge">CVSS 8.1</span><span class="cat-badge">Authentication</span></div><h3>2FA TOTP Secret Modifiable via API</h3><p>The <code>user_2fa</code> table allows PATCH of <code>totp_secret</code> and <code>backup_codes</code> fields. Combined with wildcard CORS (SS-017), an attacker can remotely hijack any user's 2FA. Secrets stored in plaintext.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-016</span><span class="cvss-badge">CVSS 7.5</span><span class="cat-badge">Infrastructure</span></div><h3>Studio Dashboard Exposed (Port 3001, Zero Rate Limiting)</h3><p>Supabase Studio-style dashboard accessible via HTTPS. 13,510 brute-force attempts completed in 2 minutes 5 seconds with zero rate limiting.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-017</span><span class="cvss-badge">CVSS 7.5</span><span class="cat-badge">Web Security</span></div><h3>Wildcard CORS on All Endpoints</h3><p><code>Access-Control-Allow-Origin: *</code> on ALL API responses including authenticated data. Any malicious website can make cross-origin requests and read responses, enabling session hijacking and data theft.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-018</span><span class="cvss-badge">CVSS 6.5</span><span class="cat-badge">Gambling Integrity</span></div><h3>All Game Probability Weights Public</h3><p>Dice, roulette, limbo, plinko, and wheel probability weights, house edges, and RTPs are all readable via the anon key. Players can calculate exact expected values.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-019</span><span class="cvss-badge">CVSS 7.5</span><span class="cat-badge">Access Control</span></div><h3>settle-sports-bets Callable by Anonymous</h3><p>The bet settlement Edge Function executes successfully with only the anon key. When bets exist, any anonymous user could trigger settlement.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-020</span><span class="cvss-badge">CVSS 7.5</span><span class="cat-badge">Authentication</span></div><h3>Password Change Without Old Password</h3><p>Authenticated users can change their password without providing the current password. Combined with session theft (CORS/XSS), enables permanent account takeover.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-022</span><span class="cvss-badge">CVSS 5.3</span><span class="cat-badge">Architecture</span></div><h3>No WAF / No CDN &mdash; Origin IP Exposed</h3><p>Zero protection layer. Origin IP 167.71.2.239 directly accessible. Vulnerable to DDoS, automated scanning, and direct service exploitation.</p></div>
+    <div class="finding sev-h"><div class="f-head"><span class="sev-badge h">High</span><span class="f-id">SS-023</span><span class="cvss-badge">CVSS 6.5</span><span class="cat-badge">Information Disclosure</span></div><h3>30+ Hidden RPC Functions Discovered</h3><p>ffuf enumeration discovered 30+ RPC functions including: <code>execute</code>, <code>run_query</code>, <code>exec_sql</code>, <code>backup</code>, <code>restore</code>, <code>dump</code>. All return 401/404 (properly protected) but their existence reveals backend architecture.</p></div>
+  </div>
+
+  <!-- MEDIUM (8) -->
+  <h3 id="sev-m" style="color:var(--signal);margin:2rem 0 0.8rem;">Medium Findings</h3>
+  <div class="findings-grid">
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-028</span><span class="cvss-badge">CVSS 6.5</span><span class="cat-badge">Web Security</span></div><h3>Missing ALL Security Headers incl. Clickjacking</h3><p>No CSP, HSTS, X-Frame-Options (clickjacking PoC confirmed &mdash; full app iframeable), X-Content-Type-Options, Referrer-Policy, Permissions-Policy.</p></div>
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-029</span><span class="cvss-badge">CVSS 5.3</span><span class="cat-badge">Information Disclosure</span></div><h3>Server Version Disclosure (All Services)</h3><p>nginx 1.29.7, OpenSSH 9.6p1, PHP 8.4.19, PostgreSQL 15.5-15.6, Kong 2.8.1, Adminer 4.17.1 &mdash; all version strings publicly exposed.</p></div>
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-030</span><span class="cvss-badge">CVSS 5.3</span><span class="cat-badge">Infrastructure</span></div><h3>SSH Password Authentication Enabled</h3><p>Should use key-only authentication. Password auth combined with exposed SSH increases brute-force surface.</p></div>
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-031</span><span class="cvss-badge">CVSS 5.9</span><span class="cat-badge">DNS</span></div><h3>DNSSEC Not Enabled</h3><p>DNS responses not cryptographically authenticated. Enables DNS spoofing/poisoning attacks.</p></div>
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-034</span><span class="cat-badge">Architecture</span></div><h3>Single Point of Failure (One Server)</h3><p>All services on one DigitalOcean droplet in Amsterdam, NL. No redundancy, no failover, no backups confirmed.</p></div>
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-035</span><span class="cvss-badge">CVSS 4.3</span><span class="cat-badge">Information Disclosure</span></div><h3>Edge Function Info Disclosure (Service Providers)</h3><p>Error messages reveal service providers: Resend (email), SlotsLaunch (slots), BetsAPI (sports).</p></div>
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-036</span><span class="cat-badge">Business Logic</span></div><h3>Self-Referral Chain Attack</h3><p>Auto-confirmed signups + referral system = automated revenue extraction ($15/pair). Unlimited fake accounts can farm referral bonuses.</p></div>
+    <div class="finding sev-m"><div class="f-head"><span class="sev-badge m">Medium</span><span class="f-id">SS-037</span><span class="cvss-badge">CVSS 4.3</span><span class="cat-badge">Authentication</span></div><h3>Session Tokens Not Rotated</h3><p>Old refresh tokens remain valid indefinitely. Combined with session theft vectors, enables persistent unauthorized access.</p></div>
+  </div>
+
+  <!-- LOW / INFO (6) -->
+  <h3 id="sev-l" style="color:var(--t3);margin:2rem 0 0.8rem;">Low / Informational Findings</h3>
+  <div class="findings-grid">
+    <div class="finding sev-l"><div class="f-head"><span class="sev-badge l">Low</span><span class="f-id">SS-038</span><span class="cvss-badge">CVSS 4.3</span><span class="cat-badge">Access Control</span></div><h3>Support Admin Impersonation via API</h3><p>Users can INSERT support messages with <code>is_admin: true</code>, appearing as official support staff.</p></div>
+    <div class="finding sev-l"><div class="f-head"><span class="sev-badge l">Low</span><span class="f-id">SS-039</span><span class="cvss-badge">CVSS 3.7</span><span class="cat-badge">Infrastructure</span></div><h3>Adminer Session Rotation Bypass</h3><p>Session rotation bypasses 7-minute lockout (108 attempts, 0 lockouts).</p></div>
+    <div class="finding sev-l"><div class="f-head"><span class="sev-badge l">Low</span><span class="f-id">SS-040</span><span class="cvss-badge">CVSS 3.1</span><span class="cat-badge">API Design</span></div><h3>Phantom 200/204 on Blocked Writes</h3><p>RLS-blocked writes return success status codes instead of 403. Misleads both attackers and legitimate developers.</p></div>
+    <div class="finding sev-l"><div class="f-head"><span class="sev-badge l">Low</span><span class="f-id">SS-041</span><span class="cvss-badge">CVSS 3.7</span><span class="cat-badge">Third-Party</span></div><h3>SlotsLaunch Token-in-URL (Inactive)</h3><p>Token passed in iframe URL, leakable to 20+ domains. Currently inactive but will become relevant when SlotsLaunch integration is enabled.</p></div>
+    <div class="finding sev-l"><div class="f-head"><span class="sev-badge l">Low</span><span class="f-id">SS-042</span><span class="cvss-badge">CVSS 2.0</span><span class="cat-badge">Code Quality</span></div><h3>Development Artifacts in Production</h3><p>Template emails (<code>admin@tuosito.com</code>, <code>support@gambleverse.io</code>), 74 console debug statements, and Docker internal IP (172.18.0.2) leaked in Adminer error messages.</p></div>
+    <div class="finding sev-l"><div class="f-head"><span class="sev-badge l">Low</span><span class="f-id">SS-045</span><span class="cvss-badge">CVSS 3.7</span><span class="cat-badge">Information Disclosure</span></div><h3>has_role() Leaks Valid Roles</h3><p>Confirms <code>admin</code> and <code>moderator</code> roles exist. Aids privilege escalation attempts.</p></div>
+  </div>
+</section>
+
+<!-- 5. BUSINESS OBSERVATIONS -->
+<section id="business-obs">
+  <div class="section-label">Business Observations</div>
+  <h2>Regulatory &amp; Business Risks</h2>
+  <p style="margin-bottom:1rem;">These are not technical vulnerabilities but represent business risks that should be addressed before platform launch.</p>
+  <div class="biz-card">
+    <div class="f-head"><span class="sev-badge h" style="background:var(--a-dim);">Warning</span><span class="f-id">BIZ-001</span></div>
+    <h3>Domain Only 15 Days Old</h3>
+    <p style="margin-top:0.4rem;">Registered 2026-03-19, <code>addPeriod</code> status. Very new for a gambling operation. No established trust with users, payment processors, or regulators.</p>
+  </div>
+  <div class="biz-card">
+    <div class="f-head"><span class="sev-badge h" style="background:var(--a-dim);">Warning</span><span class="f-id">BIZ-002</span></div>
+    <h3>No Gambling License Visible</h3>
+    <p style="margin-top:0.4rem;">No gambling license referenced on the site or discoverable via OSINT. Operating an online casino/sportsbook without a license is illegal in most jurisdictions. GambleVerse's domain has expired.</p>
+  </div>
+</section>
+
+<!-- 6. POSITIVE FINDINGS -->
+<section id="positives">
+  <div class="section-label">What Held</div>
+  <h2>Positive Security Findings</h2>
+  <p style="margin-bottom:1rem;">These represent areas where defenses held despite extensive testing.</p>
+  <div class="positive-card"><div class="pos-check">&#9989;</div><div class="pos-content"><h4>P-001: JWT Secret Properly Randomized</h4><p>14.3M+ attempts (rockyou full + targeted + Supabase defaults) via john (7.6M/sec) and Python HMAC. <strong>HELD.</strong></p></div></div>
+  <div class="positive-card"><div class="pos-check">&#9989;</div><div class="pos-content"><h4>P-002: Database Password Not Default</h4><p>50K+ attempts against Adminer, PostgreSQL, and Studio. <strong>HELD.</strong></p></div></div>
+  <div class="positive-card"><div class="pos-check">&#9989;</div><div class="pos-content"><h4>P-003: SSH Credentials Survived Brute-Force</h4><p>Full targeted wordlist via paramiko SSH brute-force. <strong>HELD.</strong></p></div></div>
+  <div class="positive-card"><div class="pos-check">&#9989;</div><div class="pos-content"><h4>P-004: RLS on Config Tables Blocked All Bypass Attempts</h4><p>14 bypass techniques across 8 tables (UPSERT, SQL injection, schema switch, bulk ops). <strong>ALL BLOCKED.</strong></p></div></div>
+  <div class="positive-card"><div class="pos-check">&#9989;</div><div class="pos-content"><h4>P-005: Admin Edge Functions Require Auth</h4><p><code>admin-reset-password</code>, <code>setup-domain</code>, <code>generate-hd-wallet</code>, <code>derive-deposit-address</code>. <strong>PROPERLY PROTECTED.</strong></p></div></div>
+  <div class="positive-card"><div class="pos-check">&#9989;</div><div class="pos-content"><h4>P-006: Cross-User Profile Modification Blocked</h4><p>User A cannot PATCH User B's profile row. <strong>RLS WORKS.</strong></p></div></div>
+</section>
+
+<!-- 7. ATTACK CHAIN VISUALIZATIONS -->
+<section id="attack-chains">
+  <div class="section-label">Attack Chains</div>
+  <h2>Exploitation Narratives</h2>
+
+  <div class="chain-viz">
+    <h3>Chain 1: "The Perfect Heist"</h3>
+    <div class="chain-sub">Infinite Money &rarr; Predicted Wins &rarr; Withdrawal | Time: &lt;60 seconds | Tools: curl</div>
+    <div class="chain-flow">
+      <div class="chain-step"><div class="step-num success">1</div><div class="step-content"><strong>Visit sharkspinz.com</strong> &rarr; extract anon key from JS bundle <span class="step-id">Public</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">2</div><div class="step-content"><strong>POST /auth/v1/signup</strong> &rarr; instant verified account <span class="step-id">SS-008</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">3</div><div class="step-content"><strong>PATCH /rest/v1/profiles</strong> &rarr; set balance to $1,000,000 <em>OR</em> POST deduct_balance_atomic with p_amount: -1000000 (no auth!) <span class="step-id">SS-001</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">4</div><div class="step-content"><strong>POST /rest/v1/rpc/process_single_bet</strong> &rarr; server_seed in response &rarr; calculate winning bet &rarr; guaranteed win <span class="step-id">SS-002</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">5</div><div class="step-content"><strong>PATCH /rest/v1/profiles</strong> &rarr; set total_wagered to bypass requirements <span class="step-id">SS-001 Path C</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">6</div><div class="step-content"><strong>POST /rest/v1/transactions</strong> &rarr; INSERT withdrawal with status=completed <span class="step-id">SS-014</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num blocked">7</div><div class="step-content blocked-step"><strong>BLOCKED:</strong> No withdrawal processor exists (chain breaks at 4/7)<br>But pre-staged records will be processed when handler is added <span class="step-id">Mitigating factor</span></div></div>
+    </div>
+  </div>
+
+  <div class="chain-viz">
+    <h3>Chain 2: Email Spoofing &rarr; Account Takeover</h3>
+    <div class="chain-sub">Caveat: Email delivery depends on recipient mail provider. 8/8 test deliveries to controlled mailboxes.</div>
+    <div class="chain-flow">
+      <div class="chain-step"><div class="step-num success">1</div><div class="step-content"><strong>Send spoofed email</strong> from security@sharkspinz.com using real leaked template style <span class="step-id">SS-004</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">2</div><div class="step-content"><strong>Victim clicks phishing link</strong> &rarr; enters credentials</div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">3</div><div class="step-content"><strong>Attacker logs in</strong> &rarr; exploits wildcard CORS for persistent access <span class="step-id">SS-017</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">4</div><div class="step-content"><strong>PATCH totp_secret</strong> &rarr; hijack 2FA <span class="step-id">SS-015</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">5</div><div class="step-content"><strong>Change password</strong> without old password <span class="step-id">SS-020</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num success">6</div><div class="step-content"><strong>Complete, permanent account takeover</strong></div></div>
+    </div>
+  </div>
+
+  <div class="chain-viz">
+    <h3>Chain 3: Database Compromise Escalation</h3>
+    <div class="chain-sub">Conditional: Requires recovering the JWT secret. Secret survived 14.3M+ attempts &mdash; computationally infeasible for truly random secret.</div>
+    <div class="chain-flow">
+      <div class="chain-step"><div class="step-num">1</div><div class="step-content"><strong>Run verify() oracle</strong> against JWT secret &mdash; 93 req/sec, zero rate limiting <span class="step-id">SS-006</span></div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num">2</div><div class="step-content"><strong>IF secret found:</strong> sign({role: "service_role"}, secret) &rarr; forge service_role JWT</div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num">3</div><div class="step-content"><strong>service_role bypasses ALL RLS</strong> &rarr; read/write EVERY table including blockchain_treasury.private_key</div></div>
+      <div class="chain-arrow-down">&#8595;</div>
+      <div class="chain-step"><div class="step-num blocked">4</div><div class="step-content blocked-step"><strong>Total database compromise:</strong> user data, wallet keys, financial records</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. FINANCIAL IMPACT -->
+<section id="financial">
+  <div class="section-label">Financial Impact</div>
+  <h2>Risk Exposure Model</h2>
+  <div class="risk-thermo">
+    <h3>Total Post-Launch Daily Exposure</h3>
+    <p style="font-size:0.85rem;margin:0.5rem 0;">If withdrawals are enabled with current vulnerabilities:</p>
+    <div class="thermo-bar"><div class="thermo-fill" style="width:75%;background:linear-gradient(90deg,var(--green) 0%,var(--yellow) 40%,var(--danger) 100%);"></div></div>
+    <div class="thermo-labels"><span>Conservative: &euro;24,500/day</span><span>Realistic: &euro;250,000/day</span><span>Worst-case: &euro;925,000+/day</span></div>
+  </div>
+  <h4 style="margin:1.5rem 0 0.5rem;">Per-Finding Financial Exposure (CRITICAL)</h4>
+  <table class="fin-table">
+    <thead><tr><th>ID</th><th>Finding</th><th>Conservative</th><th>Realistic</th><th>Worst-Case</th></tr></thead>
+    <tbody>
+      <tr><td><code>SS-001</code></td><td>Infinite Money (3 paths)</td><td class="val-green">&euro;10K/day</td><td class="val-amber">&euro;100K/day</td><td class="val-danger">&euro;500K+/day</td></tr>
+      <tr><td><code>SS-002</code></td><td>Predictable Games</td><td class="val-green">&euro;2.5K/day</td><td class="val-amber">&euro;25K/day</td><td class="val-danger">&euro;150K/day</td></tr>
+      <tr><td><code>SS-003</code></td><td>Anonymous Betting</td><td class="val-green">&euro;5K/day</td><td class="val-amber">&euro;25K/day</td><td class="val-danger">&euro;100K/day</td></tr>
+      <tr><td><code>SS-004</code></td><td>Email Spoofing</td><td class="val-green">&euro;2K/incident</td><td class="val-amber">&euro;15K/incident</td><td class="val-danger">&euro;100K/incident</td></tr>
+      <tr><td><code>SS-005</code></td><td>Database Exposure</td><td class="val-green">&euro;5K (GDPR)</td><td class="val-amber">&euro;50K (fine)</td><td class="val-danger">&euro;200K+</td></tr>
+      <tr><td><code>SS-008</code></td><td>Unlimited Accounts</td><td class="val-green">&euro;5K/mo</td><td class="val-amber">&euro;20K/mo</td><td class="val-danger">&euro;75K/mo</td></tr>
+    </tbody>
+  </table>
+  <h4 style="margin:1.5rem 0 0.5rem;">Scenario Comparison</h4>
+  <table class="fin-table">
+    <thead><tr><th>Scenario</th><th>Daily</th><th>Monthly</th><th>Annual</th></tr></thead>
+    <tbody>
+      <tr><td>Current state (no withdrawals)</td><td>&euro;0 direct</td><td>&euro;0 direct</td><td>Economy destroyed</td></tr>
+      <tr><td>Post-launch (withdrawals enabled)</td><td class="val-amber">&euro;24.5K&ndash;&euro;925K</td><td class="val-amber">&euro;735K&ndash;&euro;27.75M</td><td class="val-danger">&euro;8.9M&ndash;&euro;333M</td></tr>
+      <tr><td>Single sophisticated attacker</td><td class="val-amber">&euro;50K</td><td class="val-danger">&euro;1.5M</td><td class="val-danger">&euro;18M</td></tr>
+      <tr class="tot"><td>Coordinated attack</td><td class="val-danger">&euro;250K+</td><td class="val-danger">&euro;7.5M+</td><td class="val-danger">&euro;90M+</td></tr>
+    </tbody>
+  </table>
+  <h4 style="margin:1.5rem 0 0.5rem;">Remediation vs. Exposure</h4>
+  <div class="stat-row" style="grid-template-columns:1fr 1fr;">
+    <div class="stat-box"><div class="stat-num" style="color:var(--green);font-size:2rem;">&euro;490&ndash;&euro;920</div><div class="stat-label">Top 10 Fixes (Pro Dev)</div></div>
+    <div class="stat-box danger"><div class="stat-num" style="font-size:2rem;">&euro;100K+/day</div><div class="stat-label">Post-Launch Exposure</div></div>
+  </div>
+  <p style="font-size:0.82rem;text-align:center;margin-top:0.5rem;color:var(--t3);">ROI of remediation: <strong style="color:var(--volt);">200x &ndash; 5,400x</strong></p>
+</section>
+
+<!-- 9. REGULATORY EXPOSURE -->
+<section id="regulatory">
+  <div class="section-label">Regulatory Exposure</div>
+  <h2>Jurisdiction &amp; Compliance Risks</h2>
+  <div class="reg-grid">
+    <div class="reg-card"><div class="reg-flag">&#127470;&#127481;</div><h4>Italy &mdash; ADM</h4><p>ADM license required for gambling targeting Italian users. Operating without: criminal offense (Art. 4, Law 401/1989). Marco is Italian, based in Brescia &mdash; Italian authorities have jurisdiction.</p><div class="fine">Up to 3 years imprisonment + &euro;20K&ndash;&euro;100K</div></div>
+    <div class="reg-card"><div class="reg-flag">&#127466;&#127482;</div><h4>EU &mdash; GDPR</h4><p>Art. 5(1)(f), Art. 25, Art. 32 violated. 56 database tables readable by anon key. Payment methods with IBAN/BIC/SWIFT exposed.</p><div class="fine">Up to &euro;20M or 4% annual turnover</div></div>
+    <div class="reg-card"><div class="reg-flag">&#127464;&#127469;</div><h4>Switzerland &mdash; ESBK</h4><p>Swiss Federal Gaming Act (BGS, SR 935.51) prohibits unlicensed online gambling. Active ISP blocking of unlicensed sites.</p><div class="fine">Relevant to QuantumSearch as Swiss entity</div></div>
+    <div class="reg-card"><div class="reg-flag">&#128179;</div><h4>PCI-DSS</h4><p>MoonPay accepts credit cards &mdash; brings PCI-DSS into scope. Wildcard CORS + missing CSP could allow card-skimming JS injection.</p><div class="fine">&euro;5K&ndash;&euro;100K/month non-compliance</div></div>
+    <div class="reg-card"><div class="reg-flag">&#128176;</div><h4>AML/KYC</h4><p>EU 4AMLD requires identity verification and transaction monitoring. Auto-confirmed signups make KYC impossible. Transaction injection destroys audit trail.</p><div class="fine">Up to &euro;5M or 10% of annual turnover</div></div>
+    <div class="reg-card"><div class="reg-flag">&#9878;</div><h4>Consumer Protection</h4><p>Launching with known vulnerabilities after this audit = gross negligence. "Provably fair" when games are predictable = deceptive practice (EU Directive 2005/29/EC).</p><div class="fine">Class action risk + processor termination</div></div>
+  </div>
+  <h4 style="margin:1.5rem 0 0.5rem;">GDPR Fine Model for Micro-Operator</h4>
+  <table class="fin-table">
+    <thead><tr><th>Scenario</th><th>Turnover</th><th>Max Fine (4%)</th><th>Realistic Fine</th></tr></thead>
+    <tbody>
+      <tr><td>Pre-launch (current)</td><td>&euro;0</td><td>&euro;20M (minimum)</td><td class="val-green">&euro;5K&ndash;&euro;25K</td></tr>
+      <tr><td>Year 1 (&euro;500K)</td><td>&euro;500,000</td><td>&euro;20,000</td><td class="val-amber">&euro;10K&ndash;&euro;50K</td></tr>
+      <tr><td>Year 2 (&euro;2M)</td><td>&euro;2,000,000</td><td>&euro;80,000</td><td class="val-danger">&euro;25K&ndash;&euro;100K</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 10. REMEDIATION ROADMAP -->
+<section id="roadmap">
+  <div class="section-label">Remediation Roadmap</div>
+  <h2>Fix Priority &amp; Progress Tracker</h2>
+  <p style="margin-bottom:1rem;">Click checkboxes to track remediation progress. State is saved locally in your browser.</p>
+
+  <div class="roadmap-tier immediate">
+    <div class="tier-header"><span class="tier-badge imm">Immediate &mdash; Fix Today</span><span class="cost">$0 cost &bull; 9 items</span></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-1"></div><div class="rm-content"><div class="rm-action">Add DMARC <code>p=reject</code> + harden SPF to <code>-all</code></div><div class="rm-fixes">Fixes: SS-004</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-2"></div><div class="rm-content"><div class="rm-action">Add amount validation to <code>deduct_balance_atomic</code></div><div class="rm-fixes">Fixes: SS-001 Path A</div><div class="rm-effort">15 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-3"></div><div class="rm-content"><div class="rm-action">Add column-restricted RLS on <code>profiles</code> (block balance/wagered/won/vip/banned writes)</div><div class="rm-fixes">Fixes: SS-001 Paths B+C</div><div class="rm-effort">1&ndash;2 hours</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-4"></div><div class="rm-content"><div class="rm-action">Remove server_seed from <code>process_single_bet</code> response</div><div class="rm-fixes">Fixes: SS-002</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-5"></div><div class="rm-content"><div class="rm-action">Add auth check to <code>process_single_bet</code> (validate caller = user_id)</div><div class="rm-fixes">Fixes: SS-003</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-6"></div><div class="rm-content"><div class="rm-action">Revoke EXECUTE on pgjwt functions for anon/authenticated roles</div><div class="rm-fixes">Fixes: SS-006</div><div class="rm-effort">15 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-7"></div><div class="rm-content"><div class="rm-action">Add RLS INSERT policies: transactions, notifications &rarr; service_role only</div><div class="rm-fixes">Fixes: SS-009, SS-010, SS-014</div><div class="rm-effort">1&ndash;2 hours</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-8"></div><div class="rm-content"><div class="rm-action">Add auth guard to <code>settle-sports-bets</code> Edge Function</div><div class="rm-fixes">Fixes: SS-019</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-9"></div><div class="rm-content"><div class="rm-action">Disable <code>mailer_autoconfirm</code> &mdash; require email verification</div><div class="rm-fixes">Fixes: SS-008</div><div class="rm-effort">30 minutes</div></div></div>
+  </div>
+
+  <div class="roadmap-tier urgent">
+    <div class="tier-header"><span class="tier-badge urg">Urgent &mdash; This Week</span><span class="cost">$0&ndash;$50 cost &bull; 9 items</span></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-10"></div><div class="rm-content"><div class="rm-action">Firewall ports 3000, 3001, 5432, 8000 (allow only localhost/VPN)</div><div class="rm-fixes">Fixes: SS-012, SS-013, SS-016, SS-007</div><div class="rm-effort">1 hour</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-11"></div><div class="rm-content"><div class="rm-action">Add DKIM signing to email domain</div><div class="rm-fixes">Fixes: SS-004</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-12"></div><div class="rm-content"><div class="rm-action">Configure CORS to allow only sharkspinz.com origin</div><div class="rm-fixes">Fixes: SS-017</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-13"></div><div class="rm-content"><div class="rm-action">Add security headers (CSP, HSTS, X-Frame-Options, etc.)</div><div class="rm-fixes">Fixes: SS-028</div><div class="rm-effort">1&ndash;2 hours</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-14"></div><div class="rm-content"><div class="rm-action">Remove version strings from all server responses</div><div class="rm-fixes">Fixes: SS-029</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-15"></div><div class="rm-content"><div class="rm-action">Add rate limiting to Studio, Adminer, auth endpoints</div><div class="rm-fixes">Fixes: SS-016, SS-039</div><div class="rm-effort">1&ndash;2 hours</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-16"></div><div class="rm-content"><div class="rm-action">Disable SSH password auth &mdash; use key-only</div><div class="rm-fixes">Fixes: SS-030</div><div class="rm-effort">15 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-17"></div><div class="rm-content"><div class="rm-action">Make totp_secret write-only, hash backup codes</div><div class="rm-fixes">Fixes: SS-015</div><div class="rm-effort">1 hour</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-18"></div><div class="rm-content"><div class="rm-action">Audit ALL RLS policies on every table</div><div class="rm-fixes">Fixes: SS-005</div><div class="rm-effort">2&ndash;4 hours</div></div></div>
+  </div>
+
+  <div class="roadmap-tier shortterm">
+    <div class="tier-header"><span class="tier-badge sht">Short-Term &mdash; Before Launch</span><span class="cost">Variable cost &bull; 9 items</span></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-19"></div><div class="rm-content"><div class="rm-action">Deploy WAF/CDN (Cloudflare free tier)</div><div class="rm-fixes">Fixes: SS-022</div><div class="rm-effort">1&ndash;2 hours</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-20"></div><div class="rm-content"><div class="rm-action">Upgrade OpenSSH to 9.8p1+</div><div class="rm-fixes">Fixes: SS-011</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-21"></div><div class="rm-content"><div class="rm-action">Upgrade Adminer to 5.4.2+ (or remove entirely)</div><div class="rm-fixes">Fixes: SS-012 CVE</div><div class="rm-effort">15 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-22"></div><div class="rm-content"><div class="rm-action">Implement proper provably fair protocol</div><div class="rm-fixes">Fixes: SS-002</div><div class="rm-effort">4&ndash;8 hours</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-23"></div><div class="rm-content"><div class="rm-action">Add CAPTCHA to signup</div><div class="rm-fixes">Fixes: SS-008</div><div class="rm-effort">1&ndash;2 hours</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-24"></div><div class="rm-content"><div class="rm-action">Require old password for password change</div><div class="rm-fixes">Fixes: SS-020</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-25"></div><div class="rm-content"><div class="rm-action">Enable DNSSEC</div><div class="rm-fixes">Fixes: SS-031</div><div class="rm-effort">30 minutes</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-26"></div><div class="rm-content"><div class="rm-action">Obtain gambling license (ADM or GCB)</div><div class="rm-fixes">Fixes: BIZ-002</div><div class="rm-effort">Weeks&ndash;months</div></div></div>
+    <div class="roadmap-item"><div class="roadmap-check" role="checkbox" aria-checked="false" tabindex="0" data-rm="rm-27"></div><div class="rm-content"><div class="rm-action">Implement redundancy / load balancing</div><div class="rm-fixes">Fixes: SS-034</div><div class="rm-effort">1&ndash;2 days</div></div></div>
+  </div>
+</section>
+
+<!-- 11. TECHNOLOGY STACK -->
+<section id="techstack">
+  <div class="section-label">Technology Stack</div>
+  <h2>Platform Architecture</h2>
+  <div class="tech-grid">
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M2 15s2-2 4-2 4 2 6 2 4-2 6-2 4 2 4 2"/><path d="M2 19s2-2 4-2 4 2 6 2 4-2 6-2 4 2 4 2"/><rect x="6" y="3" width="12" height="13" rx="2"/></svg></div><div class="tech-layer">Hosting</div><h4>DigitalOcean</h4><div class="tech-ver">Droplet &bull; Amsterdam, NL</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg></div><div class="tech-layer">OS</div><h4>Ubuntu Linux</h4><div class="tech-ver">Docker Compose</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div><div class="tech-layer">Web Server</div><h4>nginx</h4><div class="tech-ver">1.29.7</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="tech-layer">Frontend</div><h4>React SPA</h4><div class="tech-ver">Lovable.dev AI builder</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div><div class="tech-layer">Backend</div><h4>Supabase + Express.js</h4><div class="tech-ver">Self-hosted</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div><div class="tech-layer">Database</div><h4>PostgreSQL</h4><div class="tech-ver">15.5&ndash;15.6</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><div class="tech-layer">API Gateway</div><h4>Kong</h4><div class="tech-ver">2.8.1</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="tech-layer">DB Admin</div><h4>Adminer</h4><div class="tech-ver">4.17.1 (PHP 8.4.19)</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><div class="tech-layer">SSH</div><h4>OpenSSH</h4><div class="tech-ver">9.6p1</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="tech-layer">SSL</div><h4>Let's Encrypt (E8)</h4><div class="tech-ver">Auto-renewing</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="tech-layer">Payments</div><h4>MoonPay / CoinPayments</h4><div class="tech-ver">NOWPayments</div></div>
+    <div class="tech-card"><div class="tech-icon"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M2 9h20"/><path d="M10 9L6 3"/><path d="M14 9l4-6"/><path d="M12 22l-2-13"/><path d="M12 22l2-13"/></svg></div><div class="tech-layer">Games</div><h4>SlotsLaunch + In-house</h4><div class="tech-ver">5 games (iframe)</div></div>
+  </div>
+  <h4 style="margin:1.5rem 0 0.5rem;">Infrastructure Map</h4>
+  <div class="infra-diagram">167.71.2.239 (DigitalOcean Amsterdam)
+&#9474;
+&#9500;&#9472;&#9472; :443  (nginx) &#9472;&#9472;&#9472;&#9472; React SPA (frontend)
+&#9474;                    &#9492;&#9472;&#9472;&#9472;&#9472; Supabase PostgREST (API)
+&#9474;                    &#9492;&#9472;&#9472;&#9472;&#9472; Express.js Edge Functions
+&#9474;
+&#9500;&#9472;&#9472; :3000 (Adminer)   &#9472;&#9472; PUBLIC &#9888; CVE-2026-25892
+&#9500;&#9472;&#9472; :3001 (Studio)    &#9472;&#9472; PUBLIC &#9888; Zero rate limiting
+&#9500;&#9472;&#9472; :5432 (PostgreSQL)&#9472;&#9472; PUBLIC &#9888; Direct DB access
+&#9500;&#9472;&#9472; :8000 (Kong)      &#9472;&#9472; PUBLIC &#9888; Full Swagger schema
+&#9500;&#9472;&#9472; :22   (SSH)       &#9472;&#9472; PUBLIC &#9888; CVE-2024-6387
+&#9474;
+&#9492;&#9472;&#9472; Docker internal: 172.18.0.x
+    &#9500;&#9472;&#9472; db (PostgreSQL 15.5)
+    &#9500;&#9472;&#9472; kong (API Gateway)
+    &#9500;&#9472;&#9472; adminer (PHP 8.4.19)
+    &#9492;&#9472;&#9472; supabase-* (auth, rest, realtime, storage)</div>
+</section>
+
+<!-- 12. APPENDIX -->
+<section id="appendix">
+  <div class="section-label">Appendix</div>
+  <h2>Supporting Data</h2>
+  <h4 style="margin:1rem 0 0.5rem;">A. Test Accounts Created</h4>
+  <table class="app-table">
+    <thead><tr><th>Email</th><th>User ID</th><th>Purpose</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><code>test-qs-audit@example.com</code></td><td><code>98ed0d00-7546-...</code></td><td>Phase 2 testing</td><td style="color:var(--danger);">DELETE</td></tr>
+      <tr><td><code>qsearch-phase3@example.com</code></td><td><code>ca6b4fc6-aeaa-...</code></td><td>Phase 3 testing</td><td style="color:var(--danger);">DELETE</td></tr>
+      <tr><td><code>qsearch-manipolatore@example.com</code></td><td><code>dea59a96-b375-...</code></td><td>Phase 3 auth testing</td><td style="color:var(--danger);">DELETE</td></tr>
+      <tr><td><code>qsearch-gambler@example.com</code></td><td><code>(see Phase 4)</code></td><td>Gambling chain testing</td><td style="color:var(--danger);">DELETE</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.78rem;margin-top:0.3rem;">All test accounts have $0 balance. All balance changes were reversed during testing.</p>
+  <h4 style="margin:1.5rem 0 0.5rem;">B. Residual Data</h4>
+  <table class="app-table">
+    <thead><tr><th>Item</th><th>Table</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>Test transaction ($0)</td><td><code>transactions</code></td><td style="color:var(--danger);">DELETE</td></tr>
+      <tr><td>Test notification</td><td><code>notifications</code></td><td style="color:var(--danger);">DELETE</td></tr>
+      <tr><td>2FA test record</td><td><code>user_2fa</code></td><td style="color:var(--danger);">DELETE with account</td></tr>
+      <tr><td>Support test tickets (2)</td><td><code>support_tickets</code></td><td style="color:var(--danger);">DELETE with account</td></tr>
+    </tbody>
+  </table>
+  <h4 style="margin:1.5rem 0 0.5rem;">C. Tools Used</h4>
+  <table class="app-table">
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Phase</th></tr></thead>
+    <tbody>
+      <tr><td>curl</td><td>All HTTP-based testing</td><td>1&ndash;8</td></tr>
+      <tr><td>nmap</td><td>Port scanning</td><td>1</td></tr>
+      <tr><td>swaks</td><td>Email spoofing PoC</td><td>2, 5, 7</td></tr>
+      <tr><td>nuclei</td><td>CVE scanning</td><td>5</td></tr>
+      <tr><td>ffuf</td><td>Directory/RPC fuzzing</td><td>5</td></tr>
+      <tr><td>testssl.sh</td><td>TLS configuration testing</td><td>5</td></tr>
+      <tr><td>john the ripper</td><td>JWT + password cracking (7.6M/sec)</td><td>8</td></tr>
+      <tr><td>Python (HMAC-SHA256)</td><td>JWT brute-force</td><td>5, 6</td></tr>
+      <tr><td>Python (paramiko)</td><td>SSH brute-force</td><td>6</td></tr>
+      <tr><td>theHarvester</td><td>OSINT reconnaissance</td><td>1</td></tr>
+      <tr><td>Sherlock</td><td>Username enumeration</td><td>1</td></tr>
+      <tr><td>holehe</td><td>Email intelligence</td><td>1</td></tr>
+      <tr><td>CeWL</td><td>Custom wordlist generation</td><td>7</td></tr>
+    </tbody>
+  </table>
+  <h4 style="margin:1.5rem 0 0.5rem;">D. Testing Infrastructure</h4>
+  <table class="app-table">
+    <thead><tr><th>System</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td>Primary testing</td><td>Kali WSL2 (Mullvad VPN, multihop)</td></tr>
+      <tr><td>Initial phases (2&ndash;4)</td><td>Windows 11 (corrected to Kali for Phase 5+)</td></tr>
+      <tr><td>Email spoofing</td><td>Kali (swaks direct-to-MX)</td></tr>
+      <tr><td>Credential testing</td><td>Kali (john, paramiko, Python)</td></tr>
+    </tbody>
+  </table>
+  <h4 style="margin:1.5rem 0 0.5rem;">E. Disclosure Timeline</h4>
+  <table class="app-table">
+    <thead><tr><th>Date</th><th>Event</th></tr></thead>
+    <tbody>
+      <tr><td>April 3, 2026</td><td>Engagement started, Phase 1 reconnaissance</td></tr>
+      <tr><td>April 4, 2026</td><td>Phases 2&ndash;8 completed, exploitation complete</td></tr>
+      <tr><td>April 4, 2026</td><td>This report delivered to client</td></tr>
+      <tr><td>&mdash;</td><td>Remediation period (recommended: 30 days critical, 90 days all)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 13. FOOTER -->
+<section class="footer">
+  <svg viewBox="0 0 40 40" fill="none" width="36" height="36" style="margin-bottom:0.5rem;">
+    <defs><linearGradient id="qg2" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#5B23FF"/><stop offset="100%" stop-color="#008BFF"/></linearGradient></defs>
+    <rect width="40" height="40" rx="10" fill="url(#qg2)"/>
+    <text x="50%" y="54%" text-anchor="middle" dominant-baseline="central" font-family="Bricolage Grotesque,sans-serif" font-weight="800" font-size="22" fill="#E4FF30">Q</text>
+  </svg>
+  <p style="font-size:0.9rem;color:var(--text);font-weight:600;">QuantumSearch Security Research</p>
+  <p>Zurich, Switzerland</p>
+  <p>contact@qsearch.ch &bull; qsearch.ch</p>
+  <p style="margin-top:0.8rem;">Version 1.0 &mdash; April 4, 2026</p>
+  <div class="conf">This report is confidential. Distribution requires written authorization.</div>
+</section>
+
+</div>
+
+<!-- JAVASCRIPT (no innerHTML, safe DOM methods only) -->
+<script>
+// Password Gate (SHA-256 hashed, not plaintext in source)
+var PW_HASH = '1bd69d5a811cdb7461a6b6d30a5742866dc9d6bd8d5399d1773fec97fffd53f1';
+async function hashPw(pw) {
+  var data = new TextEncoder().encode(pw);
+  var buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+function unlockPage() {
+  document.getElementById('pwGate').classList.add('unlocked');
+  sessionStorage.setItem('qs-sharkspinz-auth', '1');
+}
+(function() {
+  if (sessionStorage.getItem('qs-sharkspinz-auth') === '1') {
+    document.getElementById('pwGate').classList.add('unlocked');
+  }
+})();
+document.getElementById('pwForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var input = document.getElementById('pwInput');
+  var hash = await hashPw(input.value);
+  if (hash === PW_HASH) {
+    unlockPage();
+  } else {
+    input.classList.add('error');
+    document.getElementById('pwError').textContent = 'Invalid access code. Please try again.';
+    setTimeout(function(){ input.classList.remove('error'); }, 500);
+  }
+});
+
+// Theme Toggle
+function toggleTheme() {
+  var html = document.documentElement;
+  var current = html.getAttribute('data-theme');
+  if (current === 'light') {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('qs-dash-theme', 'dark');
+  } else {
+    html.setAttribute('data-theme', 'light');
+    localStorage.setItem('qs-dash-theme', 'light');
+  }
+}
+(function() {
+  var saved = localStorage.getItem('qs-dash-theme');
+  if (saved === 'dark') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', 'light');
+})();
+
+// Language Tabs
+document.querySelectorAll('.lang-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    var lang = this.getAttribute('data-lang');
+    document.querySelectorAll('.lang-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.lang-content').forEach(function(c) { c.classList.remove('active'); });
+    this.classList.add('active');
+    document.getElementById('lang-' + lang).classList.add('active');
+  });
+});
+
+// Expand/Collapse Finding Details (safe: textContent only)
+document.querySelectorAll('.expand-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var panel = this.nextElementSibling;
+    var isOpen = panel.classList.toggle('open');
+    this.textContent = isOpen ? '\u25B2 Collapse' : '\u25BC Details';
+    this.setAttribute('aria-expanded', isOpen);
+  });
+});
+
+// Scroll to Severity Section
+function scrollToSev(sev) {
+  var el = document.getElementById('sev-' + sev);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Roadmap Checkboxes (localStorage persistence)
+document.querySelectorAll('.roadmap-check').forEach(function(el) {
+  el.addEventListener('click', function() {
+    this.classList.toggle('checked');
+    this.setAttribute('aria-checked', this.classList.contains('checked'));
+    var key = this.getAttribute('data-rm');
+    localStorage.setItem('qs-sharkspinz-' + key, this.classList.contains('checked') ? '1' : '0');
+  });
+  el.addEventListener('keydown', function(e) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); this.click(); }
+  });
+});
+function loadChecks() {
+  document.querySelectorAll('.roadmap-check').forEach(function(el) {
+    var key = el.getAttribute('data-rm');
+    if (localStorage.getItem('qs-sharkspinz-' + key) === '1') { el.classList.add('checked'); el.setAttribute('aria-checked', 'true'); }
+  });
+}
+
+// Animated Number Counter
+function animateNumbers() {
+  document.querySelectorAll('.stat-num[data-target]').forEach(function(el) {
+    var target = parseInt(el.getAttribute('data-target'));
+    var duration = 1500;
+    var start = performance.now();
+    function update(now) {
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(eased * target);
+      if (target >= 1000000) el.textContent = (current / 1000000).toFixed(1) + 'M+';
+      else el.textContent = current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+// Sidebar Active Link Tracking
+function trackActiveSection() {
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('.sidebar nav a');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(function(link) { link.classList.remove('active'); });
+        var activeLink = document.querySelector('.sidebar nav a[href="#' + entry.target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '-80px 0px -60% 0px' });
+  sections.forEach(function(section) { observer.observe(section); });
+}
+
+// Mobile Nav
+function toggleMobileNav() {
+  document.getElementById('sidebar').classList.toggle('mobile-open');
+  document.getElementById('mobileOverlay').classList.toggle('open');
+}
+document.querySelectorAll('.sidebar nav a').forEach(function(link) {
+  link.addEventListener('click', function() {
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('mobileOverlay').classList.remove('open');
+  });
+});
+
+// Init
+document.addEventListener('DOMContentLoaded', function() {
+  loadChecks();
+  trackActiveSection();
+  var statObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) { animateNumbers(); statObserver.disconnect(); }
+    });
+  }, { threshold: 0.3 });
+  var statRow = document.querySelector('.stat-row');
+  if (statRow) statObserver.observe(statRow);
+});
+</script>
+</body>
+</html>
