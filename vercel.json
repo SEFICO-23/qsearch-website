@@ -10,10 +10,31 @@
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://gc.zgo.at; img-src 'self' data:; connect-src 'self' https://formspree.io https://qsearch.goatcounter.com" }
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://gc.zgo.at; img-src 'self' data:; connect-src 'self' https://formspree.io https://qsearch.goatcounter.com https://qsearch-platform.vercel.app" }
       ]
     }
   ],
   "redirects": [],
-  "rewrites": []
+  "rewrites": [
+    {
+      "source": "/r/demo",
+      "destination": "https://qsearch-platform.vercel.app/r/demo"
+    },
+    {
+      "source": "/r/demo/:path*",
+      "destination": "https://qsearch-platform.vercel.app/r/demo/:path*"
+    },
+    {
+      "source": "/r/teaser/:path*",
+      "destination": "https://qsearch-platform.vercel.app/r/teaser/:path*"
+    },
+    {
+      "source": "/api/admin/:path*",
+      "destination": "https://qsearch-platform.vercel.app/api/admin/:path*"
+    },
+    {
+      "source": "/api/scan/:path*",
+      "destination": "https://qsearch-platform.vercel.app/api/scan/:path*"
+    }
+  ]
 }
