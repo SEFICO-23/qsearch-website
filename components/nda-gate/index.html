@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study | QuantumSearch Security Research</title>
+  <meta name="description" content="Confidential case study. NDA acceptance required to view.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%235B23FF'/><stop offset='100%25' stop-color='%23008BFF'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23g)'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='18' fill='%23E4FF30'>Q</text></svg>">
+  <style>
+    /* ─── Forest Gradient Light Palette ─── */
+    :root {
+      --deep-teal: #22577A;
+      --teal: #38A3A5;
+      --green: #57CC99;
+      --light-green: #80ED99;
+      --bg: #f8faf9;
+      --bg-card: #ffffff;
+      --text: #1a2e3a;
+      --text-secondary: #4a6670;
+      --text-muted: #6b8a95;
+      --border: rgba(34, 87, 122, 0.12);
+      --border-accent: rgba(56, 163, 165, 0.25);
+      --radius: 12px;
+      --radius-lg: 20px;
+      --font-display: 'Bricolage Grotesque', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* ─── Dark Theme Override ─── */
+    html:not([data-theme="light"]) {
+      --deep-teal: #E4FF30;
+      --teal: #008BFF;
+      --green: #5B23FF;
+      --light-green: rgba(91, 35, 255, 0.15);
+      --bg: #0f0d18;
+      --bg-card: #1e1a35;
+      --text: #eeedf5;
+      --text-secondary: #a8a4be;
+      --text-muted: #7a7490;
+      --border: rgba(91, 35, 255, 0.15);
+      --border-accent: rgba(228, 255, 48, 0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ─── NDA Gate Overlay ─── */
+    .nda-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      padding: 1.5rem;
+      opacity: 1;
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nda-gate.accepted {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .nda-card {
+      max-width: 560px;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .nda-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--deep-teal), var(--teal), var(--green));
+    }
+
+    .nda-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .nda-logo img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .nda-logo span {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .nda-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--teal);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nda-label::before {
+      content: '';
+      width: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--deep-teal), var(--teal), transparent);
+      flex-shrink: 0;
+    }
+
+    .nda-card h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .nda-card p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      max-width: 480px;
+    }
+
+    /* ─── NDA Text Area ─── */
+    .nda-text-area {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 1.5rem;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .nda-text-area h3 {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .nda-text-area ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .nda-text-area li {
+      margin-bottom: 0.35rem;
+    }
+
+    /* ─── Checkbox ─── */
+    .nda-checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .nda-checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--deep-teal);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .nda-checkbox-row label {
+      font-size: 0.88rem;
+      color: var(--text);
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    /* ─── Accept Button ─── */
+    .nda-accept-btn {
+      display: block;
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      background: var(--deep-teal);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .nda-accept-btn.enabled {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .nda-accept-btn.enabled:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(34, 87, 122, 0.25);
+    }
+
+    .nda-accept-btn.enabled:focus-visible {
+      outline: 2px solid var(--deep-teal);
+      outline-offset: 3px;
+    }
+
+    .nda-footer-note {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ─── Case Study Content (behind gate) ─── */
+    .case-study-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .case-study-content .cs-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .case-study-content .cs-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--teal);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .case-study-content .cs-label::before {
+      content: '';
+      width: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--deep-teal), var(--teal), transparent);
+    }
+
+    .case-study-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .case-study-content .cs-meta {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .case-study-content .cs-meta span {
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+
+    .case-study-content h2 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 2.5rem 0 1rem;
+    }
+
+    .case-study-content p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+    }
+
+    .case-study-content .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .case-study-content .finding-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .case-study-content .finding-stat .number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--deep-teal);
+      line-height: 1;
+    }
+
+    .case-study-content .finding-stat .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .case-study-content .severity-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      margin-right: 0.35rem;
+    }
+
+    .severity-tag.critical { background: rgba(220, 38, 38, 0.08); color: #dc2626; border: 1px solid rgba(220, 38, 38, 0.12); }
+    .severity-tag.high { background: rgba(180, 83, 9, 0.06); color: #b45309; border: 1px solid rgba(180, 83, 9, 0.12); }
+    .severity-tag.medium { background: rgba(34, 87, 122, 0.06); color: var(--deep-teal); border: 1px solid rgba(34, 87, 122, 0.12); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 640px) {
+      .nda-card { padding: 1.75rem; }
+      .nda-text-area { max-height: 160px; }
+      .case-study-content .findings-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Reduced motion ─── */
+    @media (prefers-reduced-motion: reduce) {
+      .nda-gate { transition: none; }
+      .nda-accept-btn { transition: none; }
+    }
+
+    /* ─── Theme Toggle ─── */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1001;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle svg { width: 18px; height: 18px; fill: none; stroke: var(--text); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    [data-theme="light"] .icon-sun { display: none; }
+    html:not([data-theme="light"]) .icon-moon { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Skip to content -->
+  <a href="#case-study" class="skip-link" style="position:absolute;top:-100%;left:0;padding:0.5rem 1rem;background:var(--deep-teal);color:#fff;z-index:9999;font-weight:700;font-size:0.85rem;border-radius:0 0 8px 0;transition:top 0.2s">Skip to content</a>
+  <style>.skip-link:focus{top:0}</style>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+
+  <!-- ═══ NDA GATE ═══ -->
+  <div class="nda-gate" id="ndaGate" role="dialog" aria-modal="true" aria-labelledby="ndaTitle">
+    <div class="nda-card">
+      <div class="nda-logo">
+        <img src="../../logo-mark.svg" alt="Q" width="28" height="28">
+        <span>QuantumSearch</span>
+      </div>
+
+      <div class="nda-label">Confidential Material</div>
+      <h1 id="ndaTitle">Non-Disclosure Agreement</h1>
+      <p>This case study contains confidential security research. Please review and accept the terms below to proceed.</p>
+
+      <div class="nda-text-area" tabindex="0" aria-label="NDA terms">
+        <h3>Terms of Access</h3>
+        <ol>
+          <li><strong>Confidentiality.</strong> All information contained in this case study is confidential and proprietary to QuantumSearch Security Research. You agree not to disclose, reproduce, or distribute any portion of this material to third parties without prior written consent.</li>
+          <li><strong>Permitted Use.</strong> This material is provided solely for evaluating the capabilities and methodology of QuantumSearch Security Research. It may not be used for competitive intelligence, vulnerability reproduction, or any unauthorized purpose.</li>
+          <li><strong>No Exploitation.</strong> The technical details within are redacted to prevent reproduction. Any attempt to identify the assessed organization or exploit described findings is strictly prohibited.</li>
+          <li><strong>Governing Law.</strong> This agreement is governed by the laws of Switzerland. Any disputes shall be resolved in the courts of Lugano, Ticino.</li>
+          <li><strong>Duration.</strong> This obligation survives indefinitely regardless of any subsequent business relationship.</li>
+        </ol>
+      </div>
+
+      <div class="nda-checkbox-row">
+        <input type="checkbox" id="ndaAccept" aria-describedby="ndaCheckboxLabel">
+        <label for="ndaAccept" id="ndaCheckboxLabel">I have read and accept the Non-Disclosure Agreement above. I understand that this material is confidential.</label>
+      </div>
+
+      <button class="nda-accept-btn" id="ndaBtn" disabled aria-disabled="true">View Case Study</button>
+
+      <p class="nda-footer-note">QuantumSearch Security Research &middot; Switzerland &middot; Confidential</p>
+    </div>
+  </div>
+
+  <!-- ═══ CASE STUDY CONTENT (placeholder) ═══ -->
+  <main class="case-study-content" id="case-study">
+    <div class="cs-header">
+      <div class="cs-label">Case Study</div>
+      <h1>Cryptographic Weakness in<br>MPC Threshold Signing Protocol</h1>
+      <div class="cs-meta">
+        <span>Industry:</span> Digital Asset Infrastructure
+        <span>Severity:</span> <span class="severity-tag high">High</span>
+        <span>Validated:</span> Bugcrowd P2
+      </div>
+    </div>
+
+    <h2>Engagement Overview</h2>
+    <p>[Redacted case study content will be provided by CCO. This placeholder demonstrates the layout and gate mechanism. The NDA gate above blocks all content until accepted.]</p>
+
+    <div class="findings-grid">
+      <div class="finding-stat">
+        <div class="number">12</div>
+        <div class="label">Total Findings</div>
+      </div>
+      <div class="finding-stat">
+        <div class="number">3</div>
+        <div class="label">Critical/High</div>
+      </div>
+      <div class="finding-stat">
+        <div class="number">100%</div>
+        <div class="label">PoC Verified</div>
+      </div>
+    </div>
+
+    <h2>Methodology</h2>
+    <p>[Methodology description placeholder. CDO will populate with CCO-approved content describing the engagement approach, tools used, and timeline.]</p>
+
+    <h2>Key Findings</h2>
+    <p><span class="severity-tag critical">Critical</span> Ring-Pedersen parameter generation weakness in MPC threshold signing protocol allowing potential key extraction under specific conditions.</p>
+    <p><span class="severity-tag high">High</span> CSP misconfiguration enabling connect-src wildcard with unsafe-inline and unsafe-eval directives on the primary web application.</p>
+    <p><span class="severity-tag medium">Medium</span> Subdomain takeover risk on deprecated Heroku-hosted documentation endpoint.</p>
+
+    <h2>Business Impact</h2>
+    <p>[Business impact assessment placeholder. Will describe the financial and operational exposure quantified during the engagement.]</p>
+
+    <h2>Remediation</h2>
+    <p>[Remediation summary placeholder. High-level overview of the recommended fixes and their implementation status.]</p>
+  </main>
+
+  <script>
+    // ─── Theme Toggle ───
+    (function() {
+      const saved = localStorage.getItem('qs-dash-theme');
+      if (saved === 'dark') document.documentElement.removeAttribute('data-theme');
+      else if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      else if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+
+      document.getElementById('themeToggle').addEventListener('click', function() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        if (isLight) {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('qs-dash-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          localStorage.setItem('qs-dash-theme', 'light');
+        }
+      });
+    })();
+
+    // ─── NDA Gate Logic ───
+    (function() {
+      var gate = document.getElementById('ndaGate');
+      var checkbox = document.getElementById('ndaAccept');
+      var btn = document.getElementById('ndaBtn');
+
+      // Check if previously accepted for this page
+      var storageKey = 'qs-nda-' + (location.pathname.replace(/[^a-z0-9]/gi, '-'));
+      if (localStorage.getItem(storageKey) === 'accepted') {
+        gate.classList.add('accepted');
+        setTimeout(function() { gate.style.display = 'none'; }, 600);
+        return;
+      }
+
+      // Enable button when checkbox is checked
+      checkbox.addEventListener('change', function() {
+        if (checkbox.checked) {
+          btn.classList.add('enabled');
+          btn.disabled = false;
+          btn.setAttribute('aria-disabled', 'false');
+        } else {
+          btn.classList.remove('enabled');
+          btn.disabled = true;
+          btn.setAttribute('aria-disabled', 'true');
+        }
+      });
+
+      // Accept and dismiss gate
+      btn.addEventListener('click', function() {
+        if (!checkbox.checked) return;
+        localStorage.setItem(storageKey, 'accepted');
+        gate.classList.add('accepted');
+        setTimeout(function() { gate.style.display = 'none'; }, 600);
+      });
+
+      // Keyboard: Enter on button
+      btn.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && checkbox.checked) btn.click();
+      });
+
+      // Trap focus inside gate
+      gate.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          var focusable = gate.querySelectorAll('input, button, [tabindex="0"]');
+          var first = focusable[0];
+          var last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      // Auto-focus the NDA text area on load
+      setTimeout(function() { checkbox.focus(); }, 100);
+    })();
+  </script>
+
+</body>
+</html>
