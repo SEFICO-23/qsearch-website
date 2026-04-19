@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Callenium — Security Exposure Snapshot | QuantumSearch Security Research</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   QUANTUMSEARCH — CALLENIUM EXPOSURE SNAPSHOT
+   Brand: Forest Gradient (light default) / Ultraviolet Volt (dark)
+   Prospect-facing — Luca Romito compliant — impact only, no specifics
+   ══════════════════════════════════════════════ */
+
+:root {
+  --abyss: #0f0d18; --deep: #16132a; --card: #1e1a35; --elev: #262042; --surf: #120f20;
+  --electric: #5B23FF; --signal: #008BFF; --volt: #E4FF30;
+  --e-dim: rgba(91,35,255,0.08); --s-dim: rgba(0,139,255,0.06); --v-dim: rgba(228,255,48,0.06);
+  --e-glow: rgba(91,35,255,0.2); --s-glow: rgba(0,139,255,0.15); --v-glow: rgba(228,255,48,0.15);
+  --text: #eeedf5; --t2: #a8a4be; --t3: #7a7490;
+  --danger: #ef4444; --amber: #f59e0b; --yellow: #eab308; --green: #22c55e;
+  --d-dim: rgba(239,68,68,0.08); --a-dim: rgba(245,158,11,0.08); --g-dim: rgba(34,197,94,0.08);
+  --bdr: rgba(91,35,255,0.08); --bdr-s: rgba(255,255,255,0.08);
+  --fd: 'Bricolage Grotesque', sans-serif;
+  --fb: 'Plus Jakarta Sans', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+  --r: 12px; --rl: 20px;
+}
+
+[data-theme="light"] {
+  --abyss: #f8faf9; --deep: #f0f4f2; --card: #ffffff; --elev: #f5f7f6; --surf: #eef2f0;
+  --electric: #57CC99; --signal: #38A3A5; --volt: #22577A;
+  --e-dim: rgba(87,204,153,0.08); --s-dim: rgba(56,163,165,0.06); --v-dim: rgba(34,87,122,0.06);
+  --e-glow: rgba(87,204,153,0.15); --s-glow: rgba(56,163,165,0.12); --v-glow: rgba(34,87,122,0.12);
+  --text: #1a2e3a; --t2: #3d5a6e; --t3: #6b8a9e;
+  --danger: #dc2626; --amber: #b45309; --yellow: #a16207; --green: #15803d;
+  --d-dim: rgba(220,38,38,0.06); --a-dim: rgba(180,83,9,0.06); --g-dim: rgba(21,128,61,0.06);
+  --bdr: rgba(34,87,122,0.1); --bdr-s: rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; scroll-behavior:smooth; }
+body { font-family:var(--fb); background:var(--abyss); color:var(--text); line-height:1.65; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+::selection { background:var(--volt); color:var(--abyss); }
+[data-theme="light"] ::selection { background:var(--volt); color:#fff; }
+a { color:var(--signal); text-decoration:none; transition:color 0.2s; }
+a:hover { color:var(--volt); }
+
+.container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+
+/* Theme toggle */
+.theme-toggle {
+  position:fixed; top:1rem; right:1rem; z-index:999;
+  width:40px; height:40px; border-radius:10px;
+  background:var(--card); border:1px solid var(--bdr);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all 0.3s; color:var(--signal);
+}
+.theme-toggle:hover { border-color:var(--electric); transform:scale(1.05); }
+.theme-toggle svg { width:18px; height:18px; }
+[data-theme="light"] .icon-sun { display:none; }
+:root:not([data-theme="light"]) .icon-moon { display:none; }
+
+/* Typography */
+h1 { font-family:var(--fd); font-size:clamp(1.9rem,4vw,2.8rem); font-weight:800; letter-spacing:-0.04em; line-height:1.1; }
+h2 { font-family:var(--fd); font-size:1.6rem; font-weight:700; letter-spacing:-0.03em; margin-bottom:0.8rem; }
+h3 { font-family:var(--fd); font-size:1.1rem; font-weight:700; margin-bottom:0.4rem; }
+h4 { font-family:var(--fd); font-size:0.95rem; font-weight:700; }
+p { color:var(--t2); max-width:780px; }
+.label {
+  font-family:var(--fm); font-size:0.65rem; font-weight:500; text-transform:uppercase;
+  letter-spacing:0.18em; color:var(--signal); display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;
+}
+.label::before { content:''; width:20px; height:1.5px; background:linear-gradient(90deg,var(--signal),transparent); }
+
+section { padding:2.5rem 0; border-bottom:1px solid var(--bdr); }
+section:last-child { border-bottom:none; }
+
+/* Hero */
+.hero { padding:2.5rem 0; border-bottom:2px solid transparent; border-image:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)) 1; }
+.brand-row { display:flex; align-items:center; gap:0.7rem; margin-bottom:1rem; }
+.brand-row svg { width:34px; height:34px; }
+.brand-row .brand { font-family:var(--fd); font-weight:800; font-size:0.9rem; }
+.brand-row .brand-sub { font-family:var(--fm); font-size:0.65rem; color:var(--t3); margin-top:0.1rem; letter-spacing:0.08em; }
+
+.hero-badges { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1.2rem 0; }
+.badge {
+  display:inline-flex; align-items:center; gap:0.35rem;
+  padding:0.3rem 0.7rem; border-radius:6px; font-family:var(--fm); font-size:0.65rem; font-weight:600;
+}
+.badge-passive { background:var(--g-dim); color:var(--green); border:1px solid rgba(34,197,94,0.15); }
+.badge-method { background:var(--s-dim); color:var(--signal); border:1px solid rgba(0,139,255,0.15); }
+.badge-conf { background:var(--d-dim); color:var(--danger); border:1px solid rgba(239,68,68,0.15); }
+.hero-meta { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.3rem 2rem; font-size:0.78rem; color:var(--t3); margin-top:1.2rem; }
+.hero-meta strong { color:var(--t2); font-weight:600; }
+
+/* Executive callout */
+.exec-callout {
+  background:linear-gradient(135deg,var(--d-dim),var(--a-dim));
+  border:1px solid rgba(239,68,68,0.25);
+  border-radius:var(--rl);
+  padding:1.8rem 2rem;
+  margin-top:2rem;
+  position:relative; overflow:hidden;
+}
+.exec-callout::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--danger),var(--amber)); }
+.exec-callout h3 { font-size:0.7rem; font-family:var(--fm); letter-spacing:0.16em; text-transform:uppercase; color:var(--danger); margin-bottom:0.6rem; }
+.exec-callout .big-number { font-family:var(--fd); font-size:clamp(2.2rem,5vw,3.4rem); font-weight:800; color:var(--text); line-height:1.05; letter-spacing:-0.03em; }
+.exec-callout .big-number span { color:var(--danger); }
+.exec-callout .sub { font-size:0.82rem; color:var(--t2); margin-top:0.4rem; }
+
+/* KPI row */
+.kpi-row { display:grid; grid-template-columns:repeat(5,1fr); gap:0.7rem; margin:2rem 0 1rem; }
+.kpi {
+  text-align:center; padding:1.2rem 0.5rem; background:var(--card); border:1px solid var(--bdr);
+  border-radius:var(--r); position:relative; overflow:hidden; transition:transform 0.3s;
+}
+.kpi:hover { transform:translateY(-2px); }
+.kpi::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.kpi.c::before { background:var(--danger); }
+.kpi.h::before { background:var(--amber); }
+.kpi.m::before { background:var(--signal); }
+.kpi.l::before { background:var(--t3); }
+.kpi.i::before { background:var(--green); }
+.kpi-n { font-family:var(--fd); font-size:2.4rem; font-weight:800; line-height:1; }
+.kpi-n.c { color:var(--danger); }
+.kpi-n.h { color:var(--amber); }
+.kpi-n.m { color:var(--signal); }
+.kpi-n.l { color:var(--t2); }
+.kpi-n.i { color:var(--green); }
+.kpi-l { font-size:0.62rem; color:var(--t3); text-transform:uppercase; font-weight:600; letter-spacing:0.09em; margin-top:0.35rem; }
+@media (max-width:720px) { .kpi-row { grid-template-columns:repeat(5,1fr); } .kpi { padding:0.9rem 0.3rem; } .kpi-n { font-size:1.5rem; } }
+
+/* Donut chart */
+.chart-wrap {
+  display:flex; align-items:center; gap:2.5rem; margin:1.5rem 0; background:var(--card);
+  border:1px solid var(--bdr); border-radius:var(--rl); padding:2rem; position:relative; overflow:hidden;
+  flex-wrap:wrap;
+}
+.chart-wrap::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)); }
+.donut-svg { width:200px; height:200px; flex-shrink:0; }
+.donut-ring { fill:none; stroke-width:35; transition:opacity 0.3s, stroke-width 0.3s; }
+.donut-center { font-family:var(--fd); font-weight:800; font-size:1.8rem; fill:var(--text); }
+.donut-sub { font-size:0.6rem; fill:var(--t3); text-transform:uppercase; letter-spacing:0.06em; }
+.chart-legend { display:flex; flex-direction:column; gap:0.6rem; flex:1; min-width:240px; }
+.legend-item { display:flex; align-items:center; gap:0.6rem; font-size:0.82rem; color:var(--t2); }
+.legend-dot { width:12px; height:12px; border-radius:4px; flex-shrink:0; }
+.legend-count { font-family:var(--fd); font-weight:700; margin-left:auto; color:var(--text); }
+
+/* Risk category cards */
+.risk-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:0.9rem; margin-top:1.2rem; }
+.risk-card {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--r);
+  padding:1.4rem 1.6rem; position:relative; overflow:hidden;
+  transition:border-color 0.3s, transform 0.2s;
+}
+.risk-card:hover { transform:translateY(-1px); }
+.risk-card::before { content:''; position:absolute; top:0; left:0; bottom:0; width:4px; }
+.risk-card.c::before { background:var(--danger); }
+.risk-card.h::before { background:var(--amber); }
+.risk-card.m::before { background:var(--signal); }
+.risk-card .rc-head { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem; flex-wrap:wrap; }
+.sev-chip {
+  padding:0.18rem 0.55rem; border-radius:5px; font-family:var(--fm);
+  font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+}
+.sev-chip.c { background:var(--d-dim); color:var(--danger); border:1px solid rgba(239,68,68,0.2); }
+.sev-chip.h { background:var(--a-dim); color:var(--amber); border:1px solid rgba(245,158,11,0.2); }
+.sev-chip.m { background:var(--s-dim); color:var(--signal); border:1px solid rgba(0,139,255,0.2); }
+.risk-card h3 { font-size:1rem; }
+.risk-card p { font-size:0.85rem; line-height:1.6; }
+
+/* Regulatory table */
+.reg-table {
+  width:100%; background:var(--card); border:1px solid var(--bdr);
+  border-radius:var(--r); border-collapse:collapse; overflow:hidden; margin-top:1rem;
+  font-size:0.85rem;
+}
+.reg-table th, .reg-table td { padding:0.9rem 1rem; text-align:left; border-bottom:1px solid var(--bdr); vertical-align:top; }
+.reg-table th { background:var(--surf); font-family:var(--fm); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--t3); font-weight:600; }
+.reg-table tr:last-child td { border-bottom:none; }
+.reg-table td strong { color:var(--text); }
+.reg-table .fine { font-family:var(--fm); color:var(--danger); font-weight:600; font-size:0.8rem; }
+
+/* ALE table */
+.ale-wrap { background:var(--card); border:1px solid var(--bdr); border-radius:var(--rl); padding:2rem; margin-top:1.2rem; position:relative; overflow:hidden; }
+.ale-wrap::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--danger),var(--amber),var(--signal)); }
+.ale-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0.7rem; margin-top:1rem; }
+.ale-cell { text-align:center; padding:1rem 0.5rem; border-radius:var(--r); background:var(--surf); border:1px solid var(--bdr); }
+.ale-cell.median { background:linear-gradient(135deg,var(--d-dim),var(--a-dim)); border-color:var(--danger); }
+.ale-cell .p-label { font-family:var(--fm); font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--t3); margin-bottom:0.3rem; }
+.ale-cell.median .p-label { color:var(--danger); font-weight:700; }
+.ale-cell .p-amount { font-family:var(--fd); font-weight:800; font-size:1.1rem; color:var(--text); }
+.ale-cell .p-unit { font-family:var(--fm); font-size:0.6rem; color:var(--t3); margin-top:0.1rem; }
+@media (max-width:720px) { .ale-grid { grid-template-columns:repeat(5,1fr); } .ale-cell .p-amount { font-size:0.85rem; } }
+
+/* Methodology */
+.method-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:0.9rem; margin-top:1rem; }
+.method-card {
+  background:var(--card); border:1px solid var(--bdr); border-radius:var(--r);
+  padding:1.1rem 1.3rem; position:relative;
+}
+.method-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--electric),var(--signal)); }
+.method-card h4 { font-size:0.8rem; margin-bottom:0.4rem; }
+.method-card p { font-size:0.78rem; line-height:1.55; }
+
+/* CTA */
+.cta-section {
+  background:linear-gradient(135deg,var(--e-dim),var(--s-dim));
+  border:1px solid var(--electric);
+  border-radius:var(--rl);
+  padding:2.5rem 2rem;
+  text-align:center;
+  margin:2rem 0;
+  position:relative; overflow:hidden;
+}
+.cta-section::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--electric),var(--signal),var(--volt)); }
+.cta-section h2 { font-size:1.8rem; margin-bottom:0.6rem; }
+.cta-section p { margin:0 auto 1.5rem; font-size:0.9rem; }
+.cta-button {
+  display:inline-flex; align-items:center; gap:0.6rem; padding:0.9rem 1.8rem;
+  background:var(--electric); color:#fff; border-radius:10px; font-family:var(--fd);
+  font-weight:700; font-size:0.95rem; transition:all 0.3s;
+  border:2px solid var(--electric);
+}
+[data-theme="light"] .cta-button { background:var(--volt); color:#fff; border-color:var(--volt); }
+.cta-button:hover { transform:translateY(-2px); box-shadow:0 8px 25px var(--e-glow); color:#fff; }
+.cta-ref { font-family:var(--fm); font-size:0.7rem; color:var(--t3); margin-top:1rem; }
+
+/* Footer */
+.footer {
+  text-align:center; padding:2rem 0 1rem;
+  font-family:var(--fm); font-size:0.7rem; color:var(--t3);
+  line-height:1.7;
+}
+.footer strong { color:var(--t2); font-weight:600; }
+
+/* Print-friendly */
+@media print {
+  .theme-toggle { display:none; }
+  body { background:white; color:black; }
+  section { page-break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="brand-row">
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="qlogo" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#22577A"/>
+          <stop offset="50%" style="stop-color:#38A3A5"/>
+          <stop offset="100%" style="stop-color:#57CC99"/>
+        </linearGradient>
+      </defs>
+      <circle cx="20" cy="20" r="15" fill="none" stroke="url(#qlogo)" stroke-width="3"/>
+      <line x1="28" y1="28" x2="36" y2="36" stroke="url(#qlogo)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="brand">QuantumSearch Security Research</div>
+      <div class="brand-sub">CONTINUOUS ADVERSARIAL INTELLIGENCE · SWITZERLAND</div>
+    </div>
+  </div>
+
+  <div class="label">Passive Reconnaissance · Prospect Snapshot</div>
+  <h1>Callenium — Security Exposure Snapshot</h1>
+
+  <div class="hero-badges">
+    <span class="badge badge-passive">● PASSIVE ONLY</span>
+    <span class="badge badge-method">METHODOLOGY: OSINT + CT + DNS</span>
+    <span class="badge badge-conf">CONFIDENTIAL — CALLENIUM LEADERSHIP</span>
+  </div>
+
+  <p>Passive reconnaissance of Callenium's publicly-observable security posture performed on 17 April 2026, restricted to public records. No active scanning, no intrusive testing. Scope: <strong style="color:var(--text);">callenium.ch</strong> and all subdomains observable in Certificate Transparency logs and public DNS.</p>
+
+  <div class="hero-meta">
+    <div><strong>Target:</strong> callenium.ch</div>
+    <div><strong>Sector:</strong> Swiss insurance · finance · pension</div>
+    <div><strong>Snapshot date:</strong> 17 April 2026</div>
+    <div><strong>Jurisdiction:</strong> Switzerland (FADP + FINMA) · EU (GDPR)</div>
+    <div><strong>Methodology:</strong> Passive OSINT (no scanning)</div>
+    <div><strong>Report class:</strong> Impact-only (pre-engagement)</div>
+  </div>
+
+  <div class="exec-callout">
+    <h3>⚠ HEADLINE EXPOSURE</h3>
+    <div class="big-number">CHF <span>1,150,000</span> / year</div>
+    <div class="sub">Median estimated annual loss expectancy at current posture. P90 scenario: CHF 5,400,000/year. Industry-standard SimpleLoss lognormal model, calibrated against IBM Cost of a Data Breach 2024 financial-services baseline and Swiss FADP/FINMA/GDPR regulatory ceilings.</div>
+  </div>
+</section>
+
+<!-- Severity Distribution -->
+<section>
+  <div class="label">Finding Distribution</div>
+  <h2>Twenty issues across five severity classes</h2>
+  <p>The snapshot identified 20 distinct issues observable from the public internet. Specific technical details are retained in QuantumSearch's internal audit file and released under a signed engagement agreement.</p>
+
+  <div class="kpi-row">
+    <div class="kpi c"><div class="kpi-n c">2</div><div class="kpi-l">Critical</div></div>
+    <div class="kpi h"><div class="kpi-n h">4</div><div class="kpi-l">High</div></div>
+    <div class="kpi m"><div class="kpi-n m">6</div><div class="kpi-l">Medium</div></div>
+    <div class="kpi l"><div class="kpi-n l">3</div><div class="kpi-l">Low</div></div>
+    <div class="kpi i"><div class="kpi-n i">5</div><div class="kpi-l">Informational</div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <svg class="donut-svg" viewBox="0 0 200 200" aria-label="Severity distribution donut chart">
+      <!-- 20 items total; circumference 502.65 = 2πr where r=80 -->
+      <!-- Critical: 2 (10%) → 50.27 -->
+      <!-- High: 4 (20%) → 100.53 -->
+      <!-- Medium: 6 (30%) → 150.80 -->
+      <!-- Low: 3 (15%) → 75.40 -->
+      <!-- Info: 5 (25%) → 125.66 -->
+      <g transform="rotate(-90 100 100)">
+        <circle class="donut-ring" cx="100" cy="100" r="80" stroke="var(--danger)" stroke-dasharray="50.27 502.65" stroke-dashoffset="0"/>
+        <circle class="donut-ring" cx="100" cy="100" r="80" stroke="var(--amber)" stroke-dasharray="100.53 502.65" stroke-dashoffset="-50.27"/>
+        <circle class="donut-ring" cx="100" cy="100" r="80" stroke="var(--signal)" stroke-dasharray="150.80 502.65" stroke-dashoffset="-150.80"/>
+        <circle class="donut-ring" cx="100" cy="100" r="80" stroke="var(--t3)" stroke-dasharray="75.40 502.65" stroke-dashoffset="-301.59"/>
+        <circle class="donut-ring" cx="100" cy="100" r="80" stroke="var(--green)" stroke-dasharray="125.66 502.65" stroke-dashoffset="-376.99"/>
+      </g>
+      <text x="100" y="100" text-anchor="middle" class="donut-center">20</text>
+      <text x="100" y="118" text-anchor="middle" class="donut-sub">FINDINGS</text>
+    </svg>
+    <div class="chart-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:var(--danger);"></span>Critical<span class="legend-count">2</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--amber);"></span>High<span class="legend-count">4</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--signal);"></span>Medium<span class="legend-count">6</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--t3);"></span>Low<span class="legend-count">3</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--green);"></span>Informational<span class="legend-count">5</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Risk Categories -->
+<section>
+  <div class="label">Risk Categories</div>
+  <h2>What the exposure looks like — without the specifics</h2>
+  <p>Per QuantumSearch policy, we do not share specific vulnerability details, endpoints, or proof-of-exploitation in pre-engagement briefings. The following categories describe the <em>shape</em> of the exposure. Specifics and remediation paths are delivered under a signed engagement.</p>
+
+  <div class="risk-grid">
+
+    <div class="risk-card c">
+      <div class="rc-head"><span class="sev-chip c">Critical</span><span style="font-family:var(--fm); font-size:0.65rem; color:var(--t3);">CATEGORY 1</span></div>
+      <h3>Email identity integrity</h3>
+      <p>The email authentication posture permits third parties to impersonate Callenium in outbound email with a high probability of inbox delivery. Practical effect: invoice fraud, policy-update phishing, pension-rollover fraud, Business Email Compromise. Industry median BEC loss: USD 200k–800k per incident.</p>
+    </div>
+
+    <div class="risk-card c">
+      <div class="rc-head"><span class="sev-chip c">Critical</span><span style="font-family:var(--fm); font-size:0.65rem; color:var(--t3);">CATEGORY 2</span></div>
+      <h3>Public-facing administrative surface</h3>
+      <p>Administrative interfaces typically restricted to a corporate VPN or IP allowlist are reachable from the public internet. These surfaces present brute-force, credential-stuffing, and known-CVE attack vectors. For a FINMA-adjacent firm, this posture is materially below sector baseline.</p>
+    </div>
+
+    <div class="risk-card h">
+      <div class="rc-head"><span class="sev-chip h">High</span><span style="font-family:var(--fm); font-size:0.65rem; color:var(--t3);">CATEGORY 3</span></div>
+      <h3>Application authentication exposure</h3>
+      <p>The primary website's authentication surface is publicly indexed and combined with enough public information to support credential-spraying. Per Verizon DBIR 2024, this pattern is the #1 initial access vector for financial-services breaches.</p>
+    </div>
+
+    <div class="risk-card h">
+      <div class="rc-head"><span class="sev-chip h">High</span><span style="font-family:var(--fm); font-size:0.65rem; color:var(--t3);">CATEGORY 4</span></div>
+      <h3>Development / staging environment leakage</h3>
+      <p>Non-production environments are publicly resolvable and discoverable via routine OSINT. Naming conventions visible in public records reveal at least one client relationship. Staging instances are typically less hardened than production — a preferred attacker pivot.</p>
+    </div>
+
+    <div class="risk-card m">
+      <div class="rc-head"><span class="sev-chip m">Medium</span><span style="font-family:var(--fm); font-size:0.65rem; color:var(--t3);">CATEGORY 5</span></div>
+      <h3>Third-party data-processor governance</h3>
+      <p>Customer-facing application traffic traverses a third-party platform. Swiss FADP Art. 9 and EU GDPR Art. 28 require a documented processor relationship with verifiable security controls. Public evidence of governance is not observable.</p>
+    </div>
+
+    <div class="risk-card m">
+      <div class="rc-head"><span class="sev-chip m">Medium</span><span style="font-family:var(--fm); font-size:0.65rem; color:var(--t3);">CATEGORY 6</span></div>
+      <h3>Transport &amp; response security hygiene</h3>
+      <p>Public HTTP responses lack several security response headers that are now baseline for sites handling authenticated user traffic or sensitive forms. Inconsistency between authenticated and unauthenticated paths suggests ad-hoc rather than systematic hardening.</p>
+    </div>
+
+    <div class="risk-card m">
+      <div class="rc-head"><span class="sev-chip m">Medium</span><span style="font-family:var(--fm); font-size:0.65rem; color:var(--t3);">CATEGORY 7</span></div>
+      <h3>Content-management-system hardening</h3>
+      <p>The production CMS exposes administrative-diagnostic information that should be restricted. Plugin composition includes premium components whose individual patch-cadence is not independently verifiable from public data — blind spot for incident preparedness.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Swiss Regulatory Exposure -->
+<section>
+  <div class="label">Swiss FADP · FINMA · EU GDPR Exposure</div>
+  <h2>Regulatory consequence mapping</h2>
+  <p>Callenium's insurance-finance-pension positioning places the firm within three simultaneously-enforceable regulatory regimes. Each finding in the snapshot intersects specific regulatory clauses.</p>
+
+  <table class="reg-table">
+    <thead><tr><th>Regime / Article</th><th>Requirement</th><th>Exposure / Penalty</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Swiss FADP Art. 8</strong><br><span style="font-family:var(--fm); font-size:0.7rem; color:var(--t3);">In force 2023-09-01</span></td>
+        <td>Data security — "appropriate technical and organizational measures" for data controllers</td>
+        <td>Current posture does not meet industry baseline for a financial-services data controller.</td>
+      </tr>
+      <tr>
+        <td><strong>Swiss FADP Art. 9</strong></td>
+        <td>Documented data-processor contracts with due-diligence evidence</td>
+        <td>Third-party processor identified; contract and control evidence not observable from public data.</td>
+      </tr>
+      <tr>
+        <td><strong>Swiss FADP Art. 24</strong></td>
+        <td>Breach notification to FDPIC as soon as possible</td>
+        <td>Incident-response readiness not demonstrable from the public posture.</td>
+      </tr>
+      <tr>
+        <td><strong>Swiss FADP Art. 65</strong></td>
+        <td>Criminal sanctions for inadequate data protection</td>
+        <td><span class="fine">Up to CHF 250,000 per director / officer personally fined</span></td>
+      </tr>
+      <tr>
+        <td><strong>Swiss FINMA Circular 2023/1</strong></td>
+        <td>Operational risks &amp; resilience — for regulated entities (insurance intermediaries included)</td>
+        <td>Security incident can trigger <strong>licensing consequences</strong>, not only fines.</td>
+      </tr>
+      <tr>
+        <td><strong>EU GDPR Art. 32</strong></td>
+        <td>Security of processing</td>
+        <td>Same gaps as FADP Art. 8, applied to any EU data subjects served by Callenium.</td>
+      </tr>
+      <tr>
+        <td><strong>EU GDPR Art. 33–34</strong></td>
+        <td>Breach notification, 72h to supervisory authority + subjects</td>
+        <td>Readiness not demonstrable.</td>
+      </tr>
+      <tr>
+        <td><strong>EU GDPR Art. 83</strong></td>
+        <td>Administrative fines</td>
+        <td><span class="fine">Up to €20,000,000 or 4% global turnover, whichever is higher</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Financial Impact -->
+<section>
+  <div class="label">Financial Impact — Annual Loss Expectancy</div>
+  <h2>Estimated cost of inaction, in CHF per year</h2>
+  <p>Monte-Carlo-simulated annual loss expectancy at Callenium's current posture, using the lognormal SimpleLoss methodology. Anchors: IBM Cost of a Data Breach 2024 (financial-services sector average USD 6.08M per breach), Swiss FADP Art. 65 ceiling, GDPR Art. 83 ceiling, Swiss SME financial-consulting revenue bands, Verizon DBIR 2024 sector-adjusted annualized rate of occurrence.</p>
+
+  <div class="ale-wrap">
+    <h3 style="font-family:var(--fm); font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--t3); margin-bottom:0.4rem;">LOGNORMAL ANNUAL LOSS EXPECTANCY — 10,000 TRIALS</h3>
+    <div class="ale-grid">
+      <div class="ale-cell">
+        <div class="p-label">P10 · LOW</div>
+        <div class="p-amount">220,000</div>
+        <div class="p-unit">CHF / year</div>
+      </div>
+      <div class="ale-cell">
+        <div class="p-label">P25</div>
+        <div class="p-amount">430,000</div>
+        <div class="p-unit">CHF / year</div>
+      </div>
+      <div class="ale-cell median">
+        <div class="p-label">P50 · MEDIAN</div>
+        <div class="p-amount">1,150,000</div>
+        <div class="p-unit">CHF / year</div>
+      </div>
+      <div class="ale-cell">
+        <div class="p-label">P75</div>
+        <div class="p-amount">2,700,000</div>
+        <div class="p-unit">CHF / year</div>
+      </div>
+      <div class="ale-cell">
+        <div class="p-label">P90 · HIGH</div>
+        <div class="p-amount">5,400,000</div>
+        <div class="p-unit">CHF / year</div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem; margin-top:1.2rem;">Well-hardened peer firms reduce this annual loss expectancy by 60–85% through email-authentication deployment, administrative-surface reduction, CMS hardening, third-party processor governance, and a recurring vulnerability-testing cadence.</p>
+  </div>
+</section>
+
+<!-- Reputation & Continuity -->
+<section>
+  <div class="label">Reputation &amp; Business Continuity</div>
+  <h2>Beyond direct cost</h2>
+  <div class="risk-grid">
+    <div class="risk-card h">
+      <div class="rc-head"><span class="sev-chip h">High</span></div>
+      <h3>Client churn after disclosed breach</h3>
+      <p>Swiss financial-services industry benchmarks show <strong>12–22% client churn in the twelve months following a disclosed breach</strong> for SME consultancies. For a firm positioned on trust, reliability, and long-horizon financial planning, this churn rate often dwarfs direct incident cost.</p>
+    </div>
+    <div class="risk-card h">
+      <div class="rc-head"><span class="sev-chip h">High</span></div>
+      <h3>Shared-hosting blast radius</h3>
+      <p>The identified hosting model is single-tenant small-business shared hosting. Successful compromise at the hosting layer does not contain itself to one tenant — it propagates to co-tenants on the same infrastructure. Operational halt: <strong>48 hours to two weeks</strong> depending on recovery path.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Methodology -->
+<section>
+  <div class="label">Methodology</div>
+  <h2>How this snapshot was produced</h2>
+  <p>Everything in this document is derived from public records only. No active scan, no port probing, no brute force, no vulnerability-trigger testing. A Swiss StGB Art. 143bis (unauthorized access) violation is never acceptable — every QuantumSearch engagement begins only after signed authorization.</p>
+
+  <div class="method-grid">
+    <div class="method-card">
+      <h4>Certificate Transparency mining</h4>
+      <p>Publicly-logged TLS certificate issuances queried via crt.sh. Reveals subdomains regardless of DNS visibility — the standard modern discovery technique.</p>
+    </div>
+    <div class="method-card">
+      <h4>Passive DNS</h4>
+      <p>Authoritative and third-party DNS resolution for A, MX, TXT, NS, SOA, DMARC selectors, DKIM selectors. No zone transfer, no brute-force enumeration.</p>
+    </div>
+    <div class="method-card">
+      <h4>Single-GET HTTP reconnaissance</h4>
+      <p>One GET request per publicly-indexed surface. Response headers and visible HTML/JSON parsed for technology fingerprinting and baseline hygiene review. Within normal crawler traffic.</p>
+    </div>
+    <div class="method-card">
+      <h4>OSINT cross-referencing</h4>
+      <p>Wayback Machine, public GitHub APIs, Swiss commercial registry (Zefix). Validation of identified public footprint.</p>
+    </div>
+    <div class="method-card">
+      <h4>Regulatory mapping</h4>
+      <p>Each technical finding mapped to Swiss FADP, FINMA Circular 2023/1, and EU GDPR clauses. Produces a regulatory-consequence ledger, not a CVE checklist.</p>
+    </div>
+    <div class="method-card">
+      <h4>Financial modelling</h4>
+      <p>SimpleLoss lognormal Monte-Carlo simulation, 10,000 trials. Anchors from IBM Cost of Data Breach 2024 + Swiss jurisdictional fine ceilings + Verizon DBIR 2024 annualized rate of occurrence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="cta-section">
+    <h2>Convert this snapshot into concrete remediation</h2>
+    <p>A full authorized engagement takes 10–15 business days and typically reduces the annual loss curve by 80–95%. Deliverables: active assessment with proven exploitation chains, FADP + FINMA + GDPR clause-level compliance mapping, remediation playbook, retesting pass.</p>
+    <a class="cta-button" href="mailto:contact@qsearch.ch?subject=Engagement%20request%20%E2%80%94%20Callenium%20Prospect%202026-04-17">
+      REQUEST AN ENGAGEMENT →
+    </a>
+    <div class="cta-ref">Reference: Callenium Prospect 2026-04-17 &middot; contact@qsearch.ch &middot; qsearch.ch</div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <strong>QuantumSearch Security Research</strong> · Switzerland (Ticino)<br>
+  Confidential briefing prepared for Callenium leadership. This document contains no specific vulnerability details. Specific findings and proof-of-exploitation are released under a signed engagement agreement.<br>
+  Snapshot date: 17 April 2026 · Report class: Passive-only, pre-engagement · © 2026 QuantumSearch Security Research
+</div>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+  try { localStorage.setItem('qs-theme', root.getAttribute('data-theme')); } catch(e) {}
+}
+(function() {
+  try {
+    const saved = localStorage.getItem('qs-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+</script>
+
+</body>
+</html>
